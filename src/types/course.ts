@@ -31,17 +31,10 @@ export interface CourseType {
   audience: string[];
   benefits: { title: string; description: string }[];
   formats: CourseFormat[];
+  industries?: string[];
   testimonials: CourseTestimonial[];
   seo: {
     title: string;
     description: string;
   };
-}
-
-export interface Product {
-  slug: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
 }

@@ -1,0 +1,45 @@
+version: "3.8"
+
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║  INTERLEXICO-COM — Marketing-Website                                    ║
+# ║                                                                          ║
+# ║  ENTWURF — noch NICHT in /opt/deploy registriert. Vor dem produktiven   ║
+# ║  Einsatz: in /opt/deploy/xx-interlexico-com kopieren, DOMAIN/Secrets in ║
+# ║  der zentralen .env ergänzen, Traefik-Reload, DNS auf diesen Server     ║
+# ║  zeigen lassen (aktuell parkt interlexico.com noch bei IONOS).          ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+
+services:
+  com-app:
+    image: interlexico-com:latest
+    # Lokal bauen (Alternative zu Registry):
+    # build:
+    #   context: /var/www/interlexico-com
+    #   dockerfile: Dockerfile
+    container_name: ix_com_app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      CMS_URL: ${CMS_URL:-http://ix_cms_app:3020}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+    networks:
+      - ix-public
+      - ix-shared # → CMS-Container (falls im selben Compose-Netz)
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=ix-public"
+      - "traefik.http.routers.com.rule=Host(`${DOMAIN:-interlexico.com}`)"
+      - "traefik.http.routers.com.entrypoints=websecure"
+      - "traefik.http.routers.com.tls.certresolver=le"
+      - "traefik.http.routers.com.service=com-svc"
+      - "traefik.http.routers.com.middlewares=secure-headers@file,rate-limit@file"
+      - "traefik.http.services.com-svc.loadbalancer.server.port=3000"
+
+networks:
+  ix-public: { name: ix-public, external: true }
+  ix-shared: { name: ix-shared, external: true }

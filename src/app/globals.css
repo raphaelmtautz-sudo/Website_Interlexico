@@ -1,16 +1,68 @@
 @import "tailwindcss";
 
-:root {
-  --color-ink: #0f0d0b;
-  --color-ink-raised: #171310;
-  --color-paper: #ede6d8;
-  --color-paper-dim: #b9b0a0;
-  --color-gold: #c6a15b;
-  --color-gold-bright: #dcb86e;
-  --color-gold-dim: #8a7148;
-  --color-line: #3a332a;
-  --color-error: #b45a4a;
-  --color-success: #7a9a6d;
+/* --- Markenpalette (hell): Hintergrund helles Grau, Text Anthrazit,
+   Hauptfarbe Dunkelblau, Sekundärfarbe Petrol, Weiß für Karten/Formulare.
+   Die Token-Namen (ink/paper/gold/line) bleiben aus Kompatibilität erhalten;
+   ink = Seitenhintergrund, ink-raised = weiße Fläche, paper = Text,
+   gold = Primär (Dunkelblau), gold-dim/petrol = Sekundär (Petrol). */
+:root,
+[data-theme="light"] {
+  --color-ink: #ffffff;         /* Weiß — Seitenhintergrund */
+  --color-ink-raised: #ffffff;  /* Weiß — Karten, Formulare, Kontrastflächen */
+  --color-paper: color-mix(in srgb, #262b31, #000 var(--contrast)); /* Anthrazit — Text */
+  --color-paper-dim: color-mix(in srgb, #58616c, #000 var(--contrast)); /* gedämpfter Text */
+  --color-gold: #1d3b6b;        /* Dunkelblau — Text-Akzent (Eyebrows/Links) */
+  --color-gold-bright: #16305c; /* dunkleres Blau — Hover/Betonung */
+  --color-gold-dim: #17707c;    /* Petrol — Sekundärfarbe (Akzente/Linien) */
+  --color-petrol: #17707c;      /* Petrol — Sekundärfarbe */
+  --color-petrol-strong: #125b66;
+  --color-brand: #2db1fb;       /* Markenblau — Wortmarke & CTA */
+  --color-brand-strong: #1a93e0;/* Markenblau — Hover */
+  --color-on-brand: #06233a;    /* dunkler Text auf Markenblau (AA) */
+  --color-line: color-mix(in srgb, #e2e6ea, #000 var(--contrast)); /* helle Trennlinien */
+  --color-error: #b23b3b;
+  --color-success: #2f7d5b;
+  color-scheme: light;
+}
+
+/* Dunkel — dunkles Navy mit denselben Blau/Petrol-Akzenten */
+[data-theme="dark"] {
+  --color-ink: #0f1722;
+  --color-ink-raised: #17202d;
+  --color-paper: color-mix(in srgb, #e8ecf2, #fff var(--contrast));
+  --color-paper-dim: color-mix(in srgb, #9aa6b4, #fff var(--contrast));
+  --color-gold: #6f9bd8;
+  --color-gold-bright: #8fb4e6;
+  --color-gold-dim: #4bb3c2;
+  --color-petrol: #4bb3c2;
+  --color-petrol-strong: #6fc6d3;
+  --color-brand: #2db1fb;
+  --color-brand-strong: #52c0ff;
+  --color-on-brand: #06233a;
+  --color-line: color-mix(in srgb, #273443, #fff var(--contrast));
+  --color-error: #e08a7a;
+  --color-success: #8fd0a8;
+  color-scheme: dark;
+}
+
+/* Hoher Kontrast — maximale Lesbarkeit */
+[data-theme="contrast"] {
+  --color-ink: #ffffff;
+  --color-ink-raised: #ffffff;
+  --color-paper: #000000;
+  --color-paper-dim: #1a1a1a;
+  --color-gold: #0a2a5e;
+  --color-gold-bright: #061d45;
+  --color-gold-dim: #084e5a;
+  --color-petrol: #084e5a;
+  --color-petrol-strong: #063a44;
+  --color-brand: #0a63a8;
+  --color-brand-strong: #084a80;
+  --color-on-brand: #ffffff;
+  --color-line: #000000;
+  --color-error: #8a1f1f;
+  --color-success: #0f5a38;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -21,6 +73,11 @@
   --color-gold: var(--color-gold);
   --color-gold-bright: var(--color-gold-bright);
   --color-gold-dim: var(--color-gold-dim);
+  --color-petrol: var(--color-petrol);
+  --color-petrol-strong: var(--color-petrol-strong);
+  --color-brand: var(--color-brand);
+  --color-brand-strong: var(--color-brand-strong);
+  --color-on-brand: var(--color-on-brand);
   --color-line: var(--color-line);
   --color-error: var(--color-error);
   --color-success: var(--color-success);
@@ -35,6 +92,13 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Stufenloser Kontrast-Regler: --contrast = zusätzlicher Kontrast in Prozent
+   (0% = neutral). Wirkt layout-sicher über color-mix auf Text-/Linien-Tokens
+   (Richtung je Theme), statt über einen filter (der position:fixed bräche). */
+:root {
+  --contrast: 0%;
 }
 
 body {
@@ -91,4 +155,243 @@ body {
 
 .animate-fade-up {
   animation: fade-up 0.7s ease both;
+}
+
+/* --- Sanfter Theme-Übergang (Calm UI) --- */
+html {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* --- Fokus-/Lesemodus (manuell): reduziert Ablenkungen --- */
+[data-focus="on"] .grain::before {
+  display: none;
+}
+[data-focus="on"] [data-distraction] {
+  display: none !important;
+}
+
+/* --- Adaptives UI (automatisch): bei erkennbarem Suchverhalten (schnelles
+   Scrollen) werden dekorative Ablenkungen sanft gedämpft; beim Innehalten
+   kehren sie zurück. Navigationshilfen bleiben sichtbar. --- */
+.grain::before {
+  transition: opacity 0.5s ease;
+}
+[data-distraction="chat"] {
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+html[data-reading="on"] .grain::before {
+  opacity: 0;
+}
+html[data-reading="on"] [data-distraction="chat"] {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+/* --- Accessibility by Design --- */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  background: var(--color-gold);
+  color: var(--color-ink);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Respektiert Systemeinstellung: Bewegung reduzieren */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Guided Scrolling: Reveal-on-Scroll ---
+   Nur bei aktivem JS (html.js) wird versteckt/animiert; ohne JS bleibt
+   der Inhalt sichtbar (Crawler- & No-JS-sicher). */
+.reveal {
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+html.js .reveal {
+  opacity: 0;
+}
+html.js .reveal-up {
+  transform: translateY(22px);
+}
+html.js .reveal-scale {
+  transform: scale(0.96);
+}
+html.js .reveal-left {
+  transform: translateX(-24px);
+}
+html.js .reveal-right {
+  transform: translateX(24px);
+}
+html.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Kantiger Gold-Range-Slider (Konfigurator) --- */
+.il-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: var(--color-line);
+  cursor: pointer;
+}
+.il-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 22px;
+  background: var(--color-gold);
+  border: none;
+  cursor: pointer;
+}
+.il-range::-moz-range-thumb {
+  width: 16px;
+  height: 22px;
+  background: var(--color-gold);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+.il-range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* --- Tactile Brutalism: feine Körnung/Noise-Overlay --- */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* --- Kinetische Typografie (subtiler Gold-Schimmer) --- */
+@keyframes kinetic-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+.kinetic {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-paper) 0%,
+    var(--color-paper) 38%,
+    var(--color-gold-bright) 50%,
+    var(--color-paper) 62%,
+    var(--color-paper) 100%
+  );
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: kinetic-shimmer 7s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kinetic {
+    animation: none;
+    background: none;
+    color: var(--color-paper);
+    -webkit-background-clip: initial;
+    background-clip: initial;
+  }
+}
+
+/* --- Kontaktformular: Mikro-Interaktionen --- */
+@keyframes check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-check-in {
+  animation: check-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes chip-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-chip-pop {
+  animation: chip-pop 0.32s ease;
+}
+
+@keyframes ring-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-ring-pop {
+  animation: ring-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.il-check-path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: draw-check 0.4s ease 0.2s forwards;
+}
+@keyframes draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
 }

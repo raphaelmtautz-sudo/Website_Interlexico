@@ -8,9 +8,9 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary:
-    "border-gold bg-gold text-ink hover:bg-transparent hover:text-gold",
+    "border-brand bg-brand text-on-brand hover:bg-brand-strong hover:border-brand-strong",
   secondary:
-    "border-gold/60 text-paper hover:border-gold hover:text-gold bg-transparent",
+    "border-petrol text-petrol bg-transparent hover:bg-petrol hover:text-ink",
   ghost: "border-transparent text-paper hover:text-gold",
 };
 
@@ -21,6 +21,7 @@ export function Button({
   onClick,
   type = "button",
   className = "",
+  tabIndex,
 }: {
   children: ReactNode;
   href?: string;
@@ -28,19 +29,20 @@ export function Button({
   onClick?: () => void;
   type?: "button" | "submit";
   className?: string;
+  tabIndex?: number;
 }) {
   const classes = `${base} ${variants[variant]} ${className}`;
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} onClick={onClick} tabIndex={tabIndex}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes} tabIndex={tabIndex}>
       {children}
     </button>
   );
