@@ -8,6 +8,8 @@ import { StoryLaneNav } from "@/components/interactive/story-lane-nav";
 import { Reveal } from "@/components/interactive/reveal";
 import { Configurator } from "@/components/interactive/configurator";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
+import { TestimonialCarousel } from "@/components/interactive/testimonial-carousel";
+import { ImpactCalculator } from "@/components/interactive/impact-calculator";
 import { getIndustries } from "@/content/industries";
 import { FaqJsonLd } from "@/components/seo/json-ld";
 import { getFaq } from "@/lib/cms";
@@ -105,7 +107,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </Section>
       </Reveal>
 
-      <Reveal as="section" id="konfigurator" variant="scale" className="border-t border-line">
+      <Reveal as="section" id="konfigurator" variant="scale" className="border-t border-line bg-brand/5">
         <Section>
           <Eyebrow>{dict.home.konfiguratorEyebrow}</Eyebrow>
           <div className="mb-12 max-w-2xl">
@@ -208,21 +210,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <Reveal as="section" id="stimmen" variant="scale" className="border-t border-line">
         <Section>
-          <Container className="max-w-3xl text-center mx-auto">
-            <GoldRule className="mx-auto mb-8" />
-            <p className="font-display text-3xl italic leading-snug text-paper sm:text-4xl">
-              {dict.home.testimonialQuote}
-            </p>
-            <p className="mt-6 font-sans text-sm uppercase tracking-[0.08em] text-paper-dim">
-              {dict.home.testimonialRole}
-            </p>
-          </Container>
+          <GoldRule className="mx-auto mb-10" />
+          <TestimonialCarousel testimonials={dict.home.testimonials} />
         </Section>
       </Reveal>
 
-      <Reveal as="section" id="nachhaltigkeit" variant="right" className="border-t border-line">
+      <Reveal as="section" id="nachhaltigkeit" variant="right" className="border-t border-line bg-success/5">
         <Section>
-          <Eyebrow>{dict.home.nachhaltigkeitEyebrow}</Eyebrow>
+          <Eyebrow tone="success">{dict.home.nachhaltigkeitEyebrow}</Eyebrow>
           <div className="grid gap-10 lg:grid-cols-2 lg:items-end">
             <h2 className="font-display text-4xl text-paper text-balance sm:text-5xl">
               {dict.home.nachhaltigkeitTitle}
@@ -233,11 +228,18 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               </p>
               <Link
                 href={lh(lang, "/nachhaltigkeit")}
-                className="link-underline font-sans text-sm uppercase tracking-[0.08em] text-gold"
+                className="link-underline font-sans text-sm uppercase tracking-[0.08em] text-success"
               >
                 {dict.home.nachhaltigkeitLink}
               </Link>
             </div>
+          </div>
+          <div className="mt-12">
+            <ImpactCalculator
+              dict={dict.nachhaltigkeit.calculator}
+              nabuUrl={dict.nachhaltigkeit.projects[1].url}
+              dappUrl={dict.nachhaltigkeit.projects[0].url}
+            />
           </div>
         </Section>
       </Reveal>
@@ -261,7 +263,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <FaqJsonLd items={faq} />
       </Reveal>
 
-      <Reveal as="section" id="kontakt-cta" className="border-t border-line">
+      <Reveal as="section" id="kontakt-cta" className="border-t border-line bg-brand/5">
         <Section>
           <Container className="flex flex-col items-center gap-6 text-center">
             <h2 className="font-display text-4xl text-paper max-w-xl text-balance">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { NavMore } from "@/components/layout/nav-more";
 import { ThemeControl } from "@/components/theme/theme-control";
 import { CommandTrigger } from "@/components/interactive/command-trigger";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
@@ -10,14 +11,19 @@ import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 
 export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  const navItems = [
+  // Primäre Links direkt sichtbar, sekundäre in "Mehr" gebündelt — sonst
+  // laufen auf lg-Breakpoints 6 Links + Suche/Sprache/Theme/CTA über.
+  // "Kontakt" fehlt bewusst: der "Anfragen"-Button führt bereits dorthin.
+  const primaryItems = [
     { href: lh(lang, "/kurse"), label: dict.nav.kurse },
     { href: lh(lang, "/einstufung"), label: dict.nav.einstufung },
+  ];
+  const secondaryItems = [
     { href: lh(lang, "/ueber-uns"), label: dict.nav.ueberUns },
     { href: lh(lang, "/interlexico-one"), label: dict.nav.interlexicoOne },
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },
-    { href: lh(lang, "/kontakt"), label: dict.nav.kontakt },
   ];
+  const mobileItems = [...primaryItems, ...secondaryItems, { href: lh(lang, "/kontakt"), label: dict.nav.kontakt }];
   const { logoUrl, logoAlt } = await getSiteSettings();
 
   return (
@@ -32,7 +38,7 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
           )}
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">
-          {navItems.map((item) => (
+          {primaryItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -41,15 +47,16 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
               {item.label}
             </Link>
           ))}
+          <NavMore label={dict.nav.mehr} items={secondaryItems} />
         </nav>
         <div className="flex items-center gap-3">
           <CommandTrigger className="hidden lg:flex" label={dict.nav.search} ariaLabel={dict.nav.searchOpen} />
-          <LanguageSwitcher lang={lang} className="hidden lg:flex" />
+          <LanguageSwitcher lang={lang} className="hidden lg:flex" ariaLabel={dict.nav.sprache} />
           <ThemeControl className="hidden lg:block" dict={dict} />
           <Button href={lh(lang, "/kontakt")} variant="secondary" className="hidden lg:inline-flex">
             {dict.nav.anfragen}
           </Button>
-          <MobileNav items={navItems} lang={lang} dict={dict} logoUrl={logoUrl} logoAlt={logoAlt} />
+          <MobileNav items={mobileItems} lang={lang} dict={dict} logoUrl={logoUrl} logoAlt={logoAlt} />
         </div>
       </Container>
     </header>

@@ -16,6 +16,8 @@ export const en: Dictionary = {
     nachhaltigkeit: "Sustainability",
     kontakt: "Contact",
     anfragen: "Get in touch",
+    mehr: "More",
+    sprache: "Choose language",
     menuOpen: "Open menu",
     menuClose: "Close",
     searchOpen: "Open search (Ctrl/Cmd + K)",
@@ -103,9 +105,9 @@ export const en: Dictionary = {
   },
   home: {
     eyebrow: "Corporate Language Academy · English & German",
-    heroTitleBefore: "Boardroom-ready ",
-    heroTitleKinetic: "English and German",
-    heroTitleAfter: " for your leaders and teams",
+    heroTitleBefore: "Interlexico Language Academy — Business ",
+    heroTitleKinetic: "English & German",
+    heroTitleAfter: " for your company's success",
     heroSubtitle:
       "No off-the-shelf language course: Business English and German as a Foreign Language, trained on the real communication situations of your industry — tailored, measurable, no detours.",
     ctaConfigure: "Configure your training",
@@ -161,8 +163,28 @@ export const en: Dictionary = {
       { step: "03", title: "Training", description: "Sessions tailored to the chosen format." },
       { step: "04", title: "Reporting", description: "Regular progress overview for HR and leadership." },
     ],
-    testimonialQuote: "“Our sales leaders now run international client conversations with noticeably more confidence.”",
-    testimonialRole: "Head of People & Culture, mid-sized industrial company",
+    testimonials: [
+      {
+        quote: "Our sales leaders now run international client conversations with noticeably more confidence.",
+        role: "Head of People & Culture, mid-sized industrial company",
+      },
+      {
+        quote: "We can finally see in black and white how our team's language skills are developing.",
+        role: "HR Director, mechanical engineering company",
+      },
+      {
+        quote: "The topics in the training were exactly what we actually need in client conversations.",
+        role: "Sales Team Lead, SaaS company",
+      },
+      {
+        quote: "Our international sites now communicate as equals instead of past each other.",
+        role: "L&D, logistics provider",
+      },
+      {
+        quote: "Not textbook English, but exactly the negotiation situations we face day to day.",
+        role: "Managing Director, export-focused family business",
+      },
+    ],
     nachhaltigkeitEyebrow: "Sustainability — Giving Back",
     nachhaltigkeitTitle: "Every booking becomes a contribution",
     nachhaltigkeitText:
@@ -251,7 +273,7 @@ export const en: Dictionary = {
   },
   interlexicoOne: {
     eyebrow: "Interlexico ONE",
-    title: "One platform. Two perspectives. One goal: better learning.",
+    title: "One platform for organisation and learning success.",
     intro:
       "Interlexico ONE combines efficient HR management with a modern learning experience for employees — from organisation to measurable learning success.",
     ctaTitle: "Get to know Interlexico ONE in a consultation",
@@ -271,17 +293,33 @@ export const en: Dictionary = {
         eyebrow: "Social — Education",
         title: "Education in Namibia",
         body: "In Oshakati in northern Namibia, the non-profit organisation DAPP Namibia works for children and young people who often lack access to education. Choosing this option means investing directly in local educational opportunities through your own training.",
+        linkLabel: "dapp-namibia.org",
+        url: "https://dapp-namibia.org/",
       },
       {
         eyebrow: "Ecology — Nature",
         title: "New forests with NABU",
         body: "Alternatively, your contribution goes to reforestation projects run by NABU. Your language training becomes connected to new, healthy forest areas and long-term climate protection.",
+        linkLabel: "nabu.de",
+        url: "https://www.nabu.de/",
       },
     ],
     quote: "“Every booking becomes a contribution — to education or to new forests.”",
     ctaTitle: "Train — and give back at the same time",
     ctaTraining: "Enquire about training",
     ctaMehr: "Learn more",
+    calculator: {
+      eyebrow: "Calculate your impact",
+      title: "This is what your training achieves",
+      text: "€2 from every training unit goes to your chosen project — either new trees with NABU or school materials for DAPP Namibia in Oshakati.",
+      unitsLabel: "Training units",
+      donationPrefix: "equals",
+      treesLabel: "trees",
+      treesVia: "via NABU",
+      materialsLabel: "school material sets",
+      materialsVia: "via DAPP Namibia",
+      disclaimer: "Example calculation (1 unit = €2, €5 = 1 tree, €2 = 1 material set). You choose which project receives your contribution when you sign up.",
+    },
   },
   einstufung: {
     eyebrow: "Level check",
@@ -356,9 +394,6 @@ export const en: Dictionary = {
   },
   legal: {
     eyebrow: "Legal",
-    draftNoticeTitle: "Draft — not yet legally binding",
-    draftNoticeText:
-      "This text is a structured draft. All [placeholders] in brackets must be replaced with the actual details, and the full text must be reviewed by a lawyer before publication. This does not constitute legal advice.",
     germanBindingNotice:
       "This translation is provided for information only. The German version is the sole legally binding version.",
     impressum: {

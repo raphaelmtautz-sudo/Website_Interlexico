@@ -44,7 +44,7 @@ export default async function InterlexicoOnePage({ params }: { params: Promise<{
         </div>
       </Section>
 
-      <Reveal as="section" id="interlexico-one-cta" variant="scale" className="border-t border-line">
+      <Reveal as="section" id="interlexico-one-cta" variant="scale" className="border-t border-line bg-brand/5">
         <Section>
           <Container className="flex flex-col items-center gap-6 text-center">
             <GoldRule className="mb-2" />
@@ -52,8 +52,8 @@ export default async function InterlexicoOnePage({ params }: { params: Promise<{
             <p className="font-sans text-paper-dim max-w-xl">{t.ctaText}</p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button href={lh(lang, "/kontakt")}>{t.ctaButton}</Button>
-              <Button href={lh(lang, "/ueber-uns")} variant="secondary">
-                {dict.nav.ueberUns}
+              <Button href={lh(lang, "/kurse")} variant="secondary">
+                {dict.nav.kurse}
               </Button>
             </div>
           </Container>

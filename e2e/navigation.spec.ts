@@ -12,18 +12,22 @@ test.describe("Navigation", () => {
     await page.getByRole("link", { name: "Kurse", exact: true }).first().click();
     await expect(page).toHaveURL(/\/de\/kurse$/);
 
+    // "Interlexico ONE" steckt im "Mehr"-Dropdown der Hauptnavigation.
     await page.goto("/de");
-    await page.getByRole("link", { name: "Interlexico ONE", exact: true }).first().click();
+    await page.getByRole("button", { name: "Mehr", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Interlexico ONE" }).click();
     await expect(page).toHaveURL(/\/de\/interlexico-one$/);
 
+    // Kein eigener "Kontakt"-Nav-Link mehr — der "Anfragen"-Button führt dorthin.
     await page.goto("/de");
-    await page.getByRole("link", { name: "Kontakt", exact: true }).first().click();
+    await page.getByRole("link", { name: "Anfragen", exact: true }).first().click();
     await expect(page).toHaveURL(/\/de\/kontakt$/);
   });
 
   test("Sprachumschaltung wechselt Locale und behält den Pfad bei", async ({ page }) => {
     await page.goto("/de/ueber-uns");
-    await page.getByRole("link", { name: "en", exact: true }).click();
+    await page.getByRole("button", { name: "Sprache wählen" }).click();
+    await page.getByRole("menuitemradio", { name: "English" }).click();
     await expect(page).toHaveURL(/\/en\/ueber-uns$/);
   });
 

@@ -107,7 +107,7 @@ export default async function UeberUnsPage({ params }: { params: Promise<{ lang:
         </Section>
       </Reveal>
 
-      <Reveal as="section" id="ueber-uns-cta" variant="scale" className="border-t border-line">
+      <Reveal as="section" id="ueber-uns-cta" variant="scale" className="border-t border-line bg-brand/5">
         <Section>
           <Container className="flex flex-col items-center gap-6 text-center">
             <GoldRule className="mb-2" />

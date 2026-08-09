@@ -143,7 +143,7 @@ export function MobileNav({
               {dict.nav.anfragen}
             </Button>
             <div className="flex items-center gap-4">
-              <LanguageSwitcher lang={lang} />
+              <LanguageSwitcher lang={lang} ariaLabel={dict.nav.sprache} />
               <ThemeControl dict={dict} />
             </div>
           </div>

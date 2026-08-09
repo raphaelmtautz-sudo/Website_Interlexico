@@ -7,9 +7,9 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const headlines: Record<Locale, string> = {
-  de: "Verhandlungssicher in Englisch und Deutsch",
-  en: "Boardroom-ready in English and German",
-  es: "Seguridad negociadora en inglés y alemán",
+  de: "Business Englisch & Deutsch für Ihren Unternehmenserfolg",
+  en: "Business English & German for your company's success",
+  es: "Inglés y alemán para el éxito de su empresa",
 };
 
 export default async function Image({ params }: { params: Promise<{ lang: string }> }) {

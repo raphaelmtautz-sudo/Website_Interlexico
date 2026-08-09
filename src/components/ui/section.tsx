@@ -19,9 +19,13 @@ export function Section({
   );
 }
 
-export function Eyebrow({ children }: { children: ReactNode }) {
+export function Eyebrow({ children, tone = "gold" }: { children: ReactNode; tone?: "gold" | "success" }) {
   return (
-    <p className="font-sans text-xs tracking-[0.28em] uppercase text-gold mb-4">
+    <p
+      className={`font-sans text-xs tracking-[0.28em] uppercase mb-4 ${
+        tone === "success" ? "text-success" : "text-gold"
+      }`}
+    >
       {children}
     </p>
   );

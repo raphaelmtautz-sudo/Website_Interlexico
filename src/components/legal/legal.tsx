@@ -25,7 +25,6 @@ export function LegalDoc({
       <div className="max-w-3xl">
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1 className="font-display text-4xl text-paper mb-6 sm:text-5xl">{title}</h1>
-        <LegalReviewNotice dict={dict} />
         {lang !== "de" && (
           <p className="mb-6 font-sans text-xs italic leading-relaxed text-paper-dim">
             {dict.legal.germanBindingNotice}
@@ -37,20 +36,6 @@ export function LegalDoc({
         <div className="space-y-10">{children}</div>
       </div>
     </Section>
-  );
-}
-
-/** Deutlicher Hinweis: Entwurf, vor Livegang juristisch prüfen. */
-export function LegalReviewNotice({ dict }: { dict: Dictionary }) {
-  return (
-    <div className="mb-10 border border-gold-dim bg-gold/5 p-5">
-      <p className="font-sans text-xs uppercase tracking-[0.12em] text-gold mb-2">
-        {dict.legal.draftNoticeTitle}
-      </p>
-      <p className="font-sans text-sm leading-relaxed text-paper-dim">
-        {dict.legal.draftNoticeText}
-      </p>
-    </div>
   );
 }
 

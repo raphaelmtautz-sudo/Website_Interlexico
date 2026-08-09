@@ -16,6 +16,8 @@ export const es: Dictionary = {
     nachhaltigkeit: "Sostenibilidad",
     kontakt: "Contacto",
     anfragen: "Solicitar información",
+    mehr: "Más",
+    sprache: "Elegir idioma",
     menuOpen: "Abrir menú",
     menuClose: "Cerrar",
     searchOpen: "Abrir búsqueda (Ctrl/Cmd + K)",
@@ -103,9 +105,9 @@ export const es: Dictionary = {
   },
   home: {
     eyebrow: "Academia de idiomas para empresas · Inglés y alemán",
-    heroTitleBefore: "Inglés y alemán ",
-    heroTitleKinetic: "con seguridad negociadora",
-    heroTitleAfter: " para sus directivos y equipos",
+    heroTitleBefore: "Academia de idiomas Interlexico — ",
+    heroTitleKinetic: "Inglés y alemán",
+    heroTitleAfter: " para el éxito de su empresa",
     heroSubtitle:
       "Nada de cursos de idiomas estándar: inglés de negocios y alemán como lengua extranjera, entrenados con las situaciones de comunicación reales de su sector — individual, medible, sin rodeos.",
     ctaConfigure: "Configurar su formación",
@@ -161,8 +163,28 @@ export const es: Dictionary = {
       { step: "03", title: "Formación", description: "Sesiones adaptadas individualmente al formato elegido." },
       { step: "04", title: "Informes", description: "Resumen periódico del progreso para RR. HH. y dirección." },
     ],
-    testimonialQuote: "«Nuestros directores comerciales ahora llevan las conversaciones internacionales con notable más seguridad.»",
-    testimonialRole: "Head of People & Culture, empresa industrial mediana",
+    testimonials: [
+      {
+        quote: "Nuestros directores comerciales ahora llevan las conversaciones internacionales con notable más seguridad.",
+        role: "Head of People & Culture, empresa industrial mediana",
+      },
+      {
+        quote: "Por fin vemos en blanco y negro cómo evoluciona el nivel de idioma de nuestro equipo.",
+        role: "Directora de RR. HH., empresa de ingeniería mecánica",
+      },
+      {
+        quote: "Los temas del training fueron exactamente los que necesitamos en las conversaciones con clientes.",
+        role: "Responsable de Ventas, empresa SaaS",
+      },
+      {
+        quote: "Nuestras sedes internacionales ahora se comunican de igual a igual, no unas al lado de otras.",
+        role: "Desarrollo de RR. HH., empresa de logística",
+      },
+      {
+        quote: "Nada de inglés de libro de texto: exactamente nuestras situaciones de negociación del día a día.",
+        role: "Dirección General, empresa familiar exportadora",
+      },
+    ],
     nachhaltigkeitEyebrow: "Sostenibilidad — aportamos futuro",
     nachhaltigkeitTitle: "Cada reserva se convierte en una contribución",
     nachhaltigkeitText:
@@ -251,7 +273,7 @@ export const es: Dictionary = {
   },
   interlexicoOne: {
     eyebrow: "Interlexico ONE",
-    title: "Una plataforma. Dos perspectivas. Un objetivo: aprender mejor.",
+    title: "Una plataforma para la organización y el éxito de aprendizaje.",
     intro:
       "Interlexico ONE combina una gestión de RR. HH. eficiente con una experiencia de aprendizaje moderna para los empleados — desde la organización hasta el éxito de aprendizaje medible.",
     ctaTitle: "Conozca Interlexico ONE en una consulta",
@@ -271,17 +293,33 @@ export const es: Dictionary = {
         eyebrow: "Social — Educación",
         title: "Educación en Namibia",
         body: "En Oshakati, en el norte de Namibia, la organización sin ánimo de lucro DAPP Namibia trabaja por niños y jóvenes a quienes a menudo se les niega el acceso a la educación. Elegir esta opción significa invertir directamente en oportunidades educativas locales a través de su propia formación.",
+        linkLabel: "dapp-namibia.org",
+        url: "https://dapp-namibia.org/",
       },
       {
         eyebrow: "Ecología — Naturaleza",
         title: "Nuevos bosques con NABU",
         body: "Como alternativa, la contribución se destina a proyectos de reforestación de NABU. Así su formación de idiomas se vincula con la creación de nuevas superficies forestales saludables y con la protección climática a largo plazo.",
+        linkLabel: "nabu.de",
+        url: "https://www.nabu.de/",
       },
     ],
     quote: "«Cada reserva se convierte en una contribución — para la educación o para nuevos bosques.»",
     ctaTitle: "Fórmese y aporte futuro al mismo tiempo",
     ctaTraining: "Solicitar información sobre formación",
     ctaMehr: "Saber más",
+    calculator: {
+      eyebrow: "Calcule su impacto",
+      title: "Esto es lo que logra su formación",
+      text: "2 € de cada unidad de formación van a su proyecto elegido — nuevos árboles con NABU o material escolar para DAPP Namibia en Oshakati.",
+      unitsLabel: "Unidades de formación",
+      donationPrefix: "equivale a",
+      treesLabel: "árboles",
+      treesVia: "vía NABU",
+      materialsLabel: "sets de material escolar",
+      materialsVia: "vía DAPP Namibia",
+      disclaimer: "Cálculo de ejemplo (1 unidad = 2 €, 5 € = 1 árbol, 2 € = 1 set de material). Usted decide qué proyecto recibe su contribución al firmar el contrato.",
+    },
   },
   einstufung: {
     eyebrow: "Test de nivel",
@@ -356,9 +394,6 @@ export const es: Dictionary = {
   },
   legal: {
     eyebrow: "Aviso legal",
-    draftNoticeTitle: "Borrador — aún no vinculante",
-    draftNoticeText:
-      "Este texto es un borrador estructurado. Todos los [marcadores de posición] entre corchetes deben sustituirse por los datos reales, y el texto completo debe ser revisado por un abogado antes de su publicación. No constituye asesoramiento jurídico.",
     germanBindingNotice:
       "Esta traducción se ofrece solo con fines informativos. La versión en alemán es la única jurídicamente vinculante.",
     impressum: {

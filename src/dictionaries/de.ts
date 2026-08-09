@@ -14,6 +14,8 @@ export const de = {
     nachhaltigkeit: "Nachhaltigkeit",
     kontakt: "Kontakt",
     anfragen: "Anfragen",
+    mehr: "Mehr",
+    sprache: "Sprache wählen",
     menuOpen: "Menü öffnen",
     menuClose: "Schließen",
     searchOpen: "Suche öffnen (Strg/Cmd + K)",
@@ -101,9 +103,9 @@ export const de = {
   },
   home: {
     eyebrow: "Sprachakademie für Unternehmen · Englisch & Deutsch",
-    heroTitleBefore: "Verhandlungssicheres ",
-    heroTitleKinetic: "Englisch und Deutsch",
-    heroTitleAfter: " für Ihre Führungskräfte und Teams",
+    heroTitleBefore: "Sprachakademie Interlexico — Business ",
+    heroTitleKinetic: "Englisch & Deutsch",
+    heroTitleAfter: " für Ihren Unternehmenserfolg",
     heroSubtitle:
       "Kein Sprachkurs von der Stange: Business English und Deutsch als Fremdsprache, trainiert an den echten Kommunikationssituationen Ihrer Branche — individuell, messbar, ohne Umwege.",
     ctaConfigure: "Training konfigurieren",
@@ -159,8 +161,28 @@ export const de = {
       { step: "03", title: "Training", description: "Individuell abgestimmte Einheiten im gewählten Format." },
       { step: "04", title: "Reporting", description: "Regelmäßige Fortschrittsübersicht für HR und Führungskräfte." },
     ],
-    testimonialQuote: "„Unsere Vertriebsleiter führen internationale Kundengespräche heute spürbar souveräner.“",
-    testimonialRole: "Head of People & Culture, mittelständisches Industrieunternehmen",
+    testimonials: [
+      {
+        quote: "Unsere Vertriebsleiter führen internationale Kundengespräche heute spürbar souveräner.",
+        role: "Head of People & Culture, mittelständisches Industrieunternehmen",
+      },
+      {
+        quote: "Endlich sehen wir schwarz auf weiß, wie sich unser Team sprachlich entwickelt.",
+        role: "HR-Leiterin, Maschinenbau-Unternehmen",
+      },
+      {
+        quote: "Die Themen im Training waren genau die, die wir im Kundengespräch wirklich brauchen.",
+        role: "Teamleiter Vertrieb, SaaS-Unternehmen",
+      },
+      {
+        quote: "Unsere internationalen Standorte kommunizieren jetzt auf Augenhöhe statt aneinander vorbei.",
+        role: "Personalentwicklung, Logistikdienstleister",
+      },
+      {
+        quote: "Kein Lehrbuch-Englisch, sondern genau unsere Verhandlungssituationen aus dem Alltag.",
+        role: "Geschäftsführung, exportorientiertes Familienunternehmen",
+      },
+    ],
     nachhaltigkeitEyebrow: "Nachhaltigkeit — Zukunft schenken",
     nachhaltigkeitTitle: "Jede Buchung wird zu einem Beitrag",
     nachhaltigkeitText:
@@ -249,7 +271,7 @@ export const de = {
   },
   interlexicoOne: {
     eyebrow: "Interlexico ONE",
-    title: "Eine Plattform. Zwei Perspektiven. Ein Ziel: besseres Lernen.",
+    title: "Eine Plattform für Organisation und Lernerfolg.",
     intro:
       "Interlexico ONE verbindet effizientes HR-Management mit einer modernen Lernerfahrung für Mitarbeitende — von der Organisation bis zum messbaren Lernerfolg.",
     ctaTitle: "Interlexico ONE in einem Beratungsgespräch kennenlernen",
@@ -269,17 +291,33 @@ export const de = {
         eyebrow: "Soziales — Bildung",
         title: "Bildung in Namibia",
         body: "In Oshakati im Norden Namibias arbeitet die gemeinnützige Organisation DAPP Namibia für Kinder und Jugendliche, denen der Zugang zu Bildung oft verwehrt bleibt. Wer sich dafür entscheidet, investiert mit dem eigenen Training direkt in Bildungschancen vor Ort.",
+        linkLabel: "dapp-namibia.org",
+        url: "https://dapp-namibia.org/",
       },
       {
         eyebrow: "Ökologie — Natur",
         title: "Neue Wälder mit dem NABU",
         body: "Alternativ fließt der Beitrag in Wiederaufforstungsprojekte des NABU. So verbindet sich Ihr Sprachtraining mit dem Aufbau neuer, gesunder Waldflächen und langfristigem Klimaschutz.",
+        linkLabel: "nabu.de",
+        url: "https://www.nabu.de/",
       },
     ],
     quote: "„Jede Buchung wird zu einem Beitrag — für Bildung oder für neue Wälder.“",
     ctaTitle: "Trainieren und zugleich Zukunft schenken",
     ctaTraining: "Training anfragen",
     ctaMehr: "Mehr erfahren",
+    calculator: {
+      eyebrow: "Ihre Wirkung berechnen",
+      title: "So viel bewirkt Ihr Training",
+      text: "Pro Unterrichtseinheit fließen 2 € in Ihr gewähltes Projekt — wahlweise in neue Bäume mit dem NABU oder in Schulmaterial für DAPP Namibia in Oshakati.",
+      unitsLabel: "Unterrichtseinheiten",
+      donationPrefix: "entspricht",
+      treesLabel: "Bäume",
+      treesVia: "über den NABU",
+      materialsLabel: "Schulmaterial-Sets",
+      materialsVia: "über DAPP Namibia",
+      disclaimer: "Beispielrechnung (1 UE = 2 €, 5 € = 1 Baum, 2 € = 1 Materialset). Sie entscheiden bei Vertragsabschluss, welches Projekt Ihren Beitrag erhält.",
+    },
   },
   einstufung: {
     eyebrow: "Einstufung",
@@ -354,9 +392,6 @@ export const de = {
   },
   legal: {
     eyebrow: "Rechtliches",
-    draftNoticeTitle: "Entwurf — noch nicht rechtsverbindlich",
-    draftNoticeText:
-      "Dieser Text ist ein strukturierter Entwurf. Alle in eckigen Klammern markierten [Platzhalter] müssen durch die tatsächlichen Angaben ersetzt und der gesamte Text vor der Veröffentlichung juristisch geprüft werden. Es handelt sich nicht um Rechtsberatung.",
     germanBindingNotice:
       "Diese Übersetzung dient der Information. Rechtlich verbindlich ist ausschließlich die deutsche Fassung.",
     impressum: {

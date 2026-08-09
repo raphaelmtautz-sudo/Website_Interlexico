@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { GoldRule } from "@/components/ui/divider";
 import { Reveal } from "@/components/interactive/reveal";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
+import { ImpactCalculator } from "@/components/interactive/impact-calculator";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 
@@ -41,9 +42,9 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
     <>
       <StickyMobileCta href={lh(lang, "/kontakt")} label={t.ctaTraining} finalCtaId="nachhaltigkeit-cta" />
 
-      <Section id="start" className="pt-24 lg:pt-32">
+      <Section id="start" className="bg-success/5 pt-24 lg:pt-32">
         <div className="max-w-3xl animate-fade-up">
-          <Eyebrow>{t.eyebrow}</Eyebrow>
+          <Eyebrow tone="success">{t.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-5xl leading-[1.05] text-balance sm:text-6xl lg:text-7xl">
             {t.title}
           </h1>
@@ -53,9 +54,9 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
         </div>
       </Section>
 
-      <Reveal as="section" variant="scale" className="border-t border-line">
+      <Reveal as="section" variant="scale" className="border-t border-line bg-success/5">
         <Section>
-          <Eyebrow>{t.soFunktioniertEyebrow}</Eyebrow>
+          <Eyebrow tone="success">{t.soFunktioniertEyebrow}</Eyebrow>
           <div className="grid gap-16 lg:grid-cols-2">
             <div className="max-w-lg">
               <h2 className="font-display text-4xl text-paper text-balance mb-6">
@@ -67,8 +68,8 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
             </div>
             <div className="grid gap-px bg-line">
               {t.projects.map((p) => (
-                <div key={p.title} className="bg-ink p-8">
-                  <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-gold mb-3">
+                <div key={p.title} className="border-t-2 border-success bg-ink p-8">
+                  <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-success mb-3">
                     {p.eyebrow}
                   </p>
                   <h3 className="font-display text-2xl text-paper mb-3">
@@ -77,6 +78,14 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
                   <p className="font-sans text-sm leading-relaxed text-paper-dim">
                     {p.body}
                   </p>
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-underline mt-4 inline-block font-sans text-xs uppercase tracking-[0.08em] text-success"
+                  >
+                    {p.linkLabel} ↗
+                  </a>
                 </div>
               ))}
             </div>
@@ -84,10 +93,20 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
         </Section>
       </Reveal>
 
+      <Reveal as="section" variant="scale" className="border-t border-line">
+        <Section>
+          <ImpactCalculator
+            dict={t.calculator}
+            nabuUrl={t.projects[1].url}
+            dappUrl={t.projects[0].url}
+          />
+        </Section>
+      </Reveal>
+
       <Reveal as="section" variant="left" className="border-t border-line">
         <Section>
           <Container className="max-w-3xl text-center mx-auto">
-            <GoldRule className="mx-auto mb-8" />
+            <GoldRule tone="success" className="mx-auto mb-8" />
             <p className="font-display text-3xl italic leading-snug text-paper sm:text-4xl">
               {t.quote}
             </p>
@@ -95,7 +114,7 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
         </Section>
       </Reveal>
 
-      <Reveal as="section" id="nachhaltigkeit-cta" variant="scale" className="border-t border-line">
+      <Reveal as="section" id="nachhaltigkeit-cta" variant="scale" className="border-t border-line bg-success/5">
         <Section>
           <Container className="flex flex-col items-center gap-6 text-center">
             <h2 className="font-display text-4xl text-paper max-w-xl text-balance">

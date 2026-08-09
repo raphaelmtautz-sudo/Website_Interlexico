@@ -13,7 +13,7 @@ export function CommandTrigger({
     <button
       type="button"
       onClick={() => window.dispatchEvent(new Event("il:command-open"))}
-      aria-label={ariaLabel}
+      aria-label={`${label} — ${ariaLabel}`}
       title="⌘K"
       className={`flex h-10 items-center gap-2 border border-line px-3 text-paper-dim transition-colors hover:border-brand hover:text-brand ${className}`}
     >

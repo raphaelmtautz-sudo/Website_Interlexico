@@ -58,6 +58,5 @@ const nextConfig: NextConfig = {
 // erweitern (oder Sentry-Tunneling nutzen), sonst blockt die CSP die Reports.
 export default withSentryConfig(nextConfig, {
   silent: true,
-  disableLogger: true,
   telemetry: false,
 });

@@ -8,6 +8,7 @@ import { ScrollProgress } from "@/components/interactive/scroll-progress";
 import { StoryLaneNav } from "@/components/interactive/story-lane-nav";
 import { Reveal } from "@/components/interactive/reveal";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
+import { TestimonialCarousel } from "@/components/interactive/testimonial-carousel";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 
@@ -39,7 +40,7 @@ export function CourseTypeLanding({
       <ScrollProgress />
       <StoryLaneNav lanes={lanes} />
       <StickyMobileCta
-        href={lh(lang, "/kontakt")}
+        href={`${lh(lang, "/kontakt")}?kurs=${course.slug}`}
         label={t.jetztAnfragen}
         finalCtaId="anfrage"
       />
@@ -54,8 +55,8 @@ export function CourseTypeLanding({
             {course.heroSubtitle}
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button href={lh(lang, "/kontakt")}>{t.ctaBeratungAnfragen}</Button>
-            <Button href={lh(lang, "/kontakt")} variant="secondary">
+            <Button href={`${lh(lang, "/kontakt")}?kurs=${course.slug}`}>{t.ctaBeratungAnfragen}</Button>
+            <Button href={`${lh(lang, "/kontakt")}?kurs=${course.slug}`} variant="secondary">
               {t.ctaBeratungsgespraech}
             </Button>
           </div>
@@ -154,30 +155,21 @@ export function CourseTypeLanding({
       {course.testimonials.length > 0 && (
         <Reveal as="section" id="stimmen" variant="right" className="border-t border-line">
           <Section>
-            <Container className="max-w-3xl text-center mx-auto">
-              <GoldRule className="mx-auto mb-8" />
-              {course.testimonials.map((t) => (
-                <div key={t.name}>
-                  <p className="font-display text-3xl italic leading-snug text-paper sm:text-4xl">
-                    „{t.quote}“
-                  </p>
-                  <p className="mt-6 font-sans text-sm uppercase tracking-[0.08em] text-paper-dim">
-                    {t.role}, {t.company}
-                  </p>
-                </div>
-              ))}
-            </Container>
+            <GoldRule className="mx-auto mb-10" />
+            <TestimonialCarousel
+              testimonials={course.testimonials.map((t) => ({ quote: t.quote, role: `${t.role}, ${t.company}` }))}
+            />
           </Section>
         </Reveal>
       )}
 
-      <Reveal as="section" id="anfrage" className="border-t border-line">
+      <Reveal as="section" id="anfrage" className="border-t border-line bg-brand/5">
         <Section>
           <Container className="flex flex-col items-center gap-6 text-center">
             <h2 className="font-display text-4xl text-paper max-w-xl text-balance">
               {t.starten} {course.name}
             </h2>
-            <Button href={lh(lang, "/kontakt")}>{t.jetztAnfragen}</Button>
+            <Button href={`${lh(lang, "/kontakt")}?kurs=${course.slug}`}>{t.jetztAnfragen}</Button>
           </Container>
         </Section>
       </Reveal>
