@@ -95,7 +95,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             {dict.home.benefits.map((b) => (
               <div key={b.title} className="border-t border-gold-dim pt-6">
-                <h3 className="font-display text-2xl text-paper mb-3">{b.title}</h3>
+                <h2 className="font-display text-2xl text-paper mb-3">{b.title}</h2>
                 <p className="font-sans text-sm leading-relaxed text-paper-dim">
                   {b.description}
                 </p>

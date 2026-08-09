@@ -8,7 +8,7 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
     <footer className="border-t border-line py-16">
       <Container className="grid gap-12 md:grid-cols-4">
         <div>
-          <p className="font-display text-2xl text-brand mb-3">Interlexico</p>
+          <p className="font-display text-2xl text-brand-strong mb-3">Interlexico</p>
           <p className="font-sans text-sm text-paper-dim leading-relaxed">{dict.footer.tagline}</p>
         </div>
         <div>
@@ -28,6 +28,7 @@ export function SiteFooter({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           </p>
           <ul className="space-y-2 font-sans text-sm text-paper-dim">
             <li><Link className="link-underline" href={lh(lang, "/ueber-uns")}>{dict.nav.ueberUns}</Link></li>
+            <li><Link className="link-underline" href={lh(lang, "/interlexico-one")}>{dict.nav.interlexicoOne}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/nachhaltigkeit")}>{dict.nav.nachhaltigkeit}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/kontakt")}>{dict.nav.kontakt}</Link></li>
           </ul>

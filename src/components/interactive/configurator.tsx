@@ -75,6 +75,7 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
       const isMeaningfullyDifferent =
         saved.participants !== 1 || saved.goal !== "verhandlung" || saved.courseSlug !== (activeCourses[0]?.slug ?? "");
       if (isMeaningfullyDifferent && activeCourses.some((c) => c.slug === saved.courseSlug)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- einmaliges Einlesen von localStorage beim Mount, kein externer Sync-Loop.
         setResumeState(saved);
       }
     } catch {

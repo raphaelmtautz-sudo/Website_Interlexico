@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPaths = [
     { path: "/", priority: 1, changeFrequency: "weekly" as const },
     { path: "/kurse", priority: 0.9, changeFrequency: "weekly" as const },
+    { path: "/interlexico-one", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/einstufung", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/ueber-uns", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/nachhaltigkeit", priority: 0.6, changeFrequency: "monthly" as const },

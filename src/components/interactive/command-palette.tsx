@@ -27,6 +27,7 @@ export function CommandPalette({ lang, dict }: { lang: Locale; dict: Dictionary 
       { label: t.daf, href: lh(lang, "/kurse/deutsch-als-fremdsprache"), hint: t.dafHint },
       { label: t.einstufung, href: lh(lang, "/einstufung"), hint: t.einstufungHint },
       { label: t.ueberUns, href: lh(lang, "/ueber-uns"), hint: t.ueberUnsHint },
+      { label: t.interlexicoOne, href: lh(lang, "/interlexico-one"), hint: t.interlexicoOneHint },
       { label: t.nachhaltigkeit, href: lh(lang, "/nachhaltigkeit"), hint: t.nachhaltigkeitHint },
       { label: t.kontakt, href: lh(lang, "/kontakt"), hint: t.kontaktHint },
       { label: t.impressum, href: lh(lang, "/rechtliches/impressum") },

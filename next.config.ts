@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 /**
  * Content-Security-Policy für eine statische Marketing-Site.
@@ -39,9 +40,24 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Root-Layout liegt unter dem dynamischen [lang]-Segment — echte unbekannte
+  // URLs (kein notFound()-Aufruf, sondern gar keine passende Route) werden
+  // daher nicht vom [lang]/not-found.tsx abgefangen, sondern brauchen die
+  // eigenständige global-not-found.tsx (siehe node_modules/next/dist/docs).
+  experimental: {
+    globalNotFound: true,
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 
-export default nextConfig;
+// Sentry ist vorbereitet, aber ohne SENTRY_DSN/NEXT_PUBLIC_SENTRY_DSN inaktiv
+// (siehe src/instrumentation.ts, src/instrumentation-client.ts). Sobald ein
+// echter DSN gesetzt wird: connect-src oben um den Sentry-Ingest-Host
+// erweitern (oder Sentry-Tunneling nutzen), sonst blockt die CSP die Reports.
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  disableLogger: true,
+  telemetry: false,
+});

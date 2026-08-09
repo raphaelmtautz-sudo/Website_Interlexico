@@ -90,10 +90,15 @@ export function StoryLaneNav({ lanes }: { lanes: Lane[] }) {
               href={`#${lane.id}`}
               aria-label={lane.label}
               aria-current={isActive ? "true" : undefined}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                isActive ? "w-6 bg-gold" : "w-1.5 bg-paper-dim/40"
-              }`}
-            />
+              className="flex h-6 w-6 items-center justify-center"
+            >
+              <span
+                aria-hidden="true"
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  isActive ? "w-6 bg-gold" : "w-1.5 bg-paper-dim/40"
+                }`}
+              />
+            </a>
           );
         })}
       </nav>

@@ -26,6 +26,16 @@ type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
 
 const speechLang: Record<Locale, string> = { de: "de-DE", en: "en-US", es: "es-ES" };
 
+// Geführter Frage-Flow: Lexi sammelt (Anliegen → Unternehmen → Name → E-Mail
+// → Details) und übergibt das Ergebnis am Ende an /api/inquiry — dieselbe
+// Mail-Zustellung wie das Kontaktformular. Kein freies KI-Gespräch, solange
+// keine echte KI-Anbindung existiert (siehe KONZEPT.md, "Lexi-Integration").
+type Step = "topic" | "company" | "name" | "email" | "details" | "done";
+
+function isValidEmail(v: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+}
+
 export function LexiWidget({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -36,6 +46,8 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<Step>("topic");
+  const answersRef = useRef({ topic: "", company: "", name: "", email: "", details: "" });
   const [voiceSupported, setVoiceSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -91,31 +103,76 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Dictionary }) {
     }
   }
 
-  async function sendMessage() {
-    if (!input.trim() || loading) return;
-    const next: Message[] = [...messages, { role: "user", content: input }];
-    setMessages(next);
-    setInput("");
-    setLoading(true);
+  async function submitInquiry() {
+    const a = answersRef.current;
     try {
-      const res = await fetch("/api/lexi-widget", {
+      const res = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next }),
+        body: JSON.stringify({
+          kind: "lexi-chat",
+          topic: a.topic,
+          name: a.name,
+          email: a.email,
+          company: a.company,
+          message: a.details && a.details !== "-" ? a.details : "",
+          website: "", // Honeypot, siehe /api/inquiry
+        }),
       });
-      const data = await res.json();
-      setMessages((m) => [...m, { role: "assistant", content: data.reply }]);
+      if (!res.ok) throw new Error("inquiry_failed");
+      setMessages((m) => [...m, { role: "assistant", content: dict.lexi.closing }]);
     } catch {
-      setMessages((m) => [
-        ...m,
-        {
-          role: "assistant",
-          content: dict.lexi.error,
-        },
-      ]);
+      setMessages((m) => [...m, { role: "assistant", content: dict.lexi.error }]);
     } finally {
       setLoading(false);
     }
+  }
+
+  async function sendMessage() {
+    const value = input.trim();
+    if (!value || loading || step === "done") return;
+    setMessages((m) => [...m, { role: "user", content: value }]);
+    setInput("");
+
+    if (step === "email" && !isValidEmail(value)) {
+      setMessages((m) => [...m, { role: "assistant", content: dict.lexi.invalidEmail }]);
+      return;
+    }
+
+    const a = answersRef.current;
+    if (step === "topic") a.topic = value;
+    else if (step === "company") a.company = value;
+    else if (step === "name") a.name = value;
+    else if (step === "email") a.email = value;
+    else if (step === "details") a.details = value;
+
+    const flow: { step: Step; question: string }[] = [
+      { step: "company", question: dict.lexi.askCompany },
+      { step: "name", question: dict.lexi.askName },
+      { step: "email", question: dict.lexi.askEmail },
+      { step: "details", question: dict.lexi.askDetails },
+    ];
+    const currentIndex = flow.findIndex((f) => f.step === step);
+
+    if (currentIndex === -1) {
+      // step === "topic": erste Frage aus dem Flow stellen.
+      setMessages((m) => [...m, { role: "assistant", content: flow[0].question }]);
+      setStep(flow[0].step);
+      return;
+    }
+
+    const nextEntry = flow[currentIndex + 1];
+    if (nextEntry) {
+      setMessages((m) => [...m, { role: "assistant", content: nextEntry.question }]);
+      setStep(nextEntry.step);
+      return;
+    }
+
+    // Letzte Frage (Details) beantwortet → Anfrage per Mail versenden.
+    setStep("done");
+    setLoading(true);
+    setMessages((m) => [...m, { role: "assistant", content: dict.lexi.sending }]);
+    await submitInquiry();
   }
 
   return (

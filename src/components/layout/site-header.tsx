@@ -14,6 +14,7 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
     { href: lh(lang, "/kurse"), label: dict.nav.kurse },
     { href: lh(lang, "/einstufung"), label: dict.nav.einstufung },
     { href: lh(lang, "/ueber-uns"), label: dict.nav.ueberUns },
+    { href: lh(lang, "/interlexico-one"), label: dict.nav.interlexicoOne },
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },
     { href: lh(lang, "/kontakt"), label: dict.nav.kontakt },
   ];
@@ -27,7 +28,7 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
             // eslint-disable-next-line @next/next/no-img-element -- Logo kommt aus dem CMS (externe Domain), next/image bräuchte dafür eine feste remotePatterns-Konfiguration.
             <img src={logoUrl} alt={logoAlt || "Interlexico"} className="h-9 w-auto sm:h-10" />
           ) : (
-            <span className="font-display text-2xl tracking-wide text-brand">Interlexico</span>
+            <span className="font-display text-2xl tracking-wide text-brand-strong">Interlexico</span>
           )}
         </Link>
         <nav className="hidden items-center gap-8 lg:flex">

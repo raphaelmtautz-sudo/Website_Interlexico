@@ -111,7 +111,7 @@ export function MobileNav({
                 // eslint-disable-next-line @next/next/no-img-element -- Logo kommt aus dem CMS (externe Domain).
                 <img src={logoUrl} alt={logoAlt || "Interlexico"} className="h-8 w-auto" />
               ) : (
-                <span className="font-display text-2xl tracking-wide text-brand">Interlexico</span>
+                <span className="font-display text-2xl tracking-wide text-brand-strong">Interlexico</span>
               )}
             </Link>
             <button
