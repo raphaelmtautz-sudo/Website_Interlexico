@@ -52,6 +52,8 @@ export interface LegalData {
   registerNumber?: string;
   vatId?: string;
   responsiblePerson?: string;
+  phone?: string;
+  phoneMobile?: string;
   disputeResolutionParticipation?: boolean;
   dataProtectionContact?: string;
   supervisoryAuthority?: string;

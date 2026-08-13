@@ -21,9 +21,18 @@ const transport =
       })
     : null;
 
-export async function sendMail(opts: { to: string; replyTo?: string; subject: string; text: string }) {
+export async function sendMail(opts: {
+  to: string;
+  replyTo?: string;
+  subject: string;
+  text: string;
+  attachments?: { filename: string; content: Buffer; contentType?: string }[];
+}) {
   if (!transport) {
-    console.warn("[mailer] SMTP nicht konfiguriert — Mail wird nur geloggt.", opts);
+    console.warn("[mailer] SMTP nicht konfiguriert — Mail wird nur geloggt.", {
+      ...opts,
+      attachments: opts.attachments?.map((a) => a.filename),
+    });
     return { sent: false as const };
   }
   await transport.sendMail({
@@ -32,6 +41,7 @@ export async function sendMail(opts: { to: string; replyTo?: string; subject: st
     replyTo: opts.replyTo,
     subject: opts.subject,
     text: opts.text,
+    attachments: opts.attachments,
   });
   return { sent: true as const };
 }

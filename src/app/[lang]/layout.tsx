@@ -12,6 +12,7 @@ import { CommandPalette } from "@/components/interactive/command-palette";
 import { AdaptiveUI } from "@/components/interactive/adaptive-ui";
 import { locales, hasLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/dictionaries";
+import { getLegal } from "@/lib/cms";
 import { SITE } from "@/lib/site";
 
 const cormorant = Cormorant_Garamond({
@@ -103,6 +104,8 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
+  const legal = await getLegal();
+  const phone = legal.phone ?? SITE.phone;
 
   return (
     <html
@@ -126,7 +129,7 @@ export default async function RootLayout({
           <AdaptiveUI />
           <Analytics />
         </ThemeProvider>
-        <OrganizationJsonLd lang={lang} />
+        <OrganizationJsonLd lang={lang} phone={phone} />
         <WebSiteJsonLd lang={lang} />
       </body>
     </html>

@@ -1,22 +1,35 @@
-import { LegalH2, LegalP, LegalList, PH } from "@/components/legal/legal";
+import { LegalH2, LegalP, LegalList, PH, Val } from "@/components/legal/legal";
 import type { Locale } from "@/lib/i18n";
+import type { LegalData } from "@/lib/cms";
 
-export function DatenschutzContent({ lang }: { lang: Locale }) {
-  if (lang === "en") return <En />;
-  if (lang === "es") return <Es />;
-  return <De />;
+export function DatenschutzContent({ lang, legal }: { lang: Locale; legal: LegalData }) {
+  if (lang === "en") return <En legal={legal} />;
+  if (lang === "es") return <Es legal={legal} />;
+  return <De legal={legal} />;
 }
 
-function De() {
+function De({ legal }: { legal: LegalData }) {
   return (
     <>
       <div className="space-y-3">
         <LegalH2>1. Verantwortlicher</LegalH2>
+        <LegalP>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</LegalP>
         <LegalP>
-          Verantwortlich für die Datenverarbeitung auf dieser Website ist:{" "}
-          <PH>Firmenname, Anschrift, E-Mail, vertretungsberechtigte Person</PH>. Bei
-          Fragen zum Datenschutz erreichen Sie uns unter{" "}
-          <PH>Datenschutz-Kontakt / ggf. Datenschutzbeauftragte:r</PH>.
+          <Val value={legal.companyName} placeholder="Firmenname" />
+          <br />
+          <Val value={legal.street} placeholder="Anschrift" />
+          <br />
+          <Val value={legal.zipCity} placeholder="PLZ, Ort" />
+          <br />
+          Vertreten durch: <Val value={legal.managingDirector} placeholder="vertretungsberechtigte Person" />
+        </LegalP>
+        <LegalP>
+          Bei Fragen zum Datenschutz erreichen Sie uns unter{" "}
+          <Val
+            value={legal.dataProtectionContact}
+            placeholder="Datenschutz-Kontakt / ggf. Datenschutzbeauftragte:r"
+          />
+          .
         </LegalP>
       </div>
 
@@ -108,6 +121,21 @@ function De() {
           Anfragen). Die Daten werden gelöscht, sobald sie nicht mehr erforderlich
           sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
         </LegalP>
+        <LegalP>
+          Beim Englisch-Einstufungstest verarbeiten wir zusätzlich Ihre
+          Testantworten (Multiple-Choice, Freitext) sowie optional eine von
+          Ihnen aufgenommene Sprachaufnahme (Speaking-Aufgabe), sofern Sie
+          den Mikrofonzugriff im Browser erlauben. Diese Daten werden zusammen
+          mit den von Ihnen angegebenen Kontaktdaten per E-Mail an unser Team
+          gesendet, um Ihre schriftliche und mündliche Antwort individuell
+          auszuwerten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO
+          (vorvertragliche Maßnahmen zur Ermittlung eines passenden
+          Trainingsangebots). Die Sprachaufnahme wird nicht dauerhaft auf
+          unserer Website gespeichert, sondern ausschließlich per E-Mail
+          übermittelt; sie wird gelöscht, sobald sie für die Auswertung nicht
+          mehr erforderlich ist. Ohne Ihre Zustimmung zum Mikrofonzugriff
+          können Sie den Test ohne die Sprachaufgabe abschließen.
+        </LegalP>
       </div>
 
       <div className="space-y-3">
@@ -147,7 +175,11 @@ function De() {
         <LegalP>
           Zur Ausübung genügt eine formlose Mitteilung an den oben genannten
           Verantwortlichen. Zuständige Aufsichtsbehörde:{" "}
-          <PH>zuständige Landes-/Datenschutzaufsichtsbehörde</PH>.
+          <Val
+            value={legal.supervisoryAuthority}
+            placeholder="zuständige Landes-/Datenschutzaufsichtsbehörde"
+          />
+          .
         </LegalP>
       </div>
 
@@ -163,16 +195,28 @@ function De() {
   );
 }
 
-function En() {
+function En({ legal }: { legal: LegalData }) {
   return (
     <>
       <div className="space-y-3">
         <LegalH2>1. Controller</LegalH2>
+        <LegalP>The controller responsible for data processing on this website is:</LegalP>
         <LegalP>
-          The controller responsible for data processing on this website is:{" "}
-          <PH>company name, address, email, authorised representative</PH>. For
-          privacy questions, contact us at{" "}
-          <PH>privacy contact / data protection officer, if applicable</PH>.
+          <Val value={legal.companyName} placeholder="company name" />
+          <br />
+          <Val value={legal.street} placeholder="address" />
+          <br />
+          <Val value={legal.zipCity} placeholder="zip code, city" />
+          <br />
+          Represented by: <Val value={legal.managingDirector} placeholder="authorised representative" />
+        </LegalP>
+        <LegalP>
+          For privacy questions, contact us at{" "}
+          <Val
+            value={legal.dataProtectionContact}
+            placeholder="privacy contact / data protection officer, if applicable"
+          />
+          .
         </LegalP>
       </div>
 
@@ -262,6 +306,20 @@ function En() {
           6(1)(f) GDPR (responding to enquiries). Data is deleted once it is no
           longer required and no statutory retention obligations apply.
         </LegalP>
+        <LegalP>
+          For the English placement test, we additionally process your test
+          answers (multiple choice, free text) and, optionally, a voice
+          recording you make for the speaking task, provided you allow
+          microphone access in your browser. This data is sent by email to
+          our team together with the contact details you provide, so we can
+          give you individual feedback on your written and spoken answers.
+          Legal basis: Art. 6(1)(b) GDPR (pre-contractual measures to
+          determine a suitable training offer). The voice recording is not
+          permanently stored on our website — it is only transmitted by
+          email — and is deleted once it is no longer needed for the
+          assessment. You can complete the test without the speaking task if
+          you do not consent to microphone access.
+        </LegalP>
       </div>
 
       <div className="space-y-3">
@@ -301,7 +359,11 @@ function En() {
         <LegalP>
           An informal message to the controller named above is sufficient to
           exercise these rights. Competent supervisory authority:{" "}
-          <PH>relevant state/data protection supervisory authority</PH>.
+          <Val
+            value={legal.supervisoryAuthority}
+            placeholder="relevant state/data protection supervisory authority"
+          />
+          .
         </LegalP>
       </div>
 
@@ -317,16 +379,28 @@ function En() {
   );
 }
 
-function Es() {
+function Es({ legal }: { legal: LegalData }) {
   return (
     <>
       <div className="space-y-3">
         <LegalH2>1. Responsable del tratamiento</LegalH2>
+        <LegalP>El responsable del tratamiento de datos en este sitio web es:</LegalP>
         <LegalP>
-          El responsable del tratamiento de datos en este sitio web es:{" "}
-          <PH>nombre de la empresa, dirección, correo electrónico, persona con poder de representación</PH>. Para
-          consultas sobre protección de datos, escríbanos a{" "}
-          <PH>contacto de protección de datos / delegado de protección de datos, si procede</PH>.
+          <Val value={legal.companyName} placeholder="nombre de la empresa" />
+          <br />
+          <Val value={legal.street} placeholder="dirección" />
+          <br />
+          <Val value={legal.zipCity} placeholder="código postal, ciudad" />
+          <br />
+          Representado por: <Val value={legal.managingDirector} placeholder="persona con poder de representación" />
+        </LegalP>
+        <LegalP>
+          Para consultas sobre protección de datos, escríbanos a{" "}
+          <Val
+            value={legal.dataProtectionContact}
+            placeholder="contacto de protección de datos / delegado de protección de datos, si procede"
+          />
+          .
         </LegalP>
       </div>
 
@@ -419,6 +493,21 @@ function Es() {
           en cuanto dejan de ser necesarios y no existen obligaciones legales de
           conservación.
         </LegalP>
+        <LegalP>
+          En el test de nivel de inglés procesamos además sus respuestas
+          (opción múltiple, texto libre) y, opcionalmente, una grabación de voz
+          que usted realiza para la tarea de expresión oral, siempre que
+          permita el acceso al micrófono en su navegador. Estos datos se
+          envían por correo electrónico a nuestro equipo junto con los datos
+          de contacto facilitados, para poder valorar de forma individual su
+          respuesta escrita y oral. Base jurídica: artículo 6.1.b del RGPD
+          (medidas precontractuales para determinar una oferta formativa
+          adecuada). La grabación de voz no se almacena de forma permanente en
+          nuestra web — solo se transmite por correo electrónico — y se
+          elimina en cuanto ya no es necesaria para la valoración. Puede
+          completar el test sin la tarea de expresión oral si no consiente el
+          acceso al micrófono.
+        </LegalP>
       </div>
 
       <div className="space-y-3">
@@ -457,7 +546,11 @@ function Es() {
         <LegalP>
           Para ejercer estos derechos basta con una comunicación informal al responsable
           mencionado anteriormente. Autoridad de control competente:{" "}
-          <PH>autoridad de control de protección de datos competente</PH>.
+          <Val
+            value={legal.supervisoryAuthority}
+            placeholder="autoridad de control de protección de datos competente"
+          />
+          .
         </LegalP>
       </div>
 

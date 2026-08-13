@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LegalDoc } from "@/components/legal/legal";
 import { DatenschutzContent } from "@/components/legal/datenschutz-content";
+import { getLegal } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 
@@ -42,10 +43,11 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
+  const legal = await getLegal();
 
   return (
     <LegalDoc title={titles[lang]} intro={intros[lang]} eyebrow={dict.legal.eyebrow} lang={lang} dict={dict}>
-      <DatenschutzContent lang={lang} />
+      <DatenschutzContent lang={lang} legal={legal} />
     </LegalDoc>
   );
 }

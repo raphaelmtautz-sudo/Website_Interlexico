@@ -21,7 +21,7 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   );
 }
 
-export function OrganizationJsonLd({ lang }: { lang: Locale }) {
+export function OrganizationJsonLd({ lang, phone = SITE.phone }: { lang: Locale; phone?: string }) {
   return (
     <JsonLd
       data={{
@@ -32,7 +32,7 @@ export function OrganizationJsonLd({ lang }: { lang: Locale }) {
         legalName: SITE.legalName,
         url: SITE.url,
         email: SITE.email,
-        telephone: SITE.phone,
+        telephone: phone,
         description: SITE.description,
         areaServed: SITE.areaServed,
         knowsLanguage: ["de", "en", "es"],
@@ -44,7 +44,7 @@ export function OrganizationJsonLd({ lang }: { lang: Locale }) {
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "sales",
-          telephone: SITE.phone,
+          telephone: phone,
           email: SITE.email,
           areaServed: SITE.areaServed,
           availableLanguage: ["de", "en", "es"],

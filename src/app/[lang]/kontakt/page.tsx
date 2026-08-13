@@ -5,6 +5,7 @@ import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { ContactForm } from "@/components/contact/contact-form";
 import { SITE } from "@/lib/site";
+import { getLegal } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 
@@ -28,6 +29,10 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
   const t = dict.kontakt;
+  const legal = await getLegal();
+  const phone = legal.phone ?? SITE.phone;
+  const phoneMobile = legal.phoneMobile ?? SITE.phoneMobile;
+  const telHref = (n: string) => `tel:${n.replace(/[^+\d]/g, "")}`;
 
   return (
     <Section className="pt-24 lg:pt-32">
@@ -86,12 +91,12 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
                 {t.telefonLabel}
               </dt>
               <dd className="text-paper-dim">
-                <a href="tel:+4981424624046" className="link-underline text-paper">
-                  +49 8142 4624046
+                <a href={telHref(phone)} className="link-underline text-paper">
+                  {phone}
                 </a>{" "}
                 · {t.mobilLabel}{" "}
-                <a href="tel:+4915153646471" className="link-underline text-paper">
-                  +49 1515 3646471
+                <a href={telHref(phoneMobile)} className="link-underline text-paper">
+                  {phoneMobile}
                 </a>
               </dd>
             </div>

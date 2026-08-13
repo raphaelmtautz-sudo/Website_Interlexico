@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { getAssessment } from "@/content/einstufung";
+import { FullEnglishTest } from "@/components/interactive/full-english-test";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 
@@ -12,11 +13,16 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
   const { assessmentQuestions, answerOptions, levelForScore } = getAssessment(lang);
   const t = dict.selfAssessment;
   const [assessLang, setAssessLang] = useState<Lang | null>(null);
+  const [fullTest, setFullTest] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [done, setDone] = useState(false);
 
   const total = assessmentQuestions.length;
+
+  if (fullTest) {
+    return <FullEnglishTest lang={lang} dict={dict} onCancel={() => setFullTest(false)} />;
+  }
 
   function choose(value: number) {
     const next = [...answers];
@@ -55,6 +61,13 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          onClick={() => setFullTest(true)}
+          className="mt-6 font-sans text-sm text-paper-dim underline decoration-line underline-offset-4 transition-colors hover:text-brand"
+        >
+          {t.fullTestOffer}
+        </button>
       </Frame>
     );
   }

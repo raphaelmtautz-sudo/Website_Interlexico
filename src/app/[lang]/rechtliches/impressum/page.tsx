@@ -59,9 +59,9 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
       <div className="space-y-3">
         <LegalH2>{t.kontaktHeading}</LegalH2>
         <LegalP>
-          {t.telefonLabel}: +49 8142 4624046
+          {t.telefonLabel}: <Val value={legal.phone} placeholder={t.telefonLabel} />
           <br />
-          {t.mobilLabel}: +49 1515 3646471
+          {t.mobilLabel}: <Val value={legal.phoneMobile} placeholder={t.mobilLabel} />
           <br />
           {t.emailLabel}: info@interlexico.com
         </LegalP>
