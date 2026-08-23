@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
-import { getPosts } from "@/lib/cms";
+import { getPosts, getSiteSettings } from "@/lib/cms";
 import { hasLocale, lh, type Locale } from "@/lib/i18n";
 
 const t: Record<Locale, { eyebrow: string; title: string; empty: string }> = {
@@ -28,6 +28,8 @@ export async function generateMetadata({
 export default async function BlogPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
+  const { blogEnabled } = await getSiteSettings();
+  if (!blogEnabled) notFound();
   const posts = await getPosts(lang);
 
   return (

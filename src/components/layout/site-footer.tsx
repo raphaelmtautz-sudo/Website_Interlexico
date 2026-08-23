@@ -3,9 +3,9 @@ import { Container } from "@/components/ui/container";
 import { SocialIcon } from "@/components/contact/social-icon";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
-import type { ContactData } from "@/lib/cms";
+import { getSiteSettings, type ContactData } from "@/lib/cms";
 
-export function SiteFooter({
+export async function SiteFooter({
   lang,
   dict,
   socialLinks = [],
@@ -14,6 +14,7 @@ export function SiteFooter({
   dict: Dictionary;
   socialLinks?: ContactData["socialLinks"];
 }) {
+  const { blogEnabled } = await getSiteSettings();
   return (
     <footer className="border-t border-line py-16">
       <Container className="grid gap-12 md:grid-cols-4">
@@ -57,7 +58,7 @@ export function SiteFooter({
             <li><Link className="link-underline" href={lh(lang, "/interlexico-one")}>{dict.nav.interlexicoOne}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/nachhaltigkeit")}>{dict.nav.nachhaltigkeit}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/karriere")}>{dict.nav.karriere}</Link></li>
-            <li><Link className="link-underline" href={lh(lang, "/blog")}>{dict.nav.blog}</Link></li>
+            {blogEnabled && <li><Link className="link-underline" href={lh(lang, "/blog")}>{dict.nav.blog}</Link></li>}
             <li><Link className="link-underline" href={lh(lang, "/kontakt")}>{dict.nav.kontakt}</Link></li>
           </ul>
         </div>

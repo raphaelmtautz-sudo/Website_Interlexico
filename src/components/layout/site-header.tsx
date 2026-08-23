@@ -19,15 +19,15 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
     { href: lh(lang, "/kurse"), label: dict.nav.kurse },
     { href: lh(lang, "/einstufung"), label: dict.nav.einstufung },
   ];
+  const { logoUrl, logoAlt, blogEnabled } = await getSiteSettings();
   const secondaryItems = [
     { href: lh(lang, "/ueber-uns"), label: dict.nav.ueberUns },
     { href: lh(lang, "/interlexico-one"), label: dict.nav.interlexicoOne },
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },
     { href: lh(lang, "/karriere"), label: dict.nav.karriere },
-    { href: lh(lang, "/blog"), label: dict.nav.blog },
+    ...(blogEnabled ? [{ href: lh(lang, "/blog"), label: dict.nav.blog }] : []),
   ];
   const mobileItems = [...primaryItems, ...secondaryItems, { href: lh(lang, "/kontakt"), label: dict.nav.kontakt }];
-  const { logoUrl, logoAlt } = await getSiteSettings();
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-ink/70 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-ink/60">

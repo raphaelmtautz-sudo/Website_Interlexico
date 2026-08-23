@@ -375,28 +375,32 @@ export async function getRedirect(path: string): Promise<RedirectData | null> {
 export interface SiteSettingsData {
   logoUrl?: string;
   logoAlt?: string;
+  blogEnabled: boolean;
 }
 
 /**
- * Website-weite Marken-Assets (aktuell: Logo). Ohne hochgeladenes Logo im CMS
- * bleiben die Felder leer — die aufrufenden Komponenten zeigen dann weiterhin
- * den Schriftzug "Interlexico" als Platzhalter.
+ * Website-weite Einstellungen (Logo, Blog-Sichtbarkeit). Bei CMS-Ausfall
+ * bleibt das Logo-Feld leer (Fallback auf den Schriftzug "Interlexico") und
+ * `blogEnabled` bleibt `true` — ein CMS-Ausfall soll den Blog nicht
+ * überraschend verschwinden lassen.
  */
 export async function getSiteSettings(): Promise<SiteSettingsData> {
   try {
     const res = await fetch(`${CMS_URL}/api/globals/site-settings?depth=1`, {
       next: { revalidate: REVALIDATE, tags: ["site-settings"] },
     });
-    if (!res.ok) return {};
+    if (!res.ok) return { blogEnabled: true };
     const data = (await res.json()) as {
       logo?: { url?: string; alt?: string } | null;
+      blogEnabled?: boolean;
     };
-    if (!data.logo?.url) return {};
+    const blogEnabled = data.blogEnabled !== false;
+    if (!data.logo?.url) return { blogEnabled };
     const url = data.logo.url.startsWith("http") ? data.logo.url : `${CMS_URL}${data.logo.url}`;
-    return { logoUrl: url, logoAlt: data.logo.alt };
+    return { logoUrl: url, logoAlt: data.logo.alt, blogEnabled };
   } catch (e) {
     console.error("[DEBUG getSiteSettings] CAUGHT", e);
-    return {};
+    return { blogEnabled: true };
   }
 }
 

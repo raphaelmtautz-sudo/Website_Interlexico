@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Section } from "@/components/ui/section";
-import { getPost } from "@/lib/cms";
+import { getPost, getSiteSettings } from "@/lib/cms";
 import { renderLexical } from "@/lib/lexical-render";
 import { hasLocale, lh } from "@/lib/i18n";
 
@@ -39,6 +39,8 @@ export default async function BlogPostPage({
 }) {
   const { lang, slug } = await params;
   if (!hasLocale(lang)) notFound();
+  const { blogEnabled } = await getSiteSettings();
+  if (!blogEnabled) notFound();
   const post = await getPost(slug, lang);
   if (!post) notFound();
 

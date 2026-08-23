@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { getCourseTypes } from "@/content/course-types";
-import { getPosts } from "@/lib/cms";
+import { getPosts, getSiteSettings } from "@/lib/cms";
 import { locales, lh, defaultLocale, type Locale } from "@/lib/i18n";
 
 function alternates(path: string): Record<string, string> {
@@ -13,6 +13,7 @@ function alternates(path: string): Record<string, string> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const { blogEnabled } = await getSiteSettings();
 
   const staticPaths = [
     // Leerer Pfad statt "/" — lh(l, "/") würde "/de/" ergeben (Trailing
@@ -25,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/ueber-uns", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/nachhaltigkeit", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/karriere", priority: 0.5, changeFrequency: "monthly" as const },
-    { path: "/blog", priority: 0.5, changeFrequency: "weekly" as const },
+    ...(blogEnabled ? [{ path: "/blog", priority: 0.5, changeFrequency: "weekly" as const }] : []),
     { path: "/kontakt", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/rechtliches/impressum", priority: 0.2, changeFrequency: "yearly" as const },
     { path: "/rechtliches/datenschutz", priority: 0.2, changeFrequency: "yearly" as const },
@@ -66,15 +67,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    const posts = await getPosts(l as Locale);
-    for (const post of posts) {
-      entries.push({
-        url: `${SITE.url}${lh(l, `/blog/${post.slug}`)}`,
-        lastModified: post.publishedAt ? new Date(post.publishedAt) : now,
-        changeFrequency: "monthly",
-        priority: 0.4,
-        alternates: { languages: alternates(`/blog/${post.slug}`) },
-      });
+    if (blogEnabled) {
+      const posts = await getPosts(l as Locale);
+      for (const post of posts) {
+        entries.push({
+          url: `${SITE.url}${lh(l, `/blog/${post.slug}`)}`,
+          lastModified: post.publishedAt ? new Date(post.publishedAt) : now,
+          changeFrequency: "monthly",
+          priority: 0.4,
+          alternates: { languages: alternates(`/blog/${post.slug}`) },
+        });
+      }
     }
   }
 
