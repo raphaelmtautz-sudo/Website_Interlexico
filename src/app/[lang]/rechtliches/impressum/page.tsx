@@ -11,6 +11,10 @@ import { getLegal } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 
+// Siehe Kommentar in rechtliches/datenschutz/page.tsx: Pflichtangaben aus dem
+// CMS pro Anfrage frisch laden statt beim (netzwerkisolierten) Build zu backen.
+export const revalidate = 0;
+
 export async function generateMetadata({
   params,
 }: {

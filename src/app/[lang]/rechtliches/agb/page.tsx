@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LegalDoc } from "@/components/legal/legal";
 import { AgbContent } from "@/components/legal/agb-content";
-import { getLegal } from "@/lib/cms";
+import { getLegal, getLegalExtras } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
+
+// Siehe Kommentar in rechtliches/datenschutz/page.tsx: CMS-Rechtstext-Fakten
+// pro Anfrage frisch laden statt beim (netzwerkisolierten) Build zu backen.
+export const revalidate = 0;
 
 const titles = {
   de: "Allgemeine Geschäftsbedingungen",
@@ -43,11 +47,11 @@ export default async function AgbPage({ params }: { params: Promise<{ lang: stri
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const legal = await getLegal();
+  const [legal, extras] = await Promise.all([getLegal(), getLegalExtras()]);
 
   return (
     <LegalDoc title={titles[lang]} intro={intros[lang]} eyebrow={dict.legal.eyebrow} lang={lang} dict={dict}>
-      <AgbContent lang={lang} legal={legal} />
+      <AgbContent lang={lang} legal={legal} extras={extras} />
     </LegalDoc>
   );
 }

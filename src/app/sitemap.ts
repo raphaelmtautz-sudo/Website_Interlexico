@@ -14,12 +14,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const staticPaths = [
-    { path: "/", priority: 1, changeFrequency: "weekly" as const },
+    // Leerer Pfad statt "/" — lh(l, "/") würde "/de/" ergeben (Trailing
+    // Slash), die Seite läuft aber unter "/de" (trailingSlash: false,
+    // "/de/" 308-redirected auf "/de"). Sitemap-URLs dürfen nicht redirecten.
+    { path: "", priority: 1, changeFrequency: "weekly" as const },
     { path: "/kurse", priority: 0.9, changeFrequency: "weekly" as const },
     { path: "/interlexico-one", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/einstufung", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/ueber-uns", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/nachhaltigkeit", priority: 0.6, changeFrequency: "monthly" as const },
+    { path: "/karriere", priority: 0.5, changeFrequency: "monthly" as const },
     { path: "/kontakt", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/rechtliches/impressum", priority: 0.2, changeFrequency: "yearly" as const },
     { path: "/rechtliches/datenschutz", priority: 0.2, changeFrequency: "yearly" as const },

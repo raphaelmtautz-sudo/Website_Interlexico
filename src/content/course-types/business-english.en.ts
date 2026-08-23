@@ -6,7 +6,7 @@ export const businessEnglish: CourseType = {
   name: "Business English",
   shortName: "Business English",
   status: "aktiv",
-  tagline: "Negotiation-ready in the language of business",
+  tagline: "Negotiate, present, and communicate with confidence — in English",
   heroTitle: "Business English for leaders and teams",
   heroSubtitle:
     "No off-the-shelf language course. Training built around your industry, your meetings, and your goals.",

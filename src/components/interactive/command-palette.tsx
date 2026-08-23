@@ -29,6 +29,7 @@ export function CommandPalette({ lang, dict }: { lang: Locale; dict: Dictionary 
       { label: t.ueberUns, href: lh(lang, "/ueber-uns"), hint: t.ueberUnsHint },
       { label: t.interlexicoOne, href: lh(lang, "/interlexico-one"), hint: t.interlexicoOneHint },
       { label: t.nachhaltigkeit, href: lh(lang, "/nachhaltigkeit"), hint: t.nachhaltigkeitHint },
+      { label: t.karriere, href: lh(lang, "/karriere"), hint: t.karriereHint },
       { label: t.kontakt, href: lh(lang, "/kontakt"), hint: t.kontaktHint },
       { label: t.impressum, href: lh(lang, "/rechtliches/impressum") },
       { label: t.datenschutz, href: lh(lang, "/rechtliches/datenschutz") },

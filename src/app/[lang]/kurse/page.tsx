@@ -16,8 +16,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
+  const dict = getDictionary(lang);
   return {
-    title: getDictionary(lang).kurse.title,
+    title: dict.kurse.metaTitle,
+    description: dict.kurse.metaDescription,
     alternates: { canonical: lh(lang, "/kurse") },
   };
 }

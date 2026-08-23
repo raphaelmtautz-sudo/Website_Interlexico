@@ -44,6 +44,47 @@ export default async function InterlexicoOnePage({ params }: { params: Promise<{
         </div>
       </Section>
 
+      <Reveal as="section" variant="left" className="border-t border-line">
+        <Section>
+          <Container className="grid gap-12 px-0 md:grid-cols-2">
+            <div>
+              <Eyebrow>{t.problemEyebrow}</Eyebrow>
+              <h2 className="font-display text-4xl text-paper text-balance">{t.problemTitle}</h2>
+            </div>
+            <p className="font-sans text-paper-dim leading-relaxed self-center">{t.problemText}</p>
+          </Container>
+        </Section>
+      </Reveal>
+
+      <Reveal as="section" variant="scale" className="border-t border-line">
+        <Section>
+          <Eyebrow>{t.capabilitiesEyebrow}</Eyebrow>
+          <div className="mb-12 max-w-2xl">
+            <h2 className="font-display text-4xl text-paper text-balance">{t.capabilitiesTitle}</h2>
+          </div>
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+            {t.capabilities.map((c) => (
+              <div key={c.title} className="border-t border-gold-dim pt-6">
+                <h3 className="font-display text-2xl text-paper mb-3">{c.title}</h3>
+                <p className="font-sans text-sm leading-relaxed text-paper-dim">{c.description}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      </Reveal>
+
+      <Reveal as="section" className="border-t border-line">
+        <Section>
+          <Container className="grid gap-12 px-0 md:grid-cols-2">
+            <div>
+              <Eyebrow>{t.whyEyebrow}</Eyebrow>
+              <h2 className="font-display text-4xl text-paper text-balance">{t.whyTitle}</h2>
+            </div>
+            <p className="font-sans text-paper-dim leading-relaxed self-center">{t.whyText}</p>
+          </Container>
+        </Section>
+      </Reveal>
+
       <Reveal as="section" id="interlexico-one-cta" variant="scale" className="border-t border-line bg-brand/5">
         <Section>
           <Container className="flex flex-col items-center gap-6 text-center">

@@ -4,13 +4,14 @@ export const SITE = {
   name: "Interlexico",
   legalName: "Interlexico",
   description:
-    "Sprachakademie für Unternehmen in der DACH-Region: Business English und Deutsch als Fremdsprache. Individuell, messbar, ohne Umwege.",
+    "Corporate Language Training für Unternehmen in der DACH-Region: Business English und Deutsch als Fremdsprache, individuell eingestuft, mit messbarem Fortschritt und über Interlexico ONE organisiert.",
   locale: "de_DE",
   areaServed: ["DE", "AT", "CH"],
   sameAs: [] as string[], // Social-/Verzeichnis-Profile ergänzen, sobald vorhanden
   // Öffentliche Kontaktdaten (von der bestehenden Live-Seite interlexico.com).
   email: "info@interlexico.com",
   inquiryEmail: "contact@interlexico.com", // Anfragen aus Formularen/Buchung
+  careerEmail: "career@interlexico.com", // Bewerbungen aus dem Karriere-Formular
   phone: "+49 8142 4624046",
   phoneMobile: "+49 1515 3646471",
 } as const;

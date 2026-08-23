@@ -3,7 +3,6 @@ import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { GoldRule } from "@/components/ui/divider";
-import { ScrollProgress } from "@/components/interactive/scroll-progress";
 import { StoryLaneNav } from "@/components/interactive/story-lane-nav";
 import { Reveal } from "@/components/interactive/reveal";
 import { Configurator } from "@/components/interactive/configurator";
@@ -12,7 +11,7 @@ import { TestimonialCarousel } from "@/components/interactive/testimonial-carous
 import { ImpactCalculator } from "@/components/interactive/impact-calculator";
 import { getIndustries } from "@/content/industries";
 import { FaqJsonLd } from "@/components/seo/json-ld";
-import { getFaq } from "@/lib/cms";
+import { getFaq, getTestimonials } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -21,8 +20,20 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const faq = await getFaq(lang);
+  const [faq, cmsTestimonials] = await Promise.all([getFaq(lang), getTestimonials()]);
   const industries = getIndustries(lang);
+
+  // Echte, freigegebene Kundenstimmen aus dem CMS haben Vorrang; solange
+  // dort keine veröffentlicht ist, zeigen wir die illustrativen Beispiel-
+  // zitate aus dem Dictionary (anonymisiert, keine echten Personen/Firmen).
+  const testimonials = cmsTestimonials.length
+    ? cmsTestimonials.map((t) => ({
+        quote: t.quote,
+        role: [t.personName, [t.personRole, t.companyName].filter(Boolean).join(", ")]
+          .filter(Boolean)
+          .join(" — "),
+      }))
+    : dict.home.testimonials;
 
   const offering = dict.home.offering.map((o) => ({
     ...o,
@@ -47,7 +58,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <>
-      <ScrollProgress />
       <StoryLaneNav lanes={lanes} />
       <StickyMobileCta href={lh(lang, "/kontakt")} label={dict.common.beratungsgespraechBuchen} />
 
@@ -63,8 +73,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             {dict.home.heroSubtitle}
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button href="#konfigurator">{dict.home.ctaConfigure}</Button>
-            <Button href={lh(lang, "/kontakt")} variant="secondary">
+            <Button href="#konfigurator" trackEvent="cta_click" trackProps={{ cta: "konfigurator", place: "hero" }}>
+              {dict.home.ctaConfigure}
+            </Button>
+            <Button
+              href={lh(lang, "/kontakt")}
+              variant="secondary"
+              trackEvent="cta_click"
+              trackProps={{ cta: "beratung", place: "hero" }}
+            >
               {dict.common.beratungsgespraechBuchen}
             </Button>
           </div>
@@ -211,7 +228,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <Reveal as="section" id="stimmen" variant="scale" className="border-t border-line">
         <Section>
           <GoldRule className="mx-auto mb-10" />
-          <TestimonialCarousel testimonials={dict.home.testimonials} />
+          <TestimonialCarousel testimonials={testimonials} />
         </Section>
       </Reveal>
 
@@ -269,7 +286,23 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <h2 className="font-display text-4xl text-paper max-w-xl text-balance">
               {dict.home.kontaktCtaTitle}
             </h2>
-            <Button href={lh(lang, "/kontakt")}>{dict.common.beratungsgespraechBuchen}</Button>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Button
+                href={lh(lang, "/kontakt")}
+                trackEvent="cta_click"
+                trackProps={{ cta: "angebot", place: "kontakt-cta" }}
+              >
+                {dict.common.angebotAnfordern}
+              </Button>
+              <Button
+                href={lh(lang, "/kontakt")}
+                variant="secondary"
+                trackEvent="cta_click"
+                trackProps={{ cta: "beratung", place: "kontakt-cta" }}
+              >
+                {dict.common.beratungsgespraechBuchen}
+              </Button>
+            </div>
           </Container>
         </Section>
       </Reveal>

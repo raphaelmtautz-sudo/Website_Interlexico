@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ReactNode } from "react";
+import { track } from "@/lib/track";
 
 type Variant = "primary" | "secondary" | "ghost";
 
@@ -22,6 +25,8 @@ export function Button({
   type = "button",
   className = "",
   tabIndex,
+  trackEvent,
+  trackProps,
 }: {
   children: ReactNode;
   href?: string;
@@ -30,19 +35,28 @@ export function Button({
   type?: "button" | "submit";
   className?: string;
   tabIndex?: number;
+  /** Serialisierbarer Event-Name für /api/collect — funktioniert auch, wenn
+   * Button von einer Server Component aus gerendert wird (kein onClick-Prop
+   * lässt sich dort direkt übergeben). */
+  trackEvent?: string;
+  trackProps?: Record<string, string>;
 }) {
   const classes = `${base} ${variants[variant]} ${className}`;
+  const handleClick = () => {
+    if (trackEvent) track(trackEvent, trackProps);
+    onClick?.();
+  };
 
   if (href) {
     return (
-      <Link href={href} className={classes} onClick={onClick} tabIndex={tabIndex}>
+      <Link href={href} className={classes} onClick={handleClick} tabIndex={tabIndex}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes} tabIndex={tabIndex}>
+    <button type={type} onClick={handleClick} className={classes} tabIndex={tabIndex}>
       {children}
     </button>
   );

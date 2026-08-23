@@ -21,7 +21,15 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   );
 }
 
-export function OrganizationJsonLd({ lang, phone = SITE.phone }: { lang: Locale; phone?: string }) {
+export function OrganizationJsonLd({
+  lang,
+  phone = SITE.phone,
+  sameAs = SITE.sameAs,
+}: {
+  lang: Locale;
+  phone?: string;
+  sameAs?: string[];
+}) {
   return (
     <JsonLd
       data={{
@@ -49,7 +57,7 @@ export function OrganizationJsonLd({ lang, phone = SITE.phone }: { lang: Locale;
           areaServed: SITE.areaServed,
           availableLanguage: ["de", "en", "es"],
         },
-        ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
+        ...(sameAs.length ? { sameAs } : {}),
         inLanguage: bcp47[lang],
       }}
     />

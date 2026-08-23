@@ -15,7 +15,7 @@ export async function generateMetadata({
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
   return {
-    title: dict.einstufung.eyebrow,
+    title: dict.einstufung.metaTitle,
     description: dict.einstufung.text,
     alternates: { canonical: lh(lang, "/einstufung") },
   };

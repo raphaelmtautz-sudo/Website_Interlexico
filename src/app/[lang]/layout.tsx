@@ -10,9 +10,9 @@ import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/json-ld";
 import { Analytics } from "@/components/analytics/analytics";
 import { CommandPalette } from "@/components/interactive/command-palette";
 import { AdaptiveUI } from "@/components/interactive/adaptive-ui";
-import { locales, hasLocale, type Locale } from "@/lib/i18n";
+import { locales, hasLocale, lh, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/dictionaries";
-import { getLegal } from "@/lib/cms";
+import { getLegal, getContact } from "@/lib/cms";
 import { SITE } from "@/lib/site";
 
 const cormorant = Cormorant_Garamond({
@@ -42,7 +42,13 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  const path = lang === "de" ? "/" : `/${lang}`;
+  // Kanonischer Pfad IMMER mit Sprachpräfix (auch "de") — muss mit dem
+  // hreflang-Cluster unten übereinstimmen. Vorher fiel Deutsch auf "/" statt
+  // "/de" zurück: die Root-URL redirectet aber (307) auf "/de", d. h. das
+  // selbst-referenzierende Canonical zeigte auf eine URL außerhalb des
+  // eigenen hreflang-Sets — ein klassischer Google-Hreflang-Fehler, der z. B.
+  // die es-Variante für Google Spanien unzuverlässig macht.
+  const path = lh(lang);
 
   return {
     metadataBase: new URL(SITE.url),
@@ -104,8 +110,9 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const legal = await getLegal();
+  const [legal, contact] = await Promise.all([getLegal(), getContact()]);
   const phone = legal.phone ?? SITE.phone;
+  const sameAs = contact.socialLinks.map((s) => s.url);
 
   return (
     <html
@@ -123,13 +130,13 @@ export default async function RootLayout({
           <main id="main" className="flex-1">
             {children}
           </main>
-          <SiteFooter lang={lang} dict={dict} />
+          <SiteFooter lang={lang} dict={dict} socialLinks={contact.socialLinks} />
           <LexiWidget lang={lang} dict={dict} />
           <CommandPalette lang={lang} dict={dict} />
           <AdaptiveUI />
           <Analytics />
         </ThemeProvider>
-        <OrganizationJsonLd lang={lang} phone={phone} />
+        <OrganizationJsonLd lang={lang} phone={phone} sameAs={sameAs} />
         <WebSiteJsonLd lang={lang} />
       </body>
     </html>

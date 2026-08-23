@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
@@ -22,6 +23,7 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
     { href: lh(lang, "/ueber-uns"), label: dict.nav.ueberUns },
     { href: lh(lang, "/interlexico-one"), label: dict.nav.interlexicoOne },
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },
+    { href: lh(lang, "/karriere"), label: dict.nav.karriere },
   ];
   const mobileItems = [...primaryItems, ...secondaryItems, { href: lh(lang, "/kontakt"), label: dict.nav.kontakt }];
   const { logoUrl, logoAlt } = await getSiteSettings();
@@ -31,8 +33,14 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
       <Container className="flex h-20 items-center justify-between">
         <Link href={lh(lang, "/")} aria-label="Interlexico">
           {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element -- Logo kommt aus dem CMS (externe Domain), next/image bräuchte dafür eine feste remotePatterns-Konfiguration.
-            <img src={logoUrl} alt={logoAlt || "Interlexico"} className="h-9 w-auto sm:h-10" />
+            <Image
+              src={logoUrl}
+              alt={logoAlt || "Interlexico"}
+              width={160}
+              height={40}
+              priority
+              className="h-9 w-auto sm:h-10"
+            />
           ) : (
             <span className="font-display text-2xl tracking-wide text-brand-strong">Interlexico</span>
           )}

@@ -6,7 +6,7 @@ export const businessEnglish: CourseType = {
   name: "Inglés de negocios",
   shortName: "Inglés de negocios",
   status: "aktiv",
-  tagline: "Seguridad negociadora en el idioma de los negocios",
+  tagline: "Negocie, presente y comunique con seguridad — en inglés",
   heroTitle: "Inglés de negocios para directivos y equipos",
   heroSubtitle:
     "Nada de cursos de idiomas estándar. Formación diseñada según su sector, sus reuniones y sus objetivos.",

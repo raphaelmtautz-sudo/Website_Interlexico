@@ -20,12 +20,12 @@ export async function generateMetadata({
   const dict = getDictionary(lang);
   const url = lh(lang, "/nachhaltigkeit");
   return {
-    title: dict.nachhaltigkeit.eyebrow,
+    title: dict.nachhaltigkeit.metaTitle,
     description: dict.nachhaltigkeit.text,
     alternates: { canonical: url },
     openGraph: {
       type: "website",
-      title: dict.nachhaltigkeit.eyebrow,
+      title: dict.nachhaltigkeit.metaTitle,
       description: dict.nachhaltigkeit.text,
       url,
     },

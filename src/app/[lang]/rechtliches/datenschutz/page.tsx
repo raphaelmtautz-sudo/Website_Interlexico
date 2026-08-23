@@ -2,9 +2,16 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LegalDoc } from "@/components/legal/legal";
 import { DatenschutzContent } from "@/components/legal/datenschutz-content";
-import { getLegal } from "@/lib/cms";
+import { getLegal, getLegalExtras } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
+
+// Rechtstext-Fakten (Hosting, Fristen etc.) kommen aus dem CMS und ändern
+// sich unabhängig vom Deploy. Der Docker-Build hat keine CMS-Netzwerk-
+// verbindung, würde also immer den <PH>-Leerzustand einbacken (SSG-Snapshot
+// zum Build-Zeitpunkt) — deshalb hier bewusst pro Anfrage frisch rendern
+// statt statisch cachen.
+export const revalidate = 0;
 
 const titles = {
   de: "Datenschutzerklärung",
@@ -43,11 +50,11 @@ export default async function DatenschutzPage({ params }: { params: Promise<{ la
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const legal = await getLegal();
+  const [legal, extras] = await Promise.all([getLegal(), getLegalExtras()]);
 
   return (
     <LegalDoc title={titles[lang]} intro={intros[lang]} eyebrow={dict.legal.eyebrow} lang={lang} dict={dict}>
-      <DatenschutzContent lang={lang} legal={legal} />
+      <DatenschutzContent lang={lang} legal={legal} extras={extras} />
     </LegalDoc>
   );
 }

@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Field, inputClasses } from "@/components/ui/form-field";
 import { getCourseTypes, getCourseType } from "@/content/course-types";
 import { getIndustries } from "@/content/industries";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 import { getContactFormText } from "@/lib/dynamic-strings";
-
-const inputClasses =
-  "w-full border border-line bg-ink px-4 py-3 pr-10 font-sans text-sm text-paper placeholder:text-paper-dim transition-[border-color,box-shadow] duration-200 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand focus:shadow-[0_6px_24px_-10px_var(--color-brand)]";
+import { track } from "@/lib/track";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,9 +29,11 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     lastName: "",
     email: "",
     company: "",
+    participants: "",
     topic: TOPICS[0],
     branches: [] as string[],
     message: "",
+    consent: false,
     website: "", // Honeypot
   };
 
@@ -46,12 +47,12 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     const parts: string[] = [];
     const dynamicText = getContactFormText(lang);
     if (course) parts.push(dynamicText.interesseCourse(course.name));
-    if (teilnehmer) parts.push(dynamicText.teilnehmerCa(teilnehmer));
-    return { ...initial, topic, message: parts.join(" ") };
+    return { ...initial, topic, participants: teilnehmer, message: parts.join(" ") };
   });
   const [status, setStatus] = useState<Status>("idle");
   const [poppedTopic, setPoppedTopic] = useState<string | null>(null);
   const [poppedBranch, setPoppedBranch] = useState<string | null>(null);
+  const [consentError, setConsentError] = useState(false);
   // Zweistufig: erst nur Name/E-Mail (geringe Hemmschwelle), Unternehmen &
   // Nachricht folgen erst danach — reduziert die anfängliche Formularlänge.
   const [step, setStep] = useState<1 | 2>(1);
@@ -84,28 +85,36 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (step !== 2) {
-      if (step1Valid) setStep(2);
+      if (step1Valid) {
+        track("form_start", { form: "kontakt" });
+        setStep(2);
+      }
+      return;
+    }
+    if (!form.consent) {
+      setConsentError(true);
       return;
     }
     if (status === "sending") return;
     setStatus("sending");
     try {
-      const res = await fetch("/api/inquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          kind: "kontakt",
-          topic: form.topic,
-          branches: form.branches.join(", "),
-          name: `${form.firstName} ${form.lastName}`.trim(),
-          email: form.email,
-          company: form.company,
-          message: form.message,
-          website: form.website,
-        }),
-      });
+      const body = new FormData();
+      body.set("kind", "kontakt");
+      body.set("topic", form.topic);
+      body.set("branches", form.branches.join(", "));
+      body.set("name", `${form.firstName} ${form.lastName}`.trim());
+      body.set("email", form.email);
+      body.set("company", form.company);
+      body.set("participants", form.participants);
+      body.set("message", form.message);
+      body.set("consent", "true");
+      body.set("website", form.website);
+
+      const res = await fetch("/api/inquiry", { method: "POST", body });
       const data = await res.json().catch(() => ({ ok: false }));
-      setStatus(res.ok && data.ok ? "sent" : "error");
+      const ok = res.ok && data.ok;
+      if (ok) track("form_submit", { form: "kontakt", topic: form.topic });
+      setStatus(ok ? "sent" : "error");
     } catch {
       setStatus("error");
     }
@@ -127,6 +136,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           type="button"
           onClick={() => {
             setForm(initial);
+            setConsentError(false);
             setStatus("idle");
             setStep(1);
           }}
@@ -146,6 +156,29 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           className="h-full bg-brand transition-[width] duration-500 ease-out"
           style={{ width: `${progress * 100}%` }}
         />
+      </div>
+
+      {/* Schritt-Anzeige 1/2 */}
+      <div aria-hidden="true" className="flex items-center gap-2">
+        <span
+          className={`flex h-[26px] w-[26px] items-center justify-center rounded-full border font-sans text-xs transition-colors duration-200 ${
+            step === 1
+              ? "border-brand bg-brand text-on-brand"
+              : "border-brand text-brand"
+          }`}
+        >
+          1
+        </span>
+        <span className="h-px max-w-[60px] flex-1 bg-line" />
+        <span
+          className={`flex h-[26px] w-[26px] items-center justify-center rounded-full border font-sans text-xs transition-colors duration-200 ${
+            step === 2
+              ? "border-brand bg-brand text-on-brand"
+              : "border-line text-paper-dim"
+          }`}
+        >
+          2
+        </span>
       </div>
 
       {/* Interesse */}
@@ -227,7 +260,11 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
       {step === 1 && (
         <Button
           type="button"
-          onClick={() => step1Valid && setStep(2)}
+          onClick={() => {
+            if (!step1Valid) return;
+            track("form_start", { form: "kontakt" });
+            setStep(2);
+          }}
           className={`w-full sm:w-auto ${step1Valid ? "" : "pointer-events-none opacity-50"}`}
         >
           {t.weiter}
@@ -252,18 +289,38 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           <Field label={t.ihreNachricht}>
             <textarea
               aria-label={t.ihreNachricht}
-              rows={6}
+              rows={5}
               value={form.message}
               onChange={update("message")}
               placeholder={t.nachrichtPlaceholder}
               className={inputClasses}
             />
-            {form.message.length > 0 && (
-              <span className="mt-1.5 block text-right font-sans text-[11px] text-paper-dim animate-fade-up">
-                {form.message.length}
-              </span>
-            )}
           </Field>
+
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              required
+              checked={form.consent}
+              onChange={(e) => {
+                setForm((f) => ({ ...f, consent: e.target.checked }));
+                if (e.target.checked) setConsentError(false);
+              }}
+              className="mt-0.5 h-4 w-4 shrink-0 border border-line bg-ink accent-brand"
+            />
+            <span className="font-sans text-xs leading-relaxed text-paper-dim">
+              {t.dsgvoPre}{" "}
+              <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
+                {t.datenschutzLink}
+              </a>{" "}
+              {t.dsgvoPost}
+            </span>
+          </label>
+          {consentError && (
+            <p role="alert" className="-mt-4 font-sans text-xs text-error">
+              {t.dsgvoRequired}
+            </p>
+          )}
 
           {/* Honeypot */}
           <input
@@ -291,7 +348,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
               {status === "sending" ? t.wirdGesendet : t.unverbindlichAnfragen}
             </Button>
             <span className="font-sans text-xs text-paper-dim">
-              {t.antwortHinweis}
+              {t.kostenlosHinweis} {t.antwortHinweis}
             </span>
           </div>
 
@@ -304,49 +361,8 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
               {t.errorSuffix}
             </p>
           )}
-
-          <p className="font-sans text-xs leading-relaxed text-paper-dim">
-            {t.datenschutzHinweisPre}{" "}
-            <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
-              {t.datenschutzLink}
-            </a>
-            {t.datenschutzHinweisPost}
-          </p>
         </div>
       )}
     </form>
-  );
-}
-
-function Field({
-  label,
-  valid,
-  children,
-}: {
-  label: string;
-  valid?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-2 block font-sans text-[10px] uppercase tracking-[0.16em] text-gold">
-        {label}
-      </span>
-      <div className="relative">
-        {children}
-        {valid && (
-          <svg
-            className="animate-check-in pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-brand"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M5 12.5l4 4 10-10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        )}
-      </div>
-    </label>
   );
 }

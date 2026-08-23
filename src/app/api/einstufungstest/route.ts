@@ -15,7 +15,7 @@ function clean(v: unknown, max: number): string {
  * Team (analog zu /api/inquiry).
  */
 export async function POST(req: NextRequest) {
-  const rl = rateLimit(`einstufungstest:${clientKey(req)}`, { limit: 5, windowMs: 60_000 });
+  const rl = await rateLimit(`einstufungstest:${clientKey(req)}`, { limit: 5, windowMs: 60_000 });
   if (!rl.ok) {
     return Response.json(
       { ok: false, error: "rate_limited" },

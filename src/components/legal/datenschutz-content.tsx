@@ -1,14 +1,22 @@
-import { LegalH2, LegalP, LegalList, PH, Val } from "@/components/legal/legal";
+import { LegalH2, LegalP, LegalList, PH, Val, DateVal } from "@/components/legal/legal";
 import type { Locale } from "@/lib/i18n";
-import type { LegalData } from "@/lib/cms";
+import type { LegalData, LegalExtrasData } from "@/lib/cms";
 
-export function DatenschutzContent({ lang, legal }: { lang: Locale; legal: LegalData }) {
-  if (lang === "en") return <En legal={legal} />;
-  if (lang === "es") return <Es legal={legal} />;
-  return <De legal={legal} />;
+export function DatenschutzContent({
+  lang,
+  legal,
+  extras,
+}: {
+  lang: Locale;
+  legal: LegalData;
+  extras: LegalExtrasData;
+}) {
+  if (lang === "en") return <En legal={legal} extras={extras} />;
+  if (lang === "es") return <Es legal={legal} extras={extras} />;
+  return <De legal={legal} extras={extras} />;
 }
 
-function De({ legal }: { legal: LegalData }) {
+function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
   return (
     <>
       <div className="space-y-3">
@@ -36,7 +44,8 @@ function De({ legal }: { legal: LegalData }) {
       <div className="space-y-3">
         <LegalH2>2. Hosting und Server-Logfiles</LegalH2>
         <LegalP>
-          Die Website wird bei <PH>Hosting-Anbieter / eigene Serverinfrastruktur</PH>{" "}
+          Die Website wird bei{" "}
+          <Val value={extras.hostingProvider} placeholder="Hosting-Anbieter / eigene Serverinfrastruktur" />{" "}
           gehostet. Beim Aufruf werden technisch notwendige Zugriffsdaten
           (Server-Logfiles) verarbeitet, die Ihr Browser automatisch übermittelt:
         </LegalP>
@@ -49,8 +58,13 @@ function De({ legal }: { legal: LegalData }) {
           ]}
         />
         <LegalP>
-          Speicherdauer der Logfiles: <PH>z. B. 7–30 Tage</PH>, anschließend Löschung
-          bzw. Anonymisierung.
+          Speicherdauer der Logfiles:{" "}
+          {extras.logRetentionDays ? (
+            <span className="text-paper">{extras.logRetentionDays} Tage</span>
+          ) : (
+            <PH>z. B. 7–30 Tage</PH>
+          )}
+          , anschließend Löschung bzw. Anonymisierung.
         </LegalP>
       </div>
 
@@ -143,9 +157,9 @@ function De({ legal }: { legal: LegalData }) {
         <LegalP>
           Für Buchungen verarbeiten wir die zur Vertragsdurchführung erforderlichen
           Daten (Art. 6 Abs. 1 lit. b DSGVO). Die Zahlungsabwicklung erfolgt über{" "}
-          <PH>Zahlungsdienstleister, z. B. Stripe — sobald aktiviert, mit eigener
-          Datenschutzinformation und Auftragsverarbeitung</PH>. Details ergänzen,
-          sobald die Zahlungsintegration produktiv ist.
+          <Val value={extras.paymentProvider} placeholder="Zahlungsdienstleister, z. B. Stripe" /> — sobald
+          aktiviert, mit eigener Datenschutzinformation und Auftragsverarbeitung. Details
+          ergänzen, sobald die Zahlungsintegration produktiv ist.
         </LegalP>
       </div>
 
@@ -154,9 +168,12 @@ function De({ legal }: { legal: LegalData }) {
         <LegalP>
           Über den Chat können Sie Fragen stellen. Ihre Eingaben werden zur
           Beantwortung verarbeitet und ggf. zur Kontaktaufnahme gespeichert.
-          Verarbeitung/Weiterleitung erfolgt über <PH>eingesetzte
-          KI-/Backend-Komponente und deren Rechtsgrundlage/Auftragsverarbeitung</PH>.
-          Bitte geben Sie im Chat keine besonderen Kategorien personenbezogener
+          Verarbeitung/Weiterleitung erfolgt über{" "}
+          <Val
+            value={extras.aiBackendNote?.de}
+            placeholder="eingesetzte KI-/Backend-Komponente und deren Rechtsgrundlage/Auftragsverarbeitung"
+          />
+          . Bitte geben Sie im Chat keine besonderen Kategorien personenbezogener
           Daten ein.
         </LegalP>
       </div>
@@ -188,14 +205,14 @@ function De({ legal }: { legal: LegalData }) {
         <LegalP>
           Wir passen diese Datenschutzerklärung an, sobald sich die
           Datenverarbeitung ändert (z. B. bei Aktivierung der Zahlungsintegration).
-          Stand: <PH>Datum</PH>.
+          Stand: <DateVal value={extras.lastUpdated} lang="de" placeholder="Datum" />.
         </LegalP>
       </div>
     </>
   );
 }
 
-function En({ legal }: { legal: LegalData }) {
+function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
   return (
     <>
       <div className="space-y-3">
@@ -223,7 +240,8 @@ function En({ legal }: { legal: LegalData }) {
       <div className="space-y-3">
         <LegalH2>2. Hosting and server log files</LegalH2>
         <LegalP>
-          The website is hosted by <PH>hosting provider / own server infrastructure</PH>.
+          The website is hosted by{" "}
+          <Val value={extras.hostingProvider} placeholder="hosting provider / own server infrastructure" />.
           When you access it, technically necessary access data (server log
           files) automatically transmitted by your browser are processed:
         </LegalP>
@@ -236,8 +254,13 @@ function En({ legal }: { legal: LegalData }) {
           ]}
         />
         <LegalP>
-          Log file retention period: <PH>e.g. 7–30 days</PH>, after which they
-          are deleted or anonymised.
+          Log file retention period:{" "}
+          {extras.logRetentionDays ? (
+            <span className="text-paper">{extras.logRetentionDays} days</span>
+          ) : (
+            <PH>e.g. 7–30 days</PH>
+          )}
+          , after which they are deleted or anonymised.
         </LegalP>
       </div>
 
@@ -327,9 +350,9 @@ function En({ legal }: { legal: LegalData }) {
         <LegalP>
           For bookings we process the data required to perform the contract
           (Art. 6(1)(b) GDPR). Payment processing is carried out via{" "}
-          <PH>payment service provider, e.g. Stripe — once activated, with its
-          own privacy notice and data processing agreement</PH>. Details will
-          be added once payment integration goes live.
+          <Val value={extras.paymentProvider} placeholder="payment service provider, e.g. Stripe" /> — once
+          activated, with its own privacy notice and data processing agreement. Details
+          will be added once payment integration goes live.
         </LegalP>
       </div>
 
@@ -339,9 +362,11 @@ function En({ legal }: { legal: LegalData }) {
           You can ask questions via the chat. Your input is processed to
           provide an answer and may be stored to follow up with you.
           Processing/forwarding is carried out via{" "}
-          <PH>the AI/backend component used and its legal basis/data
-          processing agreement</PH>. Please do not enter special categories of
-          personal data in the chat.
+          <Val
+            value={extras.aiBackendNote?.en}
+            placeholder="the AI/backend component used and its legal basis/data processing agreement"
+          />
+          . Please do not enter special categories of personal data in the chat.
         </LegalP>
       </div>
 
@@ -372,14 +397,14 @@ function En({ legal }: { legal: LegalData }) {
         <LegalP>
           We will update this privacy policy whenever data processing changes
           (e.g. once payment integration is activated). Last updated:{" "}
-          <PH>date</PH>.
+          <DateVal value={extras.lastUpdated} lang="en" placeholder="date" />.
         </LegalP>
       </div>
     </>
   );
 }
 
-function Es({ legal }: { legal: LegalData }) {
+function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
   return (
     <>
       <div className="space-y-3">
@@ -407,7 +432,8 @@ function Es({ legal }: { legal: LegalData }) {
       <div className="space-y-3">
         <LegalH2>2. Alojamiento y archivos de registro del servidor</LegalH2>
         <LegalP>
-          El sitio web está alojado en <PH>proveedor de alojamiento / infraestructura propia</PH>.
+          El sitio web está alojado en{" "}
+          <Val value={extras.hostingProvider} placeholder="proveedor de alojamiento / infraestructura propia" />.
           Al acceder, se procesan los datos de acceso técnicamente necesarios
           (archivos de registro del servidor) que su navegador transmite
           automáticamente:
@@ -421,8 +447,13 @@ function Es({ legal }: { legal: LegalData }) {
           ]}
         />
         <LegalP>
-          Duración de conservación de los registros: <PH>p. ej., 7–30 días</PH>, tras lo cual
-          se eliminan o anonimizan.
+          Duración de conservación de los registros:{" "}
+          {extras.logRetentionDays ? (
+            <span className="text-paper">{extras.logRetentionDays} días</span>
+          ) : (
+            <PH>p. ej., 7–30 días</PH>
+          )}
+          , tras lo cual se eliminan o anonimizan.
         </LegalP>
       </div>
 
@@ -515,9 +546,10 @@ function Es({ legal }: { legal: LegalData }) {
         <LegalP>
           Para las reservas procesamos los datos necesarios para la ejecución del contrato
           (artículo 6.1.b del RGPD). El procesamiento de pagos se realiza a través de{" "}
-          <PH>proveedor de servicios de pago, p. ej. Stripe — una vez activado, con su
-          propia política de privacidad y contrato de encargo de tratamiento</PH>. Los
-          detalles se completarán en cuanto la integración de pagos esté operativa.
+          <Val value={extras.paymentProvider} placeholder="proveedor de servicios de pago, p. ej. Stripe" /> — una
+          vez activado, con su propia política de privacidad y contrato de encargo de
+          tratamiento. Los detalles se completarán en cuanto la integración de pagos esté
+          operativa.
         </LegalP>
       </div>
 
@@ -527,8 +559,11 @@ function Es({ legal }: { legal: LegalData }) {
           A través del chat puede formular preguntas. Sus mensajes se procesan para
           responderle y, en su caso, se almacenan para poder contactarle. El
           procesamiento/reenvío se realiza a través del{" "}
-          <PH>componente de IA/backend utilizado y su base jurídica/contrato de encargo de tratamiento</PH>. Por
-          favor, no introduzca en el chat categorías especiales de datos personales.
+          <Val
+            value={extras.aiBackendNote?.es}
+            placeholder="componente de IA/backend utilizado y su base jurídica/contrato de encargo de tratamiento"
+          />
+          . Por favor, no introduzca en el chat categorías especiales de datos personales.
         </LegalP>
       </div>
 
@@ -559,7 +594,7 @@ function Es({ legal }: { legal: LegalData }) {
         <LegalP>
           Actualizaremos esta política de privacidad en cuanto cambie el tratamiento de
           datos (p. ej., al activar la integración de pagos). Fecha de la última
-          actualización: <PH>fecha</PH>.
+          actualización: <DateVal value={extras.lastUpdated} lang="es" placeholder="fecha" />.
         </LegalP>
       </div>
     </>

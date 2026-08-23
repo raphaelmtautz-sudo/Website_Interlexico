@@ -6,7 +6,7 @@ export const businessEnglish: CourseType = {
   name: "Business English",
   shortName: "Business English",
   status: "aktiv",
-  tagline: "Verhandlungssicher in jeder Sprache der Wirtschaft",
+  tagline: "Sicher verhandeln, präsentieren und kommunizieren — auf Englisch",
   heroTitle: "Business English für Führungskräfte und Teams",
   heroSubtitle:
     "Kein Sprachkurs von der Stange. Trainings, die sich an Ihrer Branche, Ihren Meetings und Ihren Zielen orientieren.",

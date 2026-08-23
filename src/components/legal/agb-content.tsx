@@ -1,14 +1,23 @@
-import { LegalH2, LegalP, PH, Val } from "@/components/legal/legal";
+import { LegalH2, LegalP, PH, Val, DateVal } from "@/components/legal/legal";
 import { lh, type Locale } from "@/lib/i18n";
-import type { LegalData } from "@/lib/cms";
+import type { LegalData, LegalExtrasData } from "@/lib/cms";
 
-export function AgbContent({ lang, legal }: { lang: Locale; legal: LegalData }) {
-  if (lang === "en") return <En legal={legal} lang={lang} />;
-  if (lang === "es") return <Es legal={legal} lang={lang} />;
-  return <De legal={legal} lang={lang} />;
+export function AgbContent({
+  lang,
+  legal,
+  extras,
+}: {
+  lang: Locale;
+  legal: LegalData;
+  extras: LegalExtrasData;
+}) {
+  if (lang === "en") return <En legal={legal} lang={lang} extras={extras} />;
+  if (lang === "es") return <Es legal={legal} lang={lang} extras={extras} />;
+  return <De legal={legal} lang={lang} extras={extras} />;
 }
 
-function De({ legal, lang }: { legal: LegalData; lang: Locale }) {
+function De({ legal, lang, extras }: { legal: LegalData; lang: Locale; extras: LegalExtrasData }) {
+  const jurisdiction = extras.jurisdictionOverride || legal.zipCity;
   return (
     <>
       <div className="space-y-3">
@@ -48,10 +57,20 @@ function De({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalH2>§ 4 Preise und Zahlung</LegalH2>
         <LegalP>
           Es gelten die zum Zeitpunkt der Buchung ausgewiesenen bzw. im Angebot
-          genannten Preise. Alle Preise verstehen sich <PH>zzgl. / inkl.</PH> der
-          gesetzlichen Umsatzsteuer. Die Zahlung erfolgt nach Rechnungsstellung
-          innerhalb von <PH>Zahlungsziel, z. B. 14 Tagen</PH> bzw. über den
-          angebotenen Zahlungsdienstleister.
+          genannten Preise. Alle Preise verstehen sich{" "}
+          {extras.vatTreatment ? (
+            <span className="text-paper">{extras.vatTreatment === "inkl" ? "inkl." : "zzgl."}</span>
+          ) : (
+            <PH>zzgl. / inkl.</PH>
+          )}{" "}
+          der gesetzlichen Umsatzsteuer. Die Zahlung erfolgt nach Rechnungsstellung
+          innerhalb von{" "}
+          {extras.paymentTermDays ? (
+            <span className="text-paper">{extras.paymentTermDays} Tagen</span>
+          ) : (
+            <PH>Zahlungsziel, z. B. 14 Tagen</PH>
+          )}{" "}
+          bzw. über den angebotenen Zahlungsdienstleister.
         </LegalP>
       </div>
 
@@ -60,8 +79,12 @@ function De({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalP>
           Vereinbarte Termine sind verbindlich. Absage- und Stornierungsfristen
           sowie etwaige Ausfallgebühren richten sich nach{" "}
-          <PH>konkrete Stornoregelung, z. B. kostenfrei bis 48 Stunden vorher</PH>.
-          Vom Anbieter abgesagte Einheiten werden nachgeholt oder erstattet.
+          {extras.cancellationHours ? (
+            <span className="text-paper">kostenfrei bis {extras.cancellationHours} Stunden vorher</span>
+          ) : (
+            <PH>konkrete Stornoregelung, z. B. kostenfrei bis 48 Stunden vorher</PH>
+          )}
+          . Vom Anbieter abgesagte Einheiten werden nachgeholt oder erstattet.
         </LegalP>
       </div>
 
@@ -92,7 +115,8 @@ function De({ legal, lang }: { legal: LegalData; lang: Locale }) {
           Fahrlässigkeit haftet der Anbieter nur bei Verletzung wesentlicher
           Vertragspflichten (Kardinalpflichten) und begrenzt auf den
           vertragstypischen, vorhersehbaren Schaden. Im Übrigen ist die Haftung
-          ausgeschlossen. <PH>Vor Verwendung anwaltlich prüfen lassen.</PH>
+          ausgeschlossen.{" "}
+          <Val value={extras.liabilityClause?.de} placeholder="Vor Verwendung anwaltlich prüfen lassen." />
         </LegalP>
       </div>
 
@@ -111,16 +135,17 @@ function De({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalH2>§ 10 Schlussbestimmungen</LegalH2>
         <LegalP>
           Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist,
-          soweit zulässig, <PH>Sitz des Anbieters</PH>. Sollten einzelne
-          Bestimmungen unwirksam sein, bleibt der übrige Vertrag wirksam. Stand:{" "}
-          <PH>Datum</PH>.
+          soweit zulässig, <Val value={jurisdiction} placeholder="Sitz des Anbieters" />. Sollten
+          einzelne Bestimmungen unwirksam sein, bleibt der übrige Vertrag wirksam. Stand:{" "}
+          <DateVal value={extras.lastUpdated} lang="de" placeholder="Datum" />.
         </LegalP>
       </div>
     </>
   );
 }
 
-function En({ legal, lang }: { legal: LegalData; lang: Locale }) {
+function En({ legal, lang, extras }: { legal: LegalData; lang: Locale; extras: LegalExtrasData }) {
+  const jurisdiction = extras.jurisdictionOverride || legal.zipCity;
   return (
     <>
       <div className="space-y-3">
@@ -161,10 +186,19 @@ function En({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalH2>§ 4 Prices and payment</LegalH2>
         <LegalP>
           The prices shown at the time of booking or stated in the proposal
-          apply. All prices are <PH>plus / including</PH> statutory VAT.
-          Payment is due upon invoicing within{" "}
-          <PH>payment term, e.g. 14 days</PH> or via the payment service
-          provider offered.
+          apply. All prices are{" "}
+          {extras.vatTreatment ? (
+            <span className="text-paper">{extras.vatTreatment === "inkl" ? "including" : "plus"}</span>
+          ) : (
+            <PH>plus / including</PH>
+          )}{" "}
+          statutory VAT. Payment is due upon invoicing within{" "}
+          {extras.paymentTermDays ? (
+            <span className="text-paper">{extras.paymentTermDays} days</span>
+          ) : (
+            <PH>payment term, e.g. 14 days</PH>
+          )}{" "}
+          or via the payment service provider offered.
         </LegalP>
       </div>
 
@@ -173,8 +207,14 @@ function En({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalP>
           Agreed appointments are binding. Cancellation deadlines and any
           related fees are governed by{" "}
-          <PH>specific cancellation policy, e.g. free of charge up to 48 hours in advance</PH>.
-          Sessions cancelled by the Provider will be rescheduled or refunded.
+          {extras.cancellationHours ? (
+            <span className="text-paper">
+              free of charge up to {extras.cancellationHours} hours in advance
+            </span>
+          ) : (
+            <PH>specific cancellation policy, e.g. free of charge up to 48 hours in advance</PH>
+          )}
+          . Sessions cancelled by the Provider will be rescheduled or refunded.
         </LegalP>
       </div>
 
@@ -205,7 +245,8 @@ function En({ legal, lang }: { legal: LegalData; lang: Locale }) {
           simple negligence, the Provider is only liable for breach of
           material contractual obligations (cardinal obligations) and limited
           to the foreseeable damage typical for the type of contract. Liability
-          is otherwise excluded. <PH>Have this reviewed by a lawyer before use.</PH>
+          is otherwise excluded.{" "}
+          <Val value={extras.liabilityClause?.en} placeholder="Have this reviewed by a lawyer before use." />
         </LegalP>
       </div>
 
@@ -224,16 +265,19 @@ function En({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalH2>§ 10 Final provisions</LegalH2>
         <LegalP>
           German law applies. To the extent permitted, the place of
-          jurisdiction is <PH>the Provider&apos;s registered seat</PH>. Should
+          jurisdiction is{" "}
+          <Val value={jurisdiction} placeholder="the Provider's registered seat" />. Should
           individual provisions be invalid, the remainder of the contract
-          remains in effect. Last updated: <PH>date</PH>.
+          remains in effect. Last updated:{" "}
+          <DateVal value={extras.lastUpdated} lang="en" placeholder="date" />.
         </LegalP>
       </div>
     </>
   );
 }
 
-function Es({ legal, lang }: { legal: LegalData; lang: Locale }) {
+function Es({ legal, lang, extras }: { legal: LegalData; lang: Locale; extras: LegalExtrasData }) {
+  const jurisdiction = extras.jurisdictionOverride || legal.zipCity;
   return (
     <>
       <div className="space-y-3">
@@ -276,10 +320,20 @@ function Es({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalH2>§ 4 Precios y pago</LegalH2>
         <LegalP>
           Se aplican los precios indicados en el momento de la reserva o en la
-          propuesta. Todos los precios se entienden <PH>más / incluido</PH> el
-          IVA legal. El pago se realiza tras la emisión de la factura en un
-          plazo de <PH>plazo de pago, p. ej. 14 días</PH> o a través del
-          proveedor de servicios de pago ofrecido.
+          propuesta. Todos los precios se entienden{" "}
+          {extras.vatTreatment ? (
+            <span className="text-paper">{extras.vatTreatment === "inkl" ? "incluido" : "más"}</span>
+          ) : (
+            <PH>más / incluido</PH>
+          )}{" "}
+          el IVA legal. El pago se realiza tras la emisión de la factura en un
+          plazo de{" "}
+          {extras.paymentTermDays ? (
+            <span className="text-paper">{extras.paymentTermDays} días</span>
+          ) : (
+            <PH>plazo de pago, p. ej. 14 días</PH>
+          )}{" "}
+          o a través del proveedor de servicios de pago ofrecido.
         </LegalP>
       </div>
 
@@ -289,8 +343,12 @@ function Es({ legal, lang }: { legal: LegalData; lang: Locale }) {
           Las citas acordadas son vinculantes. Los plazos de cancelación y
           anulación, así como las posibles tarifas por inasistencia, se rigen
           por la{" "}
-          <PH>política de cancelación concreta, p. ej. gratuita hasta 48 horas antes</PH>.
-          Las sesiones canceladas por el Proveedor se recuperarán o
+          {extras.cancellationHours ? (
+            <span className="text-paper">cancelación gratuita hasta {extras.cancellationHours} horas antes</span>
+          ) : (
+            <PH>política de cancelación concreta, p. ej. gratuita hasta 48 horas antes</PH>
+          )}
+          . Las sesiones canceladas por el Proveedor se recuperarán o
           reembolsarán.
         </LegalP>
       </div>
@@ -324,7 +382,10 @@ function Es({ legal, lang }: { legal: LegalData; lang: Locale }) {
           de obligaciones contractuales esenciales y de forma limitada al daño
           previsible y típico del contrato. En todo lo demás, la
           responsabilidad queda excluida.{" "}
-          <PH>Hacer revisar por un abogado antes de su uso.</PH>
+          <Val
+            value={extras.liabilityClause?.es}
+            placeholder="Hacer revisar por un abogado antes de su uso."
+          />
         </LegalP>
       </div>
 
@@ -345,9 +406,9 @@ function Es({ legal, lang }: { legal: LegalData; lang: Locale }) {
         <LegalP>
           Se aplica el derecho de la República Federal de Alemania. El fuero
           competente, en la medida en que sea legalmente admisible, es el{" "}
-          <PH>domicilio social del Proveedor</PH>. Si alguna disposición fuera
-          inválida, el resto del contrato permanecerá vigente. Fecha de la
-          última actualización: <PH>fecha</PH>.
+          <Val value={jurisdiction} placeholder="domicilio social del Proveedor" />. Si alguna
+          disposición fuera inválida, el resto del contrato permanecerá vigente. Fecha de la
+          última actualización: <DateVal value={extras.lastUpdated} lang="es" placeholder="fecha" />.
         </LegalP>
       </div>
     </>

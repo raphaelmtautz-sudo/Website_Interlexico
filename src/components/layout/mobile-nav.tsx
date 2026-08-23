@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ThemeControl } from "@/components/theme/theme-control";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
@@ -108,8 +109,7 @@ export function MobileNav({
           <div className="flex h-20 items-center justify-between border-b border-line px-6">
             <Link href={lh(lang, "/")} onClick={() => setOpen(false)} aria-label="Interlexico">
               {logoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- Logo kommt aus dem CMS (externe Domain).
-                <img src={logoUrl} alt={logoAlt || "Interlexico"} className="h-8 w-auto" />
+                <Image src={logoUrl} alt={logoAlt || "Interlexico"} width={140} height={32} className="h-8 w-auto" />
               ) : (
                 <span className="font-display text-2xl tracking-wide text-brand-strong">Interlexico</span>
               )}

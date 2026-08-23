@@ -15,7 +15,7 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
  */
 export async function POST(request: NextRequest) {
   // Basis-Schutz gegen Missbrauch: max. 60 Beacons/Minute je Client.
-  const rl = rateLimit(`collect:${clientKey(request)}`, { limit: 60, windowMs: 60_000 });
+  const rl = await rateLimit(`collect:${clientKey(request)}`, { limit: 60, windowMs: 60_000 });
   if (!rl.ok) {
     return new Response(null, { status: 429, headers: { "Retry-After": String(rl.retryAfter) } });
   }
@@ -27,16 +27,27 @@ export async function POST(request: NextRequest) {
 
   let path = "";
   let referrer = "";
+  let event = "pageview";
+  const props: Record<string, string> = {};
   try {
     const body = await request.json();
     path = typeof body?.path === "string" ? body.path.slice(0, 512) : "";
     referrer = typeof body?.referrer === "string" ? body.referrer.slice(0, 512) : "";
+    if (typeof body?.event === "string" && body.event.trim()) {
+      event = body.event.slice(0, 80);
+    }
+    if (body?.props && typeof body.props === "object") {
+      for (const [k, v] of Object.entries(body.props as Record<string, unknown>)) {
+        if (typeof v === "string") props[String(k).slice(0, 40)] = v.slice(0, 200);
+        if (Object.keys(props).length >= 10) break;
+      }
+    }
   } catch {
     return new Response(null, { status: 204 });
   }
 
   // Anonymes Aggregat — keine IP, keine Kennung, kein Fingerprint.
-  console.info("[analytics]", JSON.stringify({ path, referrer }));
+  console.info("[analytics]", JSON.stringify({ event, path, referrer, props }));
 
   return new Response(null, { status: 204 });
 }

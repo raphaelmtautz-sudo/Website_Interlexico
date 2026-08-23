@@ -75,3 +75,24 @@ export function PH({ children }: { children: ReactNode }) {
 export function Val({ value, placeholder }: { value?: string | null; placeholder: ReactNode }) {
   return value ? <span className="text-paper">{value}</span> : <PH>{placeholder}</PH>;
 }
+
+const DATE_LOCALE: Record<Locale, string> = { de: "de-DE", en: "en-GB", es: "es-ES" };
+
+/** Wie `Val`, aber für ein ISO-Datum aus dem CMS (Global "legal-extras"). */
+export function DateVal({
+  value,
+  lang,
+  placeholder,
+}: {
+  value?: string | null;
+  lang: Locale;
+  placeholder: ReactNode;
+}) {
+  const d = value ? new Date(value) : null;
+  if (!d || Number.isNaN(d.getTime())) return <PH>{placeholder}</PH>;
+  return (
+    <span className="text-paper">
+      {d.toLocaleDateString(DATE_LOCALE[lang], { year: "numeric", month: "long", day: "numeric" })}
+    </span>
+  );
+}

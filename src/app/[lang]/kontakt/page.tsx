@@ -9,6 +9,10 @@ import { getLegal } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 
+// Siehe Kommentar in rechtliches/datenschutz/page.tsx: Telefonnummer aus dem
+// CMS pro Anfrage frisch laden statt beim (netzwerkisolierten) Build zu backen.
+export const revalidate = 0;
+
 export async function generateMetadata({
   params,
 }: {
@@ -31,7 +35,6 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
   const t = dict.kontakt;
   const legal = await getLegal();
   const phone = legal.phone ?? SITE.phone;
-  const phoneMobile = legal.phoneMobile ?? SITE.phoneMobile;
   const telHref = (n: string) => `tel:${n.replace(/[^+\d]/g, "")}`;
 
   return (
@@ -42,69 +45,21 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
           <h1 className="kinetic font-display text-5xl mb-6 text-balance sm:text-6xl lg:text-7xl">
             {t.title}
           </h1>
-          <p className="font-sans text-lg leading-relaxed text-paper-dim mb-8">
+          <p className="font-sans text-lg leading-relaxed text-paper-dim mb-2">
             {t.text}
           </p>
-
-          {/* Trust-Punkte */}
-          <div className="mb-10 grid grid-cols-3 gap-px border border-line bg-line">
-            {t.trust.map((tr) => (
-              <div key={tr.k} className="bg-ink-raised p-4">
-                <p className="font-sans text-[10px] uppercase tracking-[0.14em] text-gold mb-1">
-                  {tr.k}
-                </p>
-                <p className="font-sans text-sm text-paper">{tr.v}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Ablauf 1-2-3 */}
-          <ol className="mb-10 space-y-5">
-            {t.steps.map((s) => (
-              <li key={s.n} className="flex gap-5">
-                <span className="font-display text-2xl text-brand shrink-0">{s.n}</span>
-                <div>
-                  <p className="font-sans text-sm uppercase tracking-[0.06em] text-paper">
-                    {s.t}
-                  </p>
-                  <p className="font-sans text-sm leading-relaxed text-paper-dim">
-                    {s.d}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          <dl className="space-y-4 border-t border-line pt-8 font-sans text-sm">
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.16em] text-gold mb-1">
-                {t.anfragenLabel}
-              </dt>
-              <dd className="text-paper-dim">
-                <a href={`mailto:${SITE.inquiryEmail}`} className="link-underline text-paper">
-                  {SITE.inquiryEmail}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-[10px] uppercase tracking-[0.16em] text-gold mb-1">
-                {t.telefonLabel}
-              </dt>
-              <dd className="text-paper-dim">
-                <a href={telHref(phone)} className="link-underline text-paper">
-                  {phone}
-                </a>{" "}
-                · {t.mobilLabel}{" "}
-                <a href={telHref(phoneMobile)} className="link-underline text-paper">
-                  {phoneMobile}
-                </a>
-              </dd>
-            </div>
-          </dl>
+          <p className="font-sans text-sm text-paper-dim">
+            <a href={`mailto:${SITE.inquiryEmail}`} className="link-underline text-paper">
+              {SITE.inquiryEmail}
+            </a>{" "}
+            ·{" "}
+            <a href={telHref(phone)} className="link-underline text-paper">
+              {phone}
+            </a>
+          </p>
         </div>
 
         <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
-          <h2 className="font-display text-3xl text-paper mb-6">{t.formTitle}</h2>
           <Suspense>
             <ContactForm lang={lang} dict={dict} />
           </Suspense>

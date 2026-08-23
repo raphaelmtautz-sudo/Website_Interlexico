@@ -36,6 +36,6 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     // Alles außer _next, statischen Assets und API-Routen (die bleiben sprachneutral).
-    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|opengraph-image|icon|apple-icon|manifest.webmanifest).*)",
+    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|llms.txt|opengraph-image|icon|apple-icon|manifest.webmanifest).*)",
   ],
 };

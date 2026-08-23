@@ -40,6 +40,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "cms.interlexico.one" }],
+  },
   // Root-Layout liegt unter dem dynamischen [lang]-Segment — echte unbekannte
   // URLs (kein notFound()-Aufruf, sondern gar keine passende Route) werden
   // daher nicht vom [lang]/not-found.tsx abgefangen, sondern brauchen die
