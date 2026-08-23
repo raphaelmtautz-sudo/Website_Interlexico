@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect, permanentRedirect } from "next/navigation";
 import { Section } from "@/components/ui/section";
-import { getPage } from "@/lib/cms";
+import { getPage, getRedirect } from "@/lib/cms";
 import { renderLexical } from "@/lib/lexical-render";
 import { hasLocale, lh } from "@/lib/i18n";
 
@@ -43,7 +43,11 @@ export default async function CmsPage({
   const { lang, slug } = await params;
   if (!hasLocale(lang)) notFound();
   const page = await getPage(slug, lang);
-  if (!page) notFound();
+  if (!page) {
+    const found = await getRedirect(`/${slug}`);
+    if (found) (found.permanent ? permanentRedirect : redirect)(found.to);
+    notFound();
+  }
 
   return (
     <Section className="pt-24 lg:pt-32">

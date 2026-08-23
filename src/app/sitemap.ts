@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { getCourseTypes } from "@/content/course-types";
+import { getPosts } from "@/lib/cms";
 import { locales, lh, defaultLocale, type Locale } from "@/lib/i18n";
 
 function alternates(path: string): Record<string, string> {
@@ -10,7 +11,7 @@ function alternates(path: string): Record<string, string> {
   return langs;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticPaths = [
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/ueber-uns", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/nachhaltigkeit", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/karriere", priority: 0.5, changeFrequency: "monthly" as const },
+    { path: "/blog", priority: 0.5, changeFrequency: "weekly" as const },
     { path: "/kontakt", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/rechtliches/impressum", priority: 0.2, changeFrequency: "yearly" as const },
     { path: "/rechtliches/datenschutz", priority: 0.2, changeFrequency: "yearly" as const },
@@ -62,6 +64,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
           alternates: { languages: alternates(`/kurse/${course.slug}/${format.slug}`) },
         });
       }
+    }
+
+    const posts = await getPosts(l as Locale);
+    for (const post of posts) {
+      entries.push({
+        url: `${SITE.url}${lh(l, `/blog/${post.slug}`)}`,
+        lastModified: post.publishedAt ? new Date(post.publishedAt) : now,
+        changeFrequency: "monthly",
+        priority: 0.4,
+        alternates: { languages: alternates(`/blog/${post.slug}`) },
+      });
     }
   }
 

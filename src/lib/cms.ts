@@ -238,6 +238,140 @@ export async function getPage(slug: string, locale: Locale): Promise<CmsPageData
   }
 }
 
+export interface PostSummary {
+  slug: string;
+  title: string;
+  excerpt?: string;
+  featuredImageUrl?: string;
+  publishedAt?: string;
+}
+
+export interface PostData extends PostSummary {
+  content: unknown; // Lexical-JSON, siehe @/lib/lexical-render
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImageUrl?: string;
+}
+
+interface RawPost {
+  slug?: string;
+  publishedAt?: string;
+  featuredImage?: { url?: string } | null;
+  titleDe?: string;
+  titleEn?: string;
+  titleEs?: string;
+  excerptDe?: string;
+  excerptEn?: string;
+  excerptEs?: string;
+  contentDe?: unknown;
+  contentEn?: unknown;
+  contentEs?: unknown;
+  seoTitleDe?: string;
+  seoTitleEn?: string;
+  seoTitleEs?: string;
+  seoDescriptionDe?: string;
+  seoDescriptionEn?: string;
+  seoDescriptionEs?: string;
+  ogImage?: { url?: string } | null;
+}
+
+function mediaUrl(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  return url.startsWith("http") ? url : `${CMS_URL}${url}`;
+}
+
+function localeSuffix(locale: Locale): "De" | "En" | "Es" {
+  return locale === "en" ? "En" : locale === "es" ? "Es" : "De";
+}
+
+/**
+ * Veröffentlichte Blog-/Aktuelles-Artikel (Übersicht) aus dem CMS ("posts"),
+ * neueste zuerst. Leeres Array bei CMS-Ausfall — die Blog-Übersicht zeigt
+ * dann nur den "noch keine Artikel"-Hinweis statt einen Fehler.
+ */
+export async function getPosts(locale: Locale): Promise<PostSummary[]> {
+  try {
+    const res = await fetch(
+      `${CMS_URL}/api/posts?where[published][equals]=true&sort=-publishedAt&limit=100&depth=1`,
+      { next: { revalidate: REVALIDATE, tags: ["posts"] } },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as PayloadListResponse<RawPost>;
+    const suffix = localeSuffix(locale);
+    return (data.docs ?? [])
+      .filter((d) => d.slug && (d[`title${suffix}`] ?? d.titleDe))
+      .map((d) => ({
+        slug: String(d.slug),
+        title: String(d[`title${suffix}`] ?? d.titleDe),
+        excerpt: d[`excerpt${suffix}`] ?? d.excerptDe ?? undefined,
+        featuredImageUrl: mediaUrl(d.featuredImage?.url ?? undefined),
+        publishedAt: d.publishedAt,
+      }));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Einzelner Blog-Artikel nach Slug. `null`, wenn kein veröffentlichter
+ * Eintrag existiert (auch bei CMS-Ausfall) — die Route liefert dann `notFound()`.
+ */
+export async function getPost(slug: string, locale: Locale): Promise<PostData | null> {
+  try {
+    const res = await fetch(
+      `${CMS_URL}/api/posts?where[slug][equals]=${encodeURIComponent(slug)}&where[published][equals]=true&limit=1&depth=1`,
+      { next: { revalidate: REVALIDATE, tags: [`post-${slug}`] } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as PayloadListResponse<RawPost>;
+    const doc = data.docs?.[0];
+    if (!doc) return null;
+    const suffix = localeSuffix(locale);
+    const title = doc[`title${suffix}`] ?? doc.titleDe;
+    const content = doc[`content${suffix}`] ?? doc.contentDe;
+    if (!title || !content) return null;
+    return {
+      slug,
+      title,
+      excerpt: doc[`excerpt${suffix}`] ?? doc.excerptDe ?? undefined,
+      content,
+      featuredImageUrl: mediaUrl(doc.featuredImage?.url ?? undefined),
+      publishedAt: doc.publishedAt,
+      seoTitle: doc[`seoTitle${suffix}`] || undefined,
+      seoDescription: doc[`seoDescription${suffix}`] || undefined,
+      ogImageUrl: mediaUrl(doc.ogImage?.url ?? undefined) ?? mediaUrl(doc.featuredImage?.url ?? undefined),
+    };
+  } catch {
+    return null;
+  }
+}
+
+export interface RedirectData {
+  to: string;
+  permanent: boolean;
+}
+
+/**
+ * Prüft, ob für einen Pfad (ohne Sprachpräfix, z. B. "/black-friday") eine
+ * CMS-Weiterleitung existiert. `null`, wenn keine gefunden wurde oder das
+ * CMS nicht erreichbar ist — die aufrufende Route liefert dann `notFound()`.
+ */
+export async function getRedirect(path: string): Promise<RedirectData | null> {
+  try {
+    const res = await fetch(
+      `${CMS_URL}/api/redirects?where[from][equals]=${encodeURIComponent(path)}&limit=1&depth=0`,
+      { next: { revalidate: REVALIDATE, tags: ["redirects"] } },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as PayloadListResponse<{ to?: string; type?: "permanent" | "temporary" }>;
+    const doc = data.docs?.[0];
+    if (!doc?.to) return null;
+    return { to: doc.to, permanent: doc.type !== "temporary" };
+  } catch {
+    return null;
+  }
+}
+
 export interface SiteSettingsData {
   logoUrl?: string;
   logoAlt?: string;
