@@ -13,6 +13,7 @@ export const de = {
     interlexicoOne: "Interlexico ONE",
     nachhaltigkeit: "Nachhaltigkeit",
     karriere: "Karriere",
+    blog: "Blog",
     kontakt: "Kontakt",
     anfragen: "Anfragen",
     mehr: "Mehr",

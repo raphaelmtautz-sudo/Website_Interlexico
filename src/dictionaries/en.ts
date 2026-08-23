@@ -15,6 +15,7 @@ export const en: Dictionary = {
     interlexicoOne: "Interlexico ONE",
     nachhaltigkeit: "Sustainability",
     karriere: "Careers",
+    blog: "Blog",
     kontakt: "Contact",
     anfragen: "Get in touch",
     mehr: "More",

@@ -24,6 +24,7 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
     { href: lh(lang, "/interlexico-one"), label: dict.nav.interlexicoOne },
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },
     { href: lh(lang, "/karriere"), label: dict.nav.karriere },
+    { href: lh(lang, "/blog"), label: dict.nav.blog },
   ];
   const mobileItems = [...primaryItems, ...secondaryItems, { href: lh(lang, "/kontakt"), label: dict.nav.kontakt }];
   const { logoUrl, logoAlt } = await getSiteSettings();

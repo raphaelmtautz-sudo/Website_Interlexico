@@ -57,6 +57,7 @@ export function SiteFooter({
             <li><Link className="link-underline" href={lh(lang, "/interlexico-one")}>{dict.nav.interlexicoOne}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/nachhaltigkeit")}>{dict.nav.nachhaltigkeit}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/karriere")}>{dict.nav.karriere}</Link></li>
+            <li><Link className="link-underline" href={lh(lang, "/blog")}>{dict.nav.blog}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/kontakt")}>{dict.nav.kontakt}</Link></li>
           </ul>
         </div>
