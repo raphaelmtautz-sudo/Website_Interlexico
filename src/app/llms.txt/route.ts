@@ -1,5 +1,5 @@
 import { SITE } from "@/lib/site";
-import { getCourseTypes } from "@/content/course-types";
+import { getCourseTypes } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
 
@@ -22,10 +22,10 @@ const SECTION_LABELS: Record<Locale, { kurse: string; unternehmen: string; konta
 
 const LANG_NAMES: Record<Locale, string> = { de: "Deutsch", en: "English", es: "Español" };
 
-export function buildLlmsTxt(lang: Locale): string {
+export async function buildLlmsTxt(lang: Locale): Promise<string> {
   const dict = getDictionary(lang);
   const labels = SECTION_LABELS[lang];
-  const courses = getCourseTypes(lang).filter((c) => c.status === "aktiv");
+  const courses = (await getCourseTypes(lang)).filter((c) => c.status === "aktiv");
 
   const lines = [
     `# ${SITE.name}`,
@@ -63,7 +63,7 @@ export function buildLlmsTxt(lang: Locale): string {
 }
 
 export async function GET() {
-  return new Response(buildLlmsTxt("de"), {
+  return new Response(await buildLlmsTxt("de"), {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "public, max-age=3600",

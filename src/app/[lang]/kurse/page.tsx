@@ -3,7 +3,7 @@ import { Section, Eyebrow } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/interactive/reveal";
 import { TiltCard } from "@/components/interactive/tilt-card";
-import { getCourseTypes } from "@/content/course-types";
+import { getCourseTypes } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -28,7 +28,7 @@ export default async function KursePage({ params }: { params: Promise<{ lang: st
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const courseTypes = getCourseTypes(lang);
+  const courseTypes = await getCourseTypes(lang);
 
   return (
     <Section className="pt-24 lg:pt-32">

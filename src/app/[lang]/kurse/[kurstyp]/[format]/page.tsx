@@ -1,16 +1,26 @@
 import { notFound } from "next/navigation";
-import { getCourseTypes, getCourseFormat } from "@/content/course-types";
+import { getCourseTypes, getCourseType } from "@/lib/cms";
 import { CourseFormatDetail } from "@/components/course/course-format-detail";
 import { CourseJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, locales, lh } from "@/lib/i18n";
+import { hasLocale, locales, lh, type Locale } from "@/lib/i18n";
 
-export function generateStaticParams() {
-  return locales.flatMap((lang) =>
-    getCourseTypes(lang)
-      .filter((c) => c.status === "aktiv")
-      .flatMap((c) => c.formats.map((f) => ({ lang, kurstyp: c.slug, format: f.slug }))),
+/** Analog zu content/course-types#getCourseFormat, aber über die CMS-gestützten getCourseType(s). */
+async function getCourseFormat(lang: Locale, courseSlug: string, formatSlug: string) {
+  const course = await getCourseType(lang, courseSlug);
+  const format = course?.formats.find((f) => f.slug === formatSlug);
+  return course && format ? { course, format } : undefined;
+}
+
+export async function generateStaticParams() {
+  const perLocale = await Promise.all(
+    locales.map(async (lang) =>
+      (await getCourseTypes(lang))
+        .filter((c) => c.status === "aktiv")
+        .flatMap((c) => c.formats.map((f) => ({ lang, kurstyp: c.slug, format: f.slug }))),
+    ),
   );
+  return perLocale.flat();
 }
 
 export async function generateMetadata({
@@ -20,7 +30,7 @@ export async function generateMetadata({
 }) {
   const { lang, kurstyp, format } = await params;
   if (!hasLocale(lang)) return {};
-  const result = getCourseFormat(lang, kurstyp, format);
+  const result = await getCourseFormat(lang, kurstyp, format);
   if (!result) return {};
   const title = `${result.format.name} — ${result.course.name} | Interlexico`;
   const url = lh(lang, `/kurse/${result.course.slug}/${result.format.slug}`);
@@ -44,7 +54,7 @@ export default async function CourseFormatPage({
 }) {
   const { lang, kurstyp, format } = await params;
   if (!hasLocale(lang)) notFound();
-  const result = getCourseFormat(lang, kurstyp, format);
+  const result = await getCourseFormat(lang, kurstyp, format);
   if (!result) notFound();
   const dict = getDictionary(lang);
   const { course, format: fmt } = result;

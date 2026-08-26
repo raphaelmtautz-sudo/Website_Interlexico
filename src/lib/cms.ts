@@ -1,4 +1,8 @@
 import { getStaticFaq, type FaqItem } from "@/content/faq";
+import { getIndustries as getStaticIndustries } from "@/content/industries";
+import { getAssessment as getStaticAssessment, type AssessmentQuestion } from "@/content/einstufung";
+import { getCourseTypes as getStaticCourseTypes, getCourseType as getStaticCourseType } from "@/content/course-types";
+import type { CourseType } from "@/types/course";
 import type { Locale } from "@/lib/i18n";
 
 export type { FaqItem };
@@ -16,26 +20,45 @@ interface PayloadListResponse<T> {
 }
 
 /**
- * FAQ für die übergebene Sprache. Das CMS pflegt aktuell nur deutschsprachige
- * Inhalte — für "de" wird es (mit Fallback auf statische Inhalte) genutzt,
- * für "en"/"es" direkt die übersetzten statischen FAQ-Inhalte.
+ * FAQ für die übergebene Sprache. Das CMS pflegt Fragen/Antworten je Sprache
+ * (questionDe/En/Es, answerDe/En/Es). Fehlt eine Übersetzung für ein
+ * einzelnes CMS-Item, wird für dieses Item auf den statischen Fallback-Text
+ * an derselben Position zurückgefallen — nicht auf die komplette Liste.
  */
 export async function getFaq(locale: Locale): Promise<FaqItem[]> {
   const staticFaq = getStaticFaq(locale);
-  if (locale !== "de") return staticFaq;
   try {
     const res = await fetch(`${CMS_URL}/api/faq?limit=100&sort=order&depth=0`, {
       next: { revalidate: REVALIDATE, tags: ["faq"] },
     });
     if (!res.ok) return staticFaq;
     const data = (await res.json()) as PayloadListResponse<{
-      question?: string;
-      answer?: string;
+      questionDe?: string;
+      answerDe?: string;
+      questionEn?: string;
+      answerEn?: string;
+      questionEs?: string;
+      answerEs?: string;
     }>;
-    const items = (data.docs ?? [])
-      .filter((d) => d.question && d.answer)
-      .map((d) => ({ question: String(d.question), answer: String(d.answer) }));
-    return items.length ? items : staticFaq;
+    const docs = data.docs ?? [];
+    if (!docs.length) return staticFaq;
+
+    const byLocale = {
+      de: { q: "questionDe", a: "answerDe" },
+      en: { q: "questionEn", a: "answerEn" },
+      es: { q: "questionEs", a: "answerEs" },
+    } as const;
+    const { q: qKey, a: aKey } = byLocale[locale];
+
+    const items = docs.map((d, i) => {
+      const question = d[qKey];
+      const answer = d[aKey];
+      if (question && answer) return { question, answer };
+      // Übersetzung fehlt im CMS für dieses Item -> statischer Fallback an
+      // derselben Position (falls vorhanden), sonst deutscher CMS-Text.
+      return staticFaq[i] ?? { question: String(d.questionDe ?? ""), answer: String(d.answerDe ?? "") };
+    });
+    return items.filter((item) => item.question && item.answer);
   } catch {
     return staticFaq;
   }
@@ -398,8 +421,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     if (!data.logo?.url) return { blogEnabled };
     const url = data.logo.url.startsWith("http") ? data.logo.url : `${CMS_URL}${data.logo.url}`;
     return { logoUrl: url, logoAlt: data.logo.alt, blogEnabled };
-  } catch (e) {
-    console.error("[DEBUG getSiteSettings] CAUGHT", e);
+  } catch {
     return { blogEnabled: true };
   }
 }
@@ -448,8 +470,145 @@ export async function getContact(): Promise<ContactData> {
       officeHours: data.officeHours || undefined,
       socialLinks: (data.socialLinks ?? []).filter((s) => s.url),
     };
-  } catch (e) {
-    console.error("[DEBUG getContact] CAUGHT", e);
+  } catch {
     return { socialLinks: [] };
   }
+}
+
+/**
+ * Branchenliste aus dem CMS ("industries") für die Business-English-Seiten
+ * (Vertrauens-/Breitensignal). Fällt bei CMS-Ausfall oder leerer Liste auf
+ * die statischen Inhalte aus src/content/industries.*.ts zurück.
+ */
+export async function getIndustries(locale: Locale): Promise<string[]> {
+  const staticIndustries = getStaticIndustries(locale);
+  try {
+    const res = await fetch(`${CMS_URL}/api/industries?limit=100&sort=order&depth=0`, {
+      next: { revalidate: REVALIDATE, tags: ["industries"] },
+    });
+    if (!res.ok) return staticIndustries;
+    const data = (await res.json()) as PayloadListResponse<{
+      nameDe?: string;
+      nameEn?: string;
+      nameEs?: string;
+    }>;
+    const docs = data.docs ?? [];
+    if (!docs.length) return staticIndustries;
+    const byLocale = { de: "nameDe", en: "nameEn", es: "nameEs" } as const;
+    const key = byLocale[locale];
+    const items = docs.map((d, i) => d[key] || staticIndustries[i] || d.nameDe || "").filter(Boolean);
+    return items.length ? items : staticIndustries;
+  } catch {
+    return staticIndustries;
+  }
+}
+
+/**
+ * Fragen für den Einstufungs-Selbsttest aus dem CMS
+ * ("placement-test-questions"). Antwortoptionen und Level-Auswertung
+ * bleiben statisch (identisch über alle Fragen, kein Redaktionsbedarf).
+ * Fällt bei CMS-Ausfall oder leerer Liste auf die statischen Fragen aus
+ * src/content/einstufung.*.ts zurück.
+ */
+export async function getPlacementTest(locale: Locale): Promise<{
+  assessmentQuestions: AssessmentQuestion[];
+  answerOptions: ReturnType<typeof getStaticAssessment>["answerOptions"];
+  levelForScore: ReturnType<typeof getStaticAssessment>["levelForScore"];
+}> {
+  const staticAssessment = getStaticAssessment(locale);
+  try {
+    const res = await fetch(`${CMS_URL}/api/placement-test-questions?limit=100&sort=order&depth=0`, {
+      next: { revalidate: REVALIDATE, tags: ["placement-test-questions"] },
+    });
+    if (!res.ok) return staticAssessment;
+    const data = (await res.json()) as PayloadListResponse<{
+      promptDe?: string;
+      promptEn?: string;
+      promptEs?: string;
+    }>;
+    const docs = data.docs ?? [];
+    if (!docs.length) return staticAssessment;
+    const byLocale = { de: "promptDe", en: "promptEn", es: "promptEs" } as const;
+    const key = byLocale[locale];
+    const assessmentQuestions = docs.map((d, i) => ({
+      prompt: d[key] || staticAssessment.assessmentQuestions[i]?.prompt || d.promptDe || "",
+    })).filter((q) => q.prompt);
+    if (!assessmentQuestions.length) return staticAssessment;
+    return {
+      assessmentQuestions,
+      answerOptions: staticAssessment.answerOptions,
+      levelForScore: staticAssessment.levelForScore,
+    };
+  } catch {
+    return staticAssessment;
+  }
+}
+
+interface CmsCourseTypeDoc {
+  slug?: string;
+  status?: CourseType["status"];
+  order?: number;
+  [key: string]: unknown;
+}
+
+/** Baut ein CourseType-Objekt aus einem CMS-Dokument, mit Fallback auf den statischen Kurstyp je Feld. */
+function mapCmsCourseType(doc: CmsCourseTypeDoc, locale: Locale, fallback: CourseType | undefined): CourseType | undefined {
+  const s = localeSuffix(locale);
+  const field = <T,>(name: string, fallbackValue: T): T => {
+    const value = doc[`${name}${s}`] ?? (locale !== "de" ? doc[`${name}De`] : undefined);
+    return (value as T) ?? fallbackValue;
+  };
+  if (!doc.slug) return fallback;
+  const base: CourseType = {
+    slug: doc.slug,
+    name: field("name", fallback?.name ?? doc.slug),
+    shortName: field("shortName", fallback?.shortName ?? doc.slug),
+    status: doc.status ?? fallback?.status ?? "aktiv",
+    tagline: field("tagline", fallback?.tagline ?? ""),
+    heroTitle: field("heroTitle", fallback?.heroTitle ?? ""),
+    heroSubtitle: field("heroSubtitle", fallback?.heroSubtitle ?? ""),
+    intro: field("intro", fallback?.intro ?? ""),
+    audience: field("audience", fallback?.audience ?? []),
+    benefits: field("benefits", fallback?.benefits ?? []),
+    formats: field("formats", fallback?.formats ?? []),
+    industries: field("industries", fallback?.industries),
+    testimonials: field("testimonials", fallback?.testimonials ?? []),
+    seo: {
+      title: field("seoTitle", fallback?.seo.title ?? ""),
+      description: field("seoDescription", fallback?.seo.description ?? ""),
+    },
+  };
+  return base;
+}
+
+/**
+ * Kurstypen aus dem CMS ("course-types") für die Kurstyp-Seiten. Fällt bei
+ * CMS-Ausfall oder leerer Liste vollständig auf die statischen Kurstypen aus
+ * src/content/course-types/*.ts zurück; fehlt ein einzelnes Feld im CMS-
+ * Dokument, wird für dieses Feld auf den statischen Kurstyp mit gleichem
+ * Slug zurückgefallen.
+ */
+export async function getCourseTypes(locale: Locale): Promise<CourseType[]> {
+  const staticCourseTypes = getStaticCourseTypes(locale);
+  try {
+    const res = await fetch(`${CMS_URL}/api/course-types?limit=100&sort=order&depth=0`, {
+      next: { revalidate: REVALIDATE, tags: ["course-types"] },
+    });
+    if (!res.ok) return staticCourseTypes;
+    const data = (await res.json()) as PayloadListResponse<CmsCourseTypeDoc>;
+    const docs = data.docs ?? [];
+    if (!docs.length) return staticCourseTypes;
+    const mapped = docs
+      .map((doc) => mapCmsCourseType(doc, locale, staticCourseTypes.find((c) => c.slug === doc.slug)))
+      .filter((c): c is CourseType => Boolean(c));
+    return mapped.length ? mapped : staticCourseTypes;
+  } catch {
+    return staticCourseTypes;
+  }
+}
+
+/** Einzelner Kurstyp per Slug — siehe {@link getCourseTypes}. */
+export async function getCourseType(locale: Locale, slug: string): Promise<CourseType | undefined> {
+  const courseTypes = await getCourseTypes(locale);
+  return courseTypes.find((c) => c.slug === slug) ?? getStaticCourseType(locale, slug);
 }

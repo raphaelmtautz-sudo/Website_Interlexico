@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCourseTypes, getCourseType } from "@/content/course-types";
+import { getCourseTypes, getCourseType } from "@/lib/cms";
 import { CourseTypeLanding } from "@/components/course/course-type-landing";
 import { CourseJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, locales, lh } from "@/lib/i18n";
 
-export function generateStaticParams() {
-  return locales.flatMap((lang) =>
-    getCourseTypes(lang)
-      .filter((c) => c.status === "aktiv")
-      .map((c) => ({ lang, kurstyp: c.slug })),
+export async function generateStaticParams() {
+  const perLocale = await Promise.all(
+    locales.map(async (lang) =>
+      (await getCourseTypes(lang)).filter((c) => c.status === "aktiv").map((c) => ({ lang, kurstyp: c.slug })),
+    ),
   );
+  return perLocale.flat();
 }
 
 export async function generateMetadata({
@@ -21,7 +22,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang, kurstyp } = await params;
   if (!hasLocale(lang)) return {};
-  const course = getCourseType(lang, kurstyp);
+  const course = await getCourseType(lang, kurstyp);
   if (!course) return {};
   const url = lh(lang, `/kurse/${course.slug}`);
   return {
@@ -44,7 +45,7 @@ export default async function KurstypPage({
 }) {
   const { lang, kurstyp } = await params;
   if (!hasLocale(lang)) notFound();
-  const course = getCourseType(lang, kurstyp);
+  const course = await getCourseType(lang, kurstyp);
   if (!course || course.status !== "aktiv") notFound();
   const dict = getDictionary(lang);
 

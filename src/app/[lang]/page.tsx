@@ -9,9 +9,8 @@ import { Configurator } from "@/components/interactive/configurator";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
 import { TestimonialCarousel } from "@/components/interactive/testimonial-carousel";
 import { ImpactCalculator } from "@/components/interactive/impact-calculator";
-import { getIndustries } from "@/content/industries";
 import { FaqJsonLd } from "@/components/seo/json-ld";
-import { getFaq, getTestimonials } from "@/lib/cms";
+import { getFaq, getTestimonials, getIndustries } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 import { notFound } from "next/navigation";
@@ -20,8 +19,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const [faq, cmsTestimonials] = await Promise.all([getFaq(lang), getTestimonials()]);
-  const industries = getIndustries(lang);
+  const [faq, cmsTestimonials, industries] = await Promise.all([
+    getFaq(lang),
+    getTestimonials(),
+    getIndustries(lang),
+  ]);
 
   // Echte, freigegebene Kundenstimmen aus dem CMS haben Vorrang; solange
   // dort keine veröffentlicht ist, zeigen wir die illustrativen Beispiel-
