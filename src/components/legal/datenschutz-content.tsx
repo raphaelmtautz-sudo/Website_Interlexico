@@ -66,6 +66,12 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           )}
           , anschließend Löschung bzw. Anonymisierung.
         </LegalP>
+        <LegalP>
+          Die Website und alle damit verbundenen Anfragedaten werden
+          ausschließlich auf Servern innerhalb der Europäischen Union
+          verarbeitet und gespeichert. Es findet kein Datenabfluss in
+          Drittländer außerhalb der EU/des EWR statt.
+        </LegalP>
       </div>
 
       <div className="space-y-3">
@@ -113,12 +119,15 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
         <LegalList
           items={[
             "keine Cookies gesetzt und keine geräteübergreifende Wiedererkennung vorgenommen",
-            "keine IP-Adressen und keine personenbeziehbaren Merkmale gespeichert",
-            "lediglich aufgerufener Pfad und (sofern vorhanden) die Referrer-Domain in aggregierter Form verarbeitet",
+            "keine IP-Adressen dauerhaft gespeichert — sie werden nur für den Verarbeitungsmoment genutzt, um Land und einen täglich neu berechneten, nicht rückführbaren Prüfwert zu bilden, danach sofort verworfen",
+            "aufgerufener Pfad, Referrer-Domain, grobes Land, Browsertyp, Betriebssystem und Gerätetyp (Desktop/Mobil/Tablet) in dieser anonymisierten Form verarbeitet",
           ]}
         />
         <LegalP>
-          Die Signale <span className="text-paper">Do Not Track (DNT)</span> und{" "}
+          Die Reichweitenmessung läuft auf eigener, selbst gehosteter Infrastruktur
+          (Umami, Server in der EU) — es werden keine Daten an Dritte oder in
+          Drittländer übertragen. Die Signale{" "}
+          <span className="text-paper">Do Not Track (DNT)</span> und{" "}
           <span className="text-paper">Global Privacy Control (GPC)</span> werden
           respektiert: Ist eines davon in Ihrem Browser aktiv, findet keine Messung
           statt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
@@ -149,6 +158,38 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           übermittelt; sie wird gelöscht, sobald sie für die Auswertung nicht
           mehr erforderlich ist. Ohne Ihre Zustimmung zum Mikrofonzugriff
           können Sie den Test ohne die Sprachaufgabe abschließen.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6a. Marketing-Newsletter (optionale Einwilligung)</LegalH2>
+        <LegalP>
+          Auf unserem Kontaktformular können Sie zusätzlich, freiwillig und
+          unabhängig von Ihrer eigentlichen Anfrage einwilligen, künftig
+          E-Mail-Updates zu neuen Kursformaten, E-Learning-Modulen und Terminen
+          zu erhalten (Art. 6 Abs. 1 lit. a DSGVO, § 7 Abs. 2 Nr. 3 UWG). Diese
+          Einwilligung ist standardmäßig nicht angehakt und keine Voraussetzung
+          für die Bearbeitung Ihrer Anfrage.
+        </LegalP>
+        <LegalP>
+          Wir nutzen ein Double-Opt-In-Verfahren: Nach dem Absenden erhalten
+          Sie eine Bestätigungs-E-Mail mit einem Link. Erst nach Klick auf
+          diesen Link ist die Anmeldung aktiv und der Nachweis Ihrer
+          Einwilligung dokumentiert (Zeitpunkt, IP-Adresse). Bestätigen Sie
+          nicht, wird der Eintrag automatisch gelöscht. Sie können die
+          Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen — einen
+          Abmeldelink finden Sie am Ende jeder Werbe-E-Mail.
+        </LegalP>
+        <LegalP>
+          <span className="text-paper">Bestandskund:innen (§ 7 Abs. 3 UWG):</span>{" "}
+          Haben Sie bereits ein kostenpflichtiges Training bei uns gebucht,
+          dürfen wir die dabei angegebene E-Mail-Adresse ohne gesonderte
+          Einwilligung nutzen, um Sie über ähnliche eigene Leistungen (z. B.
+          Folgekurse, Fachsprachentrainings) zu informieren. Auf Ihr
+          jederzeitiges Widerspruchsrecht — sowohl bei der Buchung als auch in
+          jeder weiteren E-Mail — weisen wir dabei klar hin; ein Widerspruch
+          ist kostenfrei und formlos möglich (z. B. per Abmeldelink oder an
+          unsere Kontaktadresse).
         </LegalP>
       </div>
 
@@ -262,6 +303,11 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           )}
           , after which they are deleted or anonymised.
         </LegalP>
+        <LegalP>
+          The website and all associated enquiry data are processed and
+          stored exclusively on servers within the European Union. No data
+          is transferred to third countries outside the EU/EEA.
+        </LegalP>
       </div>
 
       <div className="space-y-3">
@@ -308,12 +354,14 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
         <LegalList
           items={[
             "no cookies are set and no cross-device recognition takes place",
-            "no IP addresses or personally identifiable characteristics are stored",
-            "only the path accessed and (if present) the referrer domain are processed in aggregated form",
+            "no IP addresses are stored permanently — they are used only in the moment of processing to derive a country and a non-reversible, daily-rotating check value, then discarded immediately",
+            "path accessed, referrer domain, coarse country, browser type, operating system and device type (desktop/mobile/tablet) are processed in this anonymised form",
           ]}
         />
         <LegalP>
-          <span className="text-paper">Do Not Track (DNT)</span> and{" "}
+          Traffic measurement runs on our own self-hosted infrastructure (Umami,
+          servers in the EU) — no data is transferred to third parties or third
+          countries. <span className="text-paper">Do Not Track (DNT)</span> and{" "}
           <span className="text-paper">Global Privacy Control (GPC)</span>{" "}
           signals are respected: if either is active in your browser, no
           measurement takes place. Legal basis: Art. 6(1)(f) GDPR.
@@ -342,6 +390,35 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           email — and is deleted once it is no longer needed for the
           assessment. You can complete the test without the speaking task if
           you do not consent to microphone access.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6a. Marketing newsletter (optional consent)</LegalH2>
+        <LegalP>
+          On our contact form you can separately and voluntarily agree,
+          independently of your actual enquiry, to receive email updates
+          about new course formats, e-learning modules, and dates (Art.
+          6(1)(a) GDPR). This box is unchecked by default and is not a
+          condition for handling your enquiry.
+        </LegalP>
+        <LegalP>
+          We use a double opt-in process: after submitting, you receive a
+          confirmation email with a link. Only after clicking that link is
+          the subscription active and your consent documented (timestamp,
+          IP address). If you do not confirm, the entry is automatically
+          deleted. You can withdraw consent at any time with future effect —
+          you will find an unsubscribe link at the bottom of every marketing
+          email.
+        </LegalP>
+        <LegalP>
+          <span className="text-paper">Existing customers:</span> If you have
+          already booked a paid training with us, we may use the email
+          address provided at booking to inform you about similar services
+          of our own (e.g. follow-up courses) without separate consent,
+          where permitted by applicable law — always with a clear,
+          cost-free right to object, both at booking and in every further
+          email.
         </LegalP>
       </div>
 
@@ -455,6 +532,12 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           )}
           , tras lo cual se eliminan o anonimizan.
         </LegalP>
+        <LegalP>
+          El sitio web y todos los datos de consultas asociados se procesan y
+          almacenan exclusivamente en servidores dentro de la Unión Europea.
+          No se produce transferencia de datos a terceros países fuera de la
+          UE/EEE.
+        </LegalP>
       </div>
 
       <div className="space-y-3">
@@ -502,12 +585,15 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
         <LegalList
           items={[
             "no se establecen cookies ni se realiza reconocimiento entre dispositivos",
-            "no se almacenan direcciones IP ni características que permitan identificar a personas",
-            "solo se procesan, de forma agregada, la ruta visitada y (si existe) el dominio de referencia",
+            "no se almacenan direcciones IP de forma permanente — solo se usan en el momento del procesamiento para derivar el país y un valor de verificación no reversible que rota diariamente, y se descartan de inmediato",
+            "se procesan, de forma anonimizada, la ruta visitada, el dominio de referencia, el país aproximado, el tipo de navegador, el sistema operativo y el tipo de dispositivo (escritorio/móvil/tableta)",
           ]}
         />
         <LegalP>
-          Se respetan las señales <span className="text-paper">Do Not Track (DNT)</span> y{" "}
+          La medición de audiencia se ejecuta en nuestra propia infraestructura
+          autoalojada (Umami, servidores en la UE) — no se transfieren datos a
+          terceros ni a terceros países. Se respetan las señales{" "}
+          <span className="text-paper">Do Not Track (DNT)</span> y{" "}
           <span className="text-paper">Global Privacy Control (GPC)</span>: si alguna de
           ellas está activa en su navegador, no se realiza ninguna medición. Base jurídica:
           artículo 6.1.f del RGPD.
@@ -538,6 +624,36 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           elimina en cuanto ya no es necesaria para la valoración. Puede
           completar el test sin la tarea de expresión oral si no consiente el
           acceso al micrófono.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6a. Boletín de marketing (consentimiento opcional)</LegalH2>
+        <LegalP>
+          En nuestro formulario de contacto puede además, de forma voluntaria
+          e independiente de su consulta, dar su consentimiento para recibir
+          actualizaciones por correo electrónico sobre nuevos formatos de
+          curso, módulos de e-learning y fechas (art. 6.1.a RGPD). Esta
+          casilla no está marcada por defecto y no es un requisito para
+          tramitar su consulta.
+        </LegalP>
+        <LegalP>
+          Utilizamos un procedimiento de doble consentimiento (double opt-in):
+          tras el envío recibirá un correo de confirmación con un enlace.
+          Solo tras hacer clic en dicho enlace se activa la suscripción y
+          queda documentado su consentimiento (fecha/hora, dirección IP). Si
+          no confirma, el registro se elimina automáticamente. Puede revocar
+          su consentimiento en cualquier momento con efecto futuro — al final
+          de cada correo publicitario encontrará un enlace de baja.
+        </LegalP>
+        <LegalP>
+          <span className="text-paper">Clientes existentes:</span> Si ya ha
+          reservado una formación de pago con nosotros, podemos utilizar la
+          dirección de correo facilitada en la reserva para informarle sobre
+          servicios propios similares (p. ej., cursos de continuación) sin
+          consentimiento independiente, cuando la legislación aplicable lo
+          permita — siempre con un derecho de oposición claro y gratuito,
+          tanto en la reserva como en cada correo posterior.
         </LegalP>
       </div>
 

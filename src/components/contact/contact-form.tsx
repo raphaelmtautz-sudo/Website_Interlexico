@@ -55,6 +55,9 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     branches: [] as string[],
     message: "",
     consent: false,
+    marketingConsent: false,
+    niveau: "",
+    format: "",
     website: "", // Honeypot
     contactPreference: "phone" as "phone" | "mail",
     street: "",
@@ -86,7 +89,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   const [step, setStep] = useState<1 | 2>(1);
   // Zeigt Feldfehler erst, nachdem ein Feld verlassen wurde oder ein
   // Weiter/Absenden-Versuch fehlgeschlagen ist — nicht schon beim Tippen.
-  type TouchKey = "firstName" | "lastName" | "email" | "street" | "zipCity";
+  type TouchKey = "firstName" | "lastName" | "email" | "street" | "zipCity" | "message";
   const [touched, setTouched] = useState<Partial<Record<TouchKey, boolean>>>({});
 
   function update<K extends keyof typeof form>(key: K) {
@@ -127,20 +130,23 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     setAttachment(f);
   }
 
+  // Datensparsamkeit: nur E-Mail ist für den Einstieg zwingend — Name ist
+  // eine Höflichkeit, keine Voraussetzung für die Bearbeitung der Anfrage.
   const firstNameValid = form.firstName.trim().length > 0;
   const lastNameValid = form.lastName.trim().length > 0;
   const emailValid = EMAIL_RE.test(form.email);
   const filledCount = [firstNameValid, lastNameValid, emailValid].filter(Boolean).length;
   const progress = filledCount / 3;
-  const step1Valid = firstNameValid && lastNameValid && emailValid;
+  const step1Valid = emailValid;
   const isMail = form.contactPreference === "mail";
   const streetValid = !isMail || form.street.trim().length > 0;
   const zipCityValid = !isMail || form.zipCity.trim().length > 0;
+  const messageValid = form.message.trim().length > 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (step !== 2) {
-      setTouched({ firstName: true, lastName: true, email: true });
+      setTouched({ email: true });
       if (step1Valid) {
         track("form_start", { form: "kontakt" });
         setStep(2);
@@ -149,6 +155,10 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     }
     if (isMail && (!streetValid || !zipCityValid)) {
       setTouched((prev) => ({ ...prev, street: true, zipCity: true }));
+      return;
+    }
+    if (!messageValid) {
+      setTouched((prev) => ({ ...prev, message: true }));
       return;
     }
     if (!form.consent) {
@@ -170,10 +180,14 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
       body.set("preferredDate", form.preferredDate);
       body.set("message", form.message);
       body.set("consent", "true");
+      body.set("niveau", form.niveau);
+      body.set("format", form.format);
       body.set("website", form.website);
       body.set("contactPreference", form.contactPreference);
       body.set("language", lang);
       body.set("idempotencyKey", idempotencyKey);
+      // Marketing-Einwilligung läuft NICHT über /api/inquiry — getrennter
+      // Double-Opt-In-Flow, siehe handleSubmit weiter unten.
       if (isMail) {
         body.set("street", form.street);
         body.set("zipCity", form.zipCity);
@@ -186,6 +200,16 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
       if (ok) {
         track("form_submit", { form: "kontakt", topic: form.topic, transferredToOne: String(Boolean(data.transferredToOne)) });
         setLeadRef(typeof data.leadId === "string" ? data.leadId : null);
+        // Marketing-Opt-In läuft unabhängig von der Anfrage selbst (eigener
+        // Double-Opt-In) — ein Fehlschlag hier darf die erfolgreiche Anfrage
+        // nicht als "error" zeigen, daher fire-and-forget.
+        if (form.marketingConsent) {
+          fetch("/api/newsletter", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ email: form.email, source: "kontaktformular" }),
+          }).catch(() => {});
+        }
       }
       setStatus(ok ? "sent" : "error");
     } catch {
@@ -327,28 +351,24 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
         </fieldset>
       )}
 
-      {/* Schritt 1: nur Name & E-Mail — niedrige Hemmschwelle für den Einstieg */}
+      {/* Schritt 1: nur E-Mail ist Pflicht — Name ist optional (Datensparsamkeit) */}
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label={t.vorname} valid={firstNameValid} error={touched.firstName && !firstNameValid ? t.pflichtfeld : undefined}>
+        <Field label={t.vorname}>
           <input
-            required
             aria-label={t.vorname}
             placeholder={t.vorname}
             value={form.firstName}
             onChange={update("firstName")}
-            onBlur={touch("firstName")}
-            className={fieldInputClasses(touched.firstName && !firstNameValid)}
+            className={inputClasses}
           />
         </Field>
-        <Field label={t.nachname} valid={lastNameValid} error={touched.lastName && !lastNameValid ? t.pflichtfeld : undefined}>
+        <Field label={t.nachname}>
           <input
-            required
             aria-label={t.nachname}
             placeholder={t.nachname}
             value={form.lastName}
             onChange={update("lastName")}
-            onBlur={touch("lastName")}
-            className={fieldInputClasses(touched.lastName && !lastNameValid)}
+            className={inputClasses}
           />
         </Field>
       </div>
@@ -479,14 +499,44 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
             </Field>
           </div>
 
-          <Field label={t.ihreNachricht}>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label={t.niveauLabel}>
+              <select
+                aria-label={t.niveauLabel}
+                value={form.niveau}
+                onChange={(e) => setForm((f) => ({ ...f, niveau: e.target.value }))}
+                className={inputClasses}
+              >
+                <option value="">{t.niveauUnbekannt}</option>
+                {["A1", "A2", "B1", "B2", "C1", "C2"].map((lvl) => (
+                  <option key={lvl} value={lvl}>{lvl}</option>
+                ))}
+              </select>
+            </Field>
+            <Field label={t.formatLabel}>
+              <select
+                aria-label={t.formatLabel}
+                value={form.format}
+                onChange={(e) => setForm((f) => ({ ...f, format: e.target.value }))}
+                className={inputClasses}
+              >
+                <option value="">{t.formatEgal}</option>
+                <option value="einzel">{t.formatEinzel}</option>
+                <option value="gruppe">{t.formatGruppe}</option>
+              </select>
+            </Field>
+          </div>
+
+          <Field label={t.ihreNachricht} valid={messageValid} error={touched.message && !messageValid ? t.pflichtfeld : undefined}>
             <textarea
+              required
               aria-label={t.ihreNachricht}
               rows={5}
               value={form.message}
               onChange={update("message")}
+              onBlur={touch("message")}
               placeholder={t.nachrichtPlaceholder}
-              className={inputClasses}
+              className={fieldInputClasses(touched.message && !messageValid)}
             />
           </Field>
 
@@ -524,6 +574,19 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
               {t.dsgvoRequired}
             </p>
           )}
+
+          {/* Marketing-Opt-In: eigenständig, standardmäßig NICHT angehakt,
+              nicht Voraussetzung für die Anfrage — löst einen separaten
+              Double-Opt-In-Workflow aus (siehe /api/newsletter). */}
+          <div className="space-y-2">
+            <Checkbox
+              checked={form.marketingConsent}
+              onChange={(checked) => setForm((f) => ({ ...f, marketingConsent: checked }))}
+            >
+              {t.marketingLabel}
+            </Checkbox>
+            <p className="font-sans text-[11px] leading-relaxed text-paper-dim">{t.marketingWiderruf}</p>
+          </div>
 
           {/* Honeypot */}
           <input
