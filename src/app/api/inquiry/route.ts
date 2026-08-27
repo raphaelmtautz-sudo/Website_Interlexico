@@ -86,9 +86,8 @@ export async function POST(req: NextRequest) {
   if (!inquiry.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inquiry.email)) {
     return Response.json({ ok: false, error: "invalid_email" }, { status: 422 });
   }
-  if (!inquiry.consent) {
-    return Response.json({ ok: false, error: "consent_required" }, { status: 422 });
-  }
+  // Keine Consent-Pflicht mehr — Verarbeitung läuft auf Art. 6 Abs. 1 lit.
+  // b/f DSGVO, ein Hinweistext im Formular genügt (siehe contact-form.tsx).
   if (inquiry.contactPreference === "mail" && (!inquiry.street || !inquiry.zipCity)) {
     return Response.json({ ok: false, error: "address_required" }, { status: 422 });
   }

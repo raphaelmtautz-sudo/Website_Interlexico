@@ -81,7 +81,6 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   const [idempotencyKey] = useState(makeIdempotencyKey);
   const [poppedTopic, setPoppedTopic] = useState<string | null>(null);
   const [poppedBranch, setPoppedBranch] = useState<string | null>(null);
-  const [consentError, setConsentError] = useState(false);
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   // Zweistufig: erst nur Name/E-Mail (geringe Hemmschwelle), Unternehmen &
@@ -161,10 +160,10 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
       setTouched((prev) => ({ ...prev, message: true }));
       return;
     }
-    if (!form.consent) {
-      setConsentError(true);
-      return;
-    }
+    // Keine Pflicht-Checkbox mehr für die Grundverarbeitung — die Anfrage
+    // läuft auf Art. 6 Abs. 1 lit. b/f DSGVO, dafür reicht der Hinweistext
+    // über dem Button (siehe unten). Serverseitig wurde die frühere
+    // Pflichtprüfung entsprechend entfernt (apps/sales/backend/inquiries.ts).
     if (status === "sending") return;
     setStatus("sending");
     try {
@@ -239,7 +238,6 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           type="button"
           onClick={() => {
             setForm(initial);
-            setConsentError(false);
             setAttachment(null);
             setAttachmentError(null);
             setTouched({});
@@ -554,26 +552,16 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
             </p>
           )}
 
-          <Checkbox
-            required
-            checked={form.consent}
-            invalid={consentError}
-            onChange={(checked) => {
-              setForm((f) => ({ ...f, consent: checked }));
-              if (checked) setConsentError(false);
-            }}
-          >
-            {t.dsgvoPre}{" "}
+          {/* Kein Pflicht-Checkbox mehr für die Grundverarbeitung (Art. 6
+              Abs. 1 lit. b/f DSGVO braucht keine ausdrückliche Einwilligung)
+              — ein Hinweistext genügt. */}
+          <p className="font-sans text-xs leading-relaxed text-paper-dim">
+            {t.dsgvoHinweis}{" "}
             <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
               {t.datenschutzLink}
-            </a>{" "}
-            {t.dsgvoPost}
-          </Checkbox>
-          {consentError && (
-            <p role="alert" className="-mt-4 font-sans text-xs text-error">
-              {t.dsgvoRequired}
-            </p>
-          )}
+            </a>
+            .
+          </p>
 
           {/* Marketing-Opt-In: eigenständig, standardmäßig NICHT angehakt,
               nicht Voraussetzung für die Anfrage — löst einen separaten

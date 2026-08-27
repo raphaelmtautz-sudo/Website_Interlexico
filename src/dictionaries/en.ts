@@ -538,6 +538,7 @@ export const en: Dictionary = {
     datenschutzLink: "privacy policy",
     dsgvoPost: ".",
     dsgvoRequired: "Please agree to the privacy policy.",
+    dsgvoHinweis: "Your data will be processed to handle your enquiry in accordance with our",
     niveauLabel: "Current language level (optional)",
     niveauUnbekannt: "I don't know / not yet assessed",
     formatLabel: "Preferred training format (optional)",

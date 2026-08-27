@@ -536,6 +536,7 @@ export const de = {
     datenschutzLink: "Datenschutzerklärung",
     dsgvoPost: "zu.",
     dsgvoRequired: "Bitte stimmen Sie der Datenschutzerklärung zu.",
+    dsgvoHinweis: "Die Verarbeitung Ihrer Daten erfolgt zur Bearbeitung Ihrer Anfrage gemäß unserer",
     niveauLabel: "Aktuelles Sprachniveau (optional)",
     niveauUnbekannt: "Weiß ich nicht / noch nicht eingestuft",
     formatLabel: "Bevorzugtes Trainingsformat (optional)",
