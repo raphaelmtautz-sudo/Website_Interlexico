@@ -180,7 +180,10 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Dictionary }) {
       {open && (
         <div className="mb-4 flex h-[28rem] w-[22rem] flex-col border border-gold-dim bg-ink-raised shadow-2xl">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
-            <p className="font-display text-lg text-paper">Lexi</p>
+            <div>
+              <p className="font-display text-lg text-paper leading-tight">Lexi</p>
+              <p className="font-sans text-[10px] uppercase tracking-[0.1em] text-paper-dim">{dict.lexi.subtitle}</p>
+            </div>
             <button
               onClick={() => setOpen(false)}
               className="font-sans text-xs uppercase tracking-widest text-paper-dim hover:text-gold"

@@ -37,6 +37,9 @@ export const en: Dictionary = {
     datenschutz: "Privacy policy",
     agb: "Terms & conditions",
     rights: "All rights reserved.",
+    trustHosting: "Hosting & data processing exclusively in the EU",
+    trustTracking: "No cookie tracking — analytics without storing IP addresses",
+    trustDnt: "Do Not Track & Global Privacy Control respected",
   },
   common: {
     beratungsgespraechBuchen: "Book a consultation",
@@ -92,7 +95,8 @@ export const en: Dictionary = {
   },
   lexi: {
     trigger: "Questions? — Lexi",
-    greeting: "Hello. I'm Lexi. How can I help with your language training (English or German)?",
+    subtitle: "Guided enquiry — not an AI chat",
+    greeting: "Hello. I'm Lexi, and I'll guide you through a few short steps to submit your enquiry — not a free-form AI conversation, but a guided handover to our team. What's it about (English or German)?",
     close: "Close",
     you: "You",
     typing: "Lexi is typing…",

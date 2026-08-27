@@ -10,6 +10,7 @@ import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
 import { TestimonialCarousel } from "@/components/interactive/testimonial-carousel";
 import { ImpactCalculator } from "@/components/interactive/impact-calculator";
 import { FaqJsonLd } from "@/components/seo/json-ld";
+import { Accordion } from "@/components/ui/accordion";
 import { getFaq, getTestimonials, getIndustries } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
@@ -266,19 +267,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <Reveal as="section" id="faq" className="border-t border-line">
         <Section>
           <Eyebrow>{dict.home.faqEyebrow}</Eyebrow>
-          <div className="grid gap-x-16 gap-y-10 md:grid-cols-2">
-            {faq.map((item) => (
-              <div key={item.question} className="border-t border-gold-dim pt-6">
-                <h3 className="font-display text-2xl text-paper mb-3 text-balance">
-                  {item.question}
-                </h3>
-                <p className="font-sans text-sm leading-relaxed text-paper-dim">
-                  {item.answer}
-                </p>
-              </div>
-            ))}
+          <div className="mx-auto max-w-3xl">
+            <Accordion items={faq} />
           </div>
         </Section>
+        {/* JSON-LD enthält weiterhin alle Fragen/Antworten unabhängig vom
+            Accordion-Zustand — für Crawler unsichtbar per DOM, für Schema.org
+            vollständig. */}
         <FaqJsonLd items={faq} />
       </Reveal>
 

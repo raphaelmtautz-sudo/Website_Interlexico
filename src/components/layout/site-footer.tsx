@@ -74,6 +74,11 @@ export async function SiteFooter({
         </div>
       </Container>
       <Container className="mt-14 border-t border-line pt-6">
+        <div className="mb-4 flex flex-wrap gap-x-6 gap-y-2 font-sans text-[11px] text-paper-dim">
+          <span>{dict.footer.trustHosting}</span>
+          <span>{dict.footer.trustTracking}</span>
+          <span>{dict.footer.trustDnt}</span>
+        </div>
         <p className="font-sans text-xs text-paper-dim">
           © {new Date().getFullYear()} Interlexico. {dict.footer.rights}
         </p>

@@ -35,6 +35,9 @@ export const de = {
     datenschutz: "Datenschutz",
     agb: "AGB",
     rights: "Alle Rechte vorbehalten.",
+    trustHosting: "Hosting & Datenverarbeitung ausschließlich in der EU",
+    trustTracking: "Kein Cookie-Tracking — Analyse ohne IP-Speicherung",
+    trustDnt: "Do Not Track & Global Privacy Control respektiert",
   },
   common: {
     beratungsgespraechBuchen: "Beratungsgespräch buchen",
@@ -90,7 +93,8 @@ export const de = {
   },
   lexi: {
     trigger: "Fragen? — Lexi",
-    greeting: "Guten Tag. Ich bin Lexi. Wie kann ich Ihnen bei Ihrem Sprachtraining (Englisch oder Deutsch) helfen?",
+    subtitle: "Geführte Anfrage — kein KI-Chat",
+    greeting: "Guten Tag. Ich bin Lexi und führe Sie in wenigen Schritten zu Ihrer Anfrage — kein freies KI-Gespräch, sondern eine geführte Übergabe an unser Team. Um welches Thema geht es (Englisch oder Deutsch)?",
     close: "Schließen",
     you: "Sie",
     typing: "Lexi tippt…",

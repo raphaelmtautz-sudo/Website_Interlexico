@@ -6,6 +6,11 @@ import { getPost, getSiteSettings } from "@/lib/cms";
 import { renderLexical } from "@/lib/lexical-render";
 import { hasLocale, lh } from "@/lib/i18n";
 
+// ISR statt reinem SSR: Blogartikel ändern sich nicht pro Request, ein
+// stündlicher Revalidate reicht — vermeidet einen Live-CMS-Fetch bei jedem
+// einzelnen Aufruf.
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {
