@@ -129,19 +129,12 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     setAttachment(f);
   }
 
-  // Datensparsamkeit: nur E-Mail ist für den Einstieg zwingend — Name ist
-  // eine Höflichkeit, keine Voraussetzung für die Bearbeitung der Anfrage.
   const firstNameValid = form.firstName.trim().length > 0;
   const lastNameValid = form.lastName.trim().length > 0;
   const emailValid = EMAIL_RE.test(form.email);
   const filledCount = [firstNameValid, lastNameValid, emailValid].filter(Boolean).length;
-  const step1Valid = emailValid;
-  // Der Balken darf nicht "unfertig" wirken, sobald man tatsächlich
-  // weiterklicken kann — E-Mail ist das einzige Pflichtfeld in Schritt 1
-  // (Datensparsamkeit), also volle Breite sobald sie gültig ist. Vorher
-  // (E-Mail noch ungültig/leer) zeigt der Balken weiterhin an, wie viele der
-  // drei Felder schon befüllt sind — reine Ermutigung, keine Bedingung.
-  const progress = step1Valid ? 1 : filledCount / 3;
+  const step1Valid = firstNameValid && lastNameValid && emailValid;
+  const progress = filledCount / 3;
   const isMail = form.contactPreference === "mail";
   const streetValid = !isMail || form.street.trim().length > 0;
   const zipCityValid = !isMail || form.zipCity.trim().length > 0;
@@ -150,7 +143,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (step !== 2) {
-      setTouched({ email: true });
+      setTouched({ firstName: true, lastName: true, email: true });
       if (step1Valid) {
         track("form_start", { form: "kontakt" });
         setStep(2);
@@ -354,24 +347,28 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
         </fieldset>
       )}
 
-      {/* Schritt 1: nur E-Mail ist Pflicht — Name ist optional (Datensparsamkeit) */}
+      {/* Schritt 1: Name & E-Mail sind Pflicht */}
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label={t.vorname}>
+        <Field label={t.vorname} valid={firstNameValid} error={touched.firstName && !firstNameValid ? t.pflichtfeld : undefined}>
           <input
+            required
             aria-label={t.vorname}
             placeholder={t.vorname}
             value={form.firstName}
             onChange={update("firstName")}
-            className={inputClasses}
+            onBlur={touch("firstName")}
+            className={fieldInputClasses(touched.firstName && !firstNameValid)}
           />
         </Field>
-        <Field label={t.nachname}>
+        <Field label={t.nachname} valid={lastNameValid} error={touched.lastName && !lastNameValid ? t.pflichtfeld : undefined}>
           <input
+            required
             aria-label={t.nachname}
             placeholder={t.nachname}
             value={form.lastName}
             onChange={update("lastName")}
-            className={inputClasses}
+            onBlur={touch("lastName")}
+            className={fieldInputClasses(touched.lastName && !lastNameValid)}
           />
         </Field>
       </div>
