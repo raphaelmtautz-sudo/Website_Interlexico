@@ -2,12 +2,16 @@ import { type NextRequest } from "next/server";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site";
 import { sendMail } from "@/lib/mailer";
+import { submitLead, newIdempotencyKey } from "@/lib/one-client";
 
 /**
- * Serverseitige Entgegennahme von Anfragen (Kontaktformular & Buchungsanfrage).
- * Verschickt NICHT über das Mailprogramm des Nutzers, sondern leitet die
- * Anfrage per SMTP (Mailcow, siehe src/lib/mailer.ts) an SITE.inquiryEmail
- * weiter. Ohne konfiguriertes SMTP wird nur geloggt, siehe mailer.ts.
+ * Serverseitige Entgegennahme von Anfragen (Kontaktformular, Buchungsanfrage,
+ * Lexi-Widget). Interlexico ONE ist die Single Source of Truth für Leads
+ * (§28/§50 Master-Prompt) — jede Anfrage wird dort als Lead angelegt,
+ * idempotent über einen pro Formular-Sitzung erzeugten Key. Die SMTP-Mail
+ * (Mailcow, siehe src/lib/mailer.ts) läuft unabhängig davon als
+ * Benachrichtigung weiter, damit ein ONE-Ausfall keine Anfrage verschluckt
+ * (§17: keine Anfrage darf durch einen temporären Fehler verloren gehen).
  */
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -68,7 +72,13 @@ export async function POST(req: NextRequest) {
     format: clean(data.format, 120),
     participants: clean(data.participants, 10),
     preferredDate: clean(data.preferredDate, 60),
+    contactPreference: clean(data.contactPreference, 10) === "mail" ? "mail" : "phone",
+    street: clean(data.street, 200),
+    zipCity: clean(data.zipCity, 100),
     consent: data.consent === "true" || data.consent === true,
+    language: clean(data.language, 5) || "de",
+    campaign: clean(data.campaign, 200),
+    idempotencyKey: clean(data.idempotencyKey, 100) || newIdempotencyKey(),
   };
 
   if (!inquiry.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inquiry.email)) {
@@ -76,6 +86,9 @@ export async function POST(req: NextRequest) {
   }
   if (!inquiry.consent) {
     return Response.json({ ok: false, error: "consent_required" }, { status: 422 });
+  }
+  if (inquiry.contactPreference === "mail" && (!inquiry.street || !inquiry.zipCity)) {
+    return Response.json({ ok: false, error: "address_required" }, { status: 422 });
   }
   if (file) {
     if (file.size > MAX_ATTACHMENT_BYTES) {
@@ -98,6 +111,9 @@ export async function POST(req: NextRequest) {
     inquiry.format && `Format: ${inquiry.format}`,
     inquiry.participants && `Teilnehmer: ${inquiry.participants}`,
     inquiry.preferredDate && `Wunschtermin: ${inquiry.preferredDate}`,
+    `Bevorzugter Kontaktweg: ${inquiry.contactPreference === "mail" ? "Schriftlich (Post)" : "Telefonisch"}`,
+    inquiry.contactPreference === "mail" && inquiry.street && `Straße: ${inquiry.street}`,
+    inquiry.contactPreference === "mail" && inquiry.zipCity && `PLZ/Ort: ${inquiry.zipCity}`,
     "",
     inquiry.message,
   ].filter(Boolean);
@@ -112,13 +128,52 @@ export async function POST(req: NextRequest) {
       ]
     : undefined;
 
-  await sendMail({
-    to: SITE.inquiryEmail,
-    replyTo: inquiry.email,
-    subject: `Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
-    text: lines.join("\n"),
-    attachments,
+  const [nameParts, mailResult] = await Promise.all([
+    Promise.resolve(splitName(inquiry.name)),
+    sendMail({
+      to: SITE.inquiryEmail,
+      replyTo: inquiry.email,
+      subject: `Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
+      text: lines.join("\n"),
+      attachments,
+    }),
+  ]);
+
+  const transfer = await submitLead({
+    firstName: nameParts.firstName,
+    lastName: nameParts.lastName,
+    email: inquiry.email,
+    company: inquiry.company,
+    phone: inquiry.phone,
+    notes: lines.join("\n"),
+    kind: inquiry.kind,
+    campaign: inquiry.campaign || undefined,
+    language: inquiry.language,
+    consent: inquiry.consent,
+    idempotencyKey: inquiry.idempotencyKey,
   });
 
-  return Response.json({ ok: true });
+  // Die Anfrage gilt als erfolgreich, sobald die Mail-Benachrichtigung ODER
+  // die ONE-Übergabe geklappt hat — ein einzelner Ausfall darf die Anfrage
+  // nicht verlieren (§17). Ist ONE nicht erreichbar, wird das geloggt statt
+  // die Anfrage stillschweigend als reine Mail zu behandeln.
+  if (!transfer.ok) {
+    console.error("[inquiry] ONE-Übergabe fehlgeschlagen, Anfrage lief nur per Mail:", transfer.error, {
+      idempotencyKey: inquiry.idempotencyKey,
+    });
+  }
+
+  void mailResult;
+  return Response.json({
+    ok: true,
+    leadId: transfer.ok ? transfer.leadId : undefined,
+    transferredToOne: transfer.ok,
+  });
+}
+
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length === 0 || !parts[0]) return { firstName: "Unbekannt", lastName: "Unbekannt" };
+  if (parts.length === 1) return { firstName: parts[0], lastName: "-" };
+  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
 }

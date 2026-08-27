@@ -2,6 +2,7 @@ import { type NextRequest } from "next/server";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site";
 import { sendMail } from "@/lib/mailer";
+import { submitLead, newIdempotencyKey } from "@/lib/one-client";
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -11,8 +12,12 @@ function clean(v: unknown, max: number): string {
  * Serverseitige Entgegennahme des Englisch-Einstufungstests. Reading/Grammar,
  * Listening und die Speaking-Situationsfrage werden im Client automatisch
  * ausgewertet; Writing-Antwort und Speaking-Aufnahme können nur ein
- * Interlexico-Trainer beurteilen, daher gehen alle Antworten per Mail an das
- * Team (analog zu /api/inquiry).
+ * Interlexico-Trainer beurteilen, daher gehen alle Antworten weiterhin per
+ * Mail ans Team (Audio/Freitext lassen sich nicht sinnvoll in einen
+ * Lead-Datensatz packen). Zusätzlich — analog zu /api/inquiry — wird der
+ * Test als Lead mit Qualifizierungssignal in Interlexico ONE angelegt, damit
+ * ein abgeschlossener Einstufungstest wie jede andere Anfrage im CRM landet
+ * statt nur im Postfach.
  */
 export async function POST(req: NextRequest) {
   const rl = await rateLimit(`einstufungstest:${clientKey(req)}`, { limit: 5, windowMs: 60_000 });
@@ -36,6 +41,8 @@ export async function POST(req: NextRequest) {
   const newsletter = form.get("newsletter") === "true";
   const level = clean(form.get("level"), 40);
   const answersJson = clean(form.get("answers"), 20000);
+  const language = clean(form.get("language"), 5) || "de";
+  const idempotencyKey = clean(form.get("idempotencyKey"), 100) || newIdempotencyKey();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return Response.json({ ok: false, error: "invalid_email" }, { status: 422 });
@@ -76,13 +83,44 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  await sendMail({
-    to: SITE.inquiryEmail,
-    replyTo: email,
-    subject: `Einstufungstest Englisch — ${name}`,
-    text: lines.join("\n"),
-    attachments,
-  });
+  const [nameParts] = await Promise.all([
+    Promise.resolve(splitName(name)),
+    sendMail({
+      to: SITE.inquiryEmail,
+      replyTo: email,
+      subject: `Einstufungstest Englisch — ${name}`,
+      text: lines.join("\n"),
+      attachments,
+    }),
+  ]);
 
-  return Response.json({ ok: true });
+  const transfer = await submitLead({
+    firstName: nameParts.firstName,
+    lastName: nameParts.lastName,
+    email,
+    phone,
+    notes: lines.join("\n"),
+    kind: "einstufungstest",
+    language,
+    // Das Formular hat aktuell keine eigene DSGVO-Consent-Checkbox (nur den
+    // Newsletter-Opt-in, der etwas anderes ist) — bewusst nicht als Consent
+    // umdeklariert, siehe "Was noch offen ist" im Audit.
+    consent: false,
+    idempotencyKey,
+    signal: { type: "PLACEMENT_TEST_COMPLETED", value: level || undefined, weight: 15 },
+  });
+  if (!transfer.ok) {
+    console.error("[einstufungstest] ONE-Übergabe fehlgeschlagen, Test lief nur per Mail:", transfer.error, {
+      idempotencyKey,
+    });
+  }
+
+  return Response.json({ ok: true, leadId: transfer.ok ? transfer.leadId : undefined, transferredToOne: transfer.ok });
+}
+
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length === 0 || !parts[0]) return { firstName: "Unbekannt", lastName: "Unbekannt" };
+  if (parts.length === 1) return { firstName: parts[0], lastName: "-" };
+  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
 }

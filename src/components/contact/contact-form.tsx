@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Field, inputClasses } from "@/components/ui/form-field";
+import { Field, FileField, Checkbox, inputClasses, fieldInputClasses } from "@/components/ui/form-field";
 import { getCourseTypes, getCourseType } from "@/content/course-types";
 import { getIndustries } from "@/content/industries";
 import { lh, type Locale } from "@/lib/i18n";
@@ -12,8 +12,27 @@ import { getContactFormText } from "@/lib/dynamic-strings";
 import { track } from "@/lib/track";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_ATTACHMENT_TYPES = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
 
 type Status = "idle" | "sending" | "sent" | "error";
+
+/** Erzeugt einmal pro Formular-Sitzung einen Schlüssel, damit ein erneuter
+ * Submit (Doppelklick, Netzwerk-Retry) auf interlexico.com nicht zwei Leads
+ * in Interlexico ONE anlegt (§50 Master-Prompt). */
+function makeIdempotencyKey(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+}
 
 export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   const t = dict.contactForm;
@@ -28,13 +47,18 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     company: "",
     participants: "",
+    preferredDate: "",
     topic: TOPICS[0],
     branches: [] as string[],
     message: "",
     consent: false,
     website: "", // Honeypot
+    contactPreference: "phone" as "phone" | "mail",
+    street: "",
+    zipCity: "",
   };
 
   const params = useSearchParams();
@@ -50,16 +74,27 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     return { ...initial, topic, participants: teilnehmer, message: parts.join(" ") };
   });
   const [status, setStatus] = useState<Status>("idle");
+  const [leadRef, setLeadRef] = useState<string | null>(null);
+  const [idempotencyKey] = useState(makeIdempotencyKey);
   const [poppedTopic, setPoppedTopic] = useState<string | null>(null);
   const [poppedBranch, setPoppedBranch] = useState<string | null>(null);
   const [consentError, setConsentError] = useState(false);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachmentError, setAttachmentError] = useState<string | null>(null);
   // Zweistufig: erst nur Name/E-Mail (geringe Hemmschwelle), Unternehmen &
   // Nachricht folgen erst danach — reduziert die anfängliche Formularlänge.
   const [step, setStep] = useState<1 | 2>(1);
+  // Zeigt Feldfehler erst, nachdem ein Feld verlassen wurde oder ein
+  // Weiter/Absenden-Versuch fehlgeschlagen ist — nicht schon beim Tippen.
+  type TouchKey = "firstName" | "lastName" | "email" | "street" | "zipCity";
+  const [touched, setTouched] = useState<Partial<Record<TouchKey, boolean>>>({});
 
   function update<K extends keyof typeof form>(key: K) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
+  }
+  function touch(key: TouchKey) {
+    return () => setTouched((t) => ({ ...t, [key]: true }));
   }
   function setTopic(topic: string) {
     setForm((f) => ({ ...f, topic, branches: topic === BRANCH_TOPIC ? f.branches : [] }));
@@ -74,6 +109,23 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     }));
     setPoppedBranch(b);
   }
+  function handleAttachment(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0] ?? null;
+    if (f && f.size > MAX_ATTACHMENT_BYTES) {
+      setAttachment(null);
+      setAttachmentError(t.anhangZuGross);
+      e.target.value = "";
+      return;
+    }
+    if (f && !ALLOWED_ATTACHMENT_TYPES.includes(f.type)) {
+      setAttachment(null);
+      setAttachmentError(t.anhangTypFalsch);
+      e.target.value = "";
+      return;
+    }
+    setAttachmentError(null);
+    setAttachment(f);
+  }
 
   const firstNameValid = form.firstName.trim().length > 0;
   const lastNameValid = form.lastName.trim().length > 0;
@@ -81,14 +133,22 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   const filledCount = [firstNameValid, lastNameValid, emailValid].filter(Boolean).length;
   const progress = filledCount / 3;
   const step1Valid = firstNameValid && lastNameValid && emailValid;
+  const isMail = form.contactPreference === "mail";
+  const streetValid = !isMail || form.street.trim().length > 0;
+  const zipCityValid = !isMail || form.zipCity.trim().length > 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (step !== 2) {
+      setTouched({ firstName: true, lastName: true, email: true });
       if (step1Valid) {
         track("form_start", { form: "kontakt" });
         setStep(2);
       }
+      return;
+    }
+    if (isMail && (!streetValid || !zipCityValid)) {
+      setTouched((prev) => ({ ...prev, street: true, zipCity: true }));
       return;
     }
     if (!form.consent) {
@@ -104,16 +164,29 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
       body.set("branches", form.branches.join(", "));
       body.set("name", `${form.firstName} ${form.lastName}`.trim());
       body.set("email", form.email);
+      body.set("phone", form.phone);
       body.set("company", form.company);
       body.set("participants", form.participants);
+      body.set("preferredDate", form.preferredDate);
       body.set("message", form.message);
       body.set("consent", "true");
       body.set("website", form.website);
+      body.set("contactPreference", form.contactPreference);
+      body.set("language", lang);
+      body.set("idempotencyKey", idempotencyKey);
+      if (isMail) {
+        body.set("street", form.street);
+        body.set("zipCity", form.zipCity);
+      }
+      if (attachment) body.set("attachment", attachment);
 
       const res = await fetch("/api/inquiry", { method: "POST", body });
       const data = await res.json().catch(() => ({ ok: false }));
       const ok = res.ok && data.ok;
-      if (ok) track("form_submit", { form: "kontakt", topic: form.topic });
+      if (ok) {
+        track("form_submit", { form: "kontakt", topic: form.topic, transferredToOne: String(Boolean(data.transferredToOne)) });
+        setLeadRef(typeof data.leadId === "string" ? data.leadId : null);
+      }
       setStatus(ok ? "sent" : "error");
     } catch {
       setStatus("error");
@@ -132,12 +205,22 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
         <p className="mx-auto max-w-sm font-sans text-sm leading-relaxed text-paper-dim mb-6">
           {t.successText}
         </p>
+        {leadRef && (
+          <p className="mx-auto mb-6 max-w-sm font-sans text-xs text-paper-dim">
+            {lang === "de" ? "Referenz" : lang === "es" ? "Referencia" : "Reference"}:{" "}
+            <span className="font-mono text-paper">{leadRef.slice(0, 8)}</span>
+          </p>
+        )}
         <button
           type="button"
           onClick={() => {
             setForm(initial);
             setConsentError(false);
+            setAttachment(null);
+            setAttachmentError(null);
+            setTouched({});
             setStatus("idle");
+            setLeadRef(null);
             setStep(1);
           }}
           className="font-sans text-xs uppercase tracking-[0.1em] text-brand hover:underline"
@@ -246,15 +329,40 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
 
       {/* Schritt 1: nur Name & E-Mail — niedrige Hemmschwelle für den Einstieg */}
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label={t.vorname} valid={firstNameValid}>
-          <input required aria-label={t.vorname} placeholder={t.vorname} value={form.firstName} onChange={update("firstName")} className={inputClasses} />
+        <Field label={t.vorname} valid={firstNameValid} error={touched.firstName && !firstNameValid ? t.pflichtfeld : undefined}>
+          <input
+            required
+            aria-label={t.vorname}
+            placeholder={t.vorname}
+            value={form.firstName}
+            onChange={update("firstName")}
+            onBlur={touch("firstName")}
+            className={fieldInputClasses(touched.firstName && !firstNameValid)}
+          />
         </Field>
-        <Field label={t.nachname} valid={lastNameValid}>
-          <input required aria-label={t.nachname} placeholder={t.nachname} value={form.lastName} onChange={update("lastName")} className={inputClasses} />
+        <Field label={t.nachname} valid={lastNameValid} error={touched.lastName && !lastNameValid ? t.pflichtfeld : undefined}>
+          <input
+            required
+            aria-label={t.nachname}
+            placeholder={t.nachname}
+            value={form.lastName}
+            onChange={update("lastName")}
+            onBlur={touch("lastName")}
+            className={fieldInputClasses(touched.lastName && !lastNameValid)}
+          />
         </Field>
       </div>
-      <Field label={t.email} valid={emailValid}>
-        <input required type="email" aria-label={t.email} placeholder="name@company.com" value={form.email} onChange={update("email")} className={inputClasses} />
+      <Field label={t.email} valid={emailValid} error={touched.email && !emailValid ? t.emailUngueltig : undefined}>
+        <input
+          required
+          type="email"
+          aria-label={t.email}
+          placeholder="name@company.com"
+          value={form.email}
+          onChange={update("email")}
+          onBlur={touch("email")}
+          className={fieldInputClasses(touched.email && !emailValid)}
+        />
       </Field>
 
       {step === 1 && (
@@ -282,9 +390,94 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
             ← {t.zurueck}
           </button>
 
-          <Field label={t.unternehmen}>
-            <input aria-label={t.unternehmen} placeholder={t.unternehmen} value={form.company} onChange={update("company")} className={inputClasses} />
-          </Field>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label={t.unternehmen}>
+              <input aria-label={t.unternehmen} placeholder={t.unternehmen} value={form.company} onChange={update("company")} className={inputClasses} />
+            </Field>
+            <Field label={t.telefon}>
+              <input type="tel" aria-label={t.telefon} placeholder={t.telefon} value={form.phone} onChange={update("phone")} className={inputClasses} />
+            </Field>
+          </div>
+
+          <fieldset>
+            <legend className="mb-3 font-sans text-[10px] uppercase tracking-[0.16em] text-gold">
+              {t.kontaktwegLabel}
+            </legend>
+            <div role="radiogroup" aria-label={t.kontaktwegLabel} className="grid gap-2 sm:grid-cols-2">
+              {(
+                [
+                  ["phone", t.kontaktwegTelefonisch, t.kontaktwegTelefonischHinweis],
+                  ["mail", t.kontaktwegSchriftlich, t.kontaktwegSchriftlichHinweis],
+                ] as const
+              ).map(([value, label, hint]) => {
+                const active = form.contactPreference === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => setForm((f) => ({ ...f, contactPreference: value }))}
+                    className={`border px-4 py-2.5 text-left transition-colors ${
+                      active ? "border-brand bg-brand/5" : "border-line hover:border-brand"
+                    }`}
+                  >
+                    <span className="block font-sans text-sm text-paper">{label}</span>
+                    <span className="block font-sans text-xs text-paper-dim">{hint}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          {isMail && (
+            <div className="animate-fade-up grid gap-5 sm:grid-cols-2">
+              <Field label={t.strasseLabel} error={touched.street && !streetValid ? t.pflichtfeld : undefined}>
+                <input
+                  aria-label={t.strasseLabel}
+                  placeholder={t.strasseLabel}
+                  value={form.street}
+                  onChange={update("street")}
+                  onBlur={touch("street")}
+                  className={fieldInputClasses(touched.street && !streetValid)}
+                />
+              </Field>
+              <Field label={t.plzOrtLabel} error={touched.zipCity && !zipCityValid ? t.pflichtfeld : undefined}>
+                <input
+                  aria-label={t.plzOrtLabel}
+                  placeholder={t.plzOrtLabel}
+                  value={form.zipCity}
+                  onChange={update("zipCity")}
+                  onBlur={touch("zipCity")}
+                  className={fieldInputClasses(touched.zipCity && !zipCityValid)}
+                />
+              </Field>
+            </div>
+          )}
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label={t.teilnehmerzahl}>
+              <input
+                type="number"
+                min={1}
+                inputMode="numeric"
+                aria-label={t.teilnehmerzahl}
+                placeholder={t.teilnehmerzahl}
+                value={form.participants}
+                onChange={update("participants")}
+                className={inputClasses}
+              />
+            </Field>
+            <Field label={t.wunschtermin}>
+              <input
+                aria-label={t.wunschtermin}
+                placeholder={t.wunschterminPlaceholder}
+                value={form.preferredDate}
+                onChange={update("preferredDate")}
+                className={inputClasses}
+              />
+            </Field>
+          </div>
 
           <Field label={t.ihreNachricht}>
             <textarea
@@ -297,25 +490,35 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
             />
           </Field>
 
-          <label className="flex items-start gap-3">
-            <input
-              type="checkbox"
-              required
-              checked={form.consent}
-              onChange={(e) => {
-                setForm((f) => ({ ...f, consent: e.target.checked }));
-                if (e.target.checked) setConsentError(false);
-              }}
-              className="mt-0.5 h-4 w-4 shrink-0 border border-line bg-ink accent-brand"
-            />
-            <span className="font-sans text-xs leading-relaxed text-paper-dim">
-              {t.dsgvoPre}{" "}
-              <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
-                {t.datenschutzLink}
-              </a>{" "}
-              {t.dsgvoPost}
-            </span>
-          </label>
+          <FileField
+            label={t.anhangLabel}
+            hint={t.anhangHinweis}
+            file={attachment}
+            onChange={handleAttachment}
+            chooseLabel={t.dateiWaehlen}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+          />
+          {attachmentError && (
+            <p role="alert" className="-mt-4 font-sans text-xs text-error">
+              {attachmentError}
+            </p>
+          )}
+
+          <Checkbox
+            required
+            checked={form.consent}
+            invalid={consentError}
+            onChange={(checked) => {
+              setForm((f) => ({ ...f, consent: checked }));
+              if (checked) setConsentError(false);
+            }}
+          >
+            {t.dsgvoPre}{" "}
+            <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
+              {t.datenschutzLink}
+            </a>{" "}
+            {t.dsgvoPost}
+          </Checkbox>
           {consentError && (
             <p role="alert" className="-mt-4 font-sans text-xs text-error">
               {t.dsgvoRequired}

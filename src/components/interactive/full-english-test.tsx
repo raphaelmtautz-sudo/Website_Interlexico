@@ -32,6 +32,13 @@ export function FullEnglishTest({
   const [sending, setSending] = useState(false);
   const [leadError, setLeadError] = useState<string | null>(null);
   const [website, setWebsite] = useState(""); // honeypot
+  const [idempotencyKey] = useState(() => {
+    try {
+      return crypto.randomUUID();
+    } catch {
+      return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+  });
 
   const current = steps[step];
   const canAdvance =
@@ -61,6 +68,8 @@ export function FullEnglishTest({
     form.set("phone", phone.trim());
     form.set("newsletter", String(newsletter));
     form.set("level", result.level);
+    form.set("language", lang);
+    form.set("idempotencyKey", idempotencyKey);
     form.set(
       "answers",
       JSON.stringify(
