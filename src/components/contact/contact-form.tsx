@@ -135,8 +135,13 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   const lastNameValid = form.lastName.trim().length > 0;
   const emailValid = EMAIL_RE.test(form.email);
   const filledCount = [firstNameValid, lastNameValid, emailValid].filter(Boolean).length;
-  const progress = filledCount / 3;
   const step1Valid = emailValid;
+  // Der Balken darf nicht "unfertig" wirken, sobald man tatsächlich
+  // weiterklicken kann — E-Mail ist das einzige Pflichtfeld in Schritt 1
+  // (Datensparsamkeit), also volle Breite sobald sie gültig ist. Vorher
+  // (E-Mail noch ungültig/leer) zeigt der Balken weiterhin an, wie viele der
+  // drei Felder schon befüllt sind — reine Ermutigung, keine Bedingung.
+  const progress = step1Valid ? 1 : filledCount / 3;
   const isMail = form.contactPreference === "mail";
   const streetValid = !isMail || form.street.trim().length > 0;
   const zipCityValid = !isMail || form.zipCity.trim().length > 0;
