@@ -500,6 +500,12 @@ export const en: Dictionary = {
     ],
     einzelunterricht: "One-on-one (1:1)",
     einzelunterrichtNote: "Maximum flexibility — fully tailored to one person.",
+    kostenschaetzung: "Cost estimate",
+    proEinheit: "€ per session",
+    proEinheitGruppe: "€ per session for the group",
+    proEinheitRechnung: "€/person × {n} participants",
+    preisAufAnfrage: "Price on request",
+    kostenHinweis: "Indicative per-session cost, non-binding — depends on group size/count and duration.",
   },
   contactForm: {
     ihrInteresse: "Your interest",

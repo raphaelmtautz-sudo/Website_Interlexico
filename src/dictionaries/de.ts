@@ -498,6 +498,12 @@ export const de = {
     ],
     einzelunterricht: "Einzelunterricht (1:1)",
     einzelunterrichtNote: "Maximale Flexibilität — ganz auf eine Person zugeschnitten.",
+    kostenschaetzung: "Kostenschätzung",
+    proEinheit: "€ pro Einheit",
+    proEinheitGruppe: "€ pro Einheit für die Gruppe",
+    proEinheitRechnung: "€/Person × {n} Teilnehmer:innen",
+    preisAufAnfrage: "Preis auf Anfrage",
+    kostenHinweis: "Richtwert je Trainingseinheit, unverbindlich — abhängig von Gruppengröße/-anzahl und Umfang.",
   },
   contactForm: {
     ihrInteresse: "Ihr Interesse",

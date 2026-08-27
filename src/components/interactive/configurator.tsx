@@ -115,6 +115,17 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
 
   const format = course.formats.find((f) => f.slug === plan.formatSlug) ?? course.formats[0];
   const goalCopy = GOALS.find((g) => g.value === goal)?.copy ?? "";
+
+  // Echte Kostenspanne aus den vorhandenen Format-Preisen (content/course-types) —
+  // kein erfundener Paketpreis. Einzelunterricht: der reale Preis pro Einheit.
+  // Gruppe/Klasse: realer Preis pro Person × tatsächliche Teilnehmerzahl = realer
+  // Gesamtpreis pro Einheit für die Gruppe, Rechenweg wird transparent gezeigt.
+  const costEstimate =
+    !format.priceFrom
+      ? dict.configurator.preisAufAnfrage
+      : format.kind === "einzel"
+        ? `ab ${format.priceFrom} ${dict.configurator.proEinheit}`
+        : `ab ${format.priceFrom * participants} ${dict.configurator.proEinheitGruppe} (${format.priceFrom} ${dict.configurator.proEinheitRechnung.replace("{n}", String(participants))})`;
   const bookingHref = `${lh(lang, "/kontakt")}?kurs=${course.slug}&format=${plan.formatSlug}&teilnehmer=${participants}`;
 
   function setCount(v: number) {
@@ -235,7 +246,11 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
             <Row term={dict.configurator.kurs} value={course.shortName} />
             <Row term={dict.configurator.umfang} value={format.duration} />
             <Row term={dict.configurator.zielLabel} value={goalCopy} />
+            <Row term={dict.configurator.kostenschaetzung} value={costEstimate} />
           </dl>
+          <p className="mt-2 font-sans text-[11px] leading-relaxed text-paper-dim">
+            {dict.configurator.kostenHinweis}
+          </p>
         </div>
 
         <div>
