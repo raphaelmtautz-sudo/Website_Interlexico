@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site";
 import { sendMail } from "@/lib/mailer";
-import { submitLead, newIdempotencyKey } from "@/lib/one-client";
+import { submitInquiry, newIdempotencyKey } from "@/lib/one-client";
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
   const newsletter = form.get("newsletter") === "true";
   const level = clean(form.get("level"), 40);
   const answersJson = clean(form.get("answers"), 20000);
-  const language = clean(form.get("language"), 5) || "de";
   const idempotencyKey = clean(form.get("idempotencyKey"), 100) || newIdempotencyKey();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -83,44 +82,37 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const [nameParts] = await Promise.all([
-    Promise.resolve(splitName(name)),
-    sendMail({
-      to: SITE.inquiryEmail,
-      replyTo: email,
-      subject: `Einstufungstest Englisch — ${name}`,
-      text: lines.join("\n"),
-      attachments,
-    }),
-  ]);
+  await sendMail({
+    to: SITE.inquiryEmail,
+    replyTo: email,
+    subject: `Einstufungstest Englisch — ${name}`,
+    text: lines.join("\n"),
+    attachments,
+  });
 
-  const transfer = await submitLead({
-    firstName: nameParts.firstName,
-    lastName: nameParts.lastName,
+  // Das Formular hat aktuell keine eigene DSGVO-Consent-Checkbox (nur den
+  // Newsletter-Opt-in, der etwas anderes ist) — /api/public/inquiries
+  // verlangt privacyConsent zwingend, daher scheitert dieser Transfer
+  // aktuell IMMER (transferredToOne bleibt false, Mail-Versand oben läuft
+  // trotzdem). Kein stiller Workaround: bewusst nicht als Consent
+  // umgedeutet, siehe "Was noch offen ist" im Audit — muss über eine echte
+  // Consent-Checkbox im Formular gelöst werden.
+  const transfer = await submitInquiry({
+    companyName: `${name} (Privatperson, Einstufungstest)`,
+    contactName: name,
     email,
-    phone,
-    notes: lines.join("\n"),
-    kind: "einstufungstest",
-    language,
-    // Das Formular hat aktuell keine eigene DSGVO-Consent-Checkbox (nur den
-    // Newsletter-Opt-in, der etwas anderes ist) — bewusst nicht als Consent
-    // umdeklariert, siehe "Was noch offen ist" im Audit.
-    consent: false,
+    phone: phone || undefined,
+    contactMethod: "digital",
+    privacyConsent: false,
+    otherInfo: lines.join("\n"),
+    trainingType: "Business English",
     idempotencyKey,
-    signal: { type: "PLACEMENT_TEST_COMPLETED", value: level || undefined, weight: 15 },
   });
   if (!transfer.ok) {
-    console.error("[einstufungstest] ONE-Übergabe fehlgeschlagen, Test lief nur per Mail:", transfer.error, {
+    console.error("[einstufungstest] ONE-Übergabe fehlgeschlagen (erwartet, fehlende Consent-Checkbox), Test lief nur per Mail:", transfer.error, {
       idempotencyKey,
     });
   }
 
   return Response.json({ ok: true, leadId: transfer.ok ? transfer.leadId : undefined, transferredToOne: transfer.ok });
-}
-
-function splitName(fullName: string): { firstName: string; lastName: string } {
-  const parts = fullName.trim().split(/\s+/);
-  if (parts.length === 0 || !parts[0]) return { firstName: "Unbekannt", lastName: "Unbekannt" };
-  if (parts.length === 1) return { firstName: parts[0], lastName: "-" };
-  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
 }

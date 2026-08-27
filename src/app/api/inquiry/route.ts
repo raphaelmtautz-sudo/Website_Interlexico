@@ -2,16 +2,17 @@ import { type NextRequest } from "next/server";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site";
 import { sendMail } from "@/lib/mailer";
-import { submitLead, newIdempotencyKey } from "@/lib/one-client";
+import { submitInquiry, newIdempotencyKey } from "@/lib/one-client";
 
 /**
  * Serverseitige Entgegennahme von Anfragen (Kontaktformular, Buchungsanfrage,
  * Lexi-Widget). Interlexico ONE ist die Single Source of Truth für Leads
- * (§28/§50 Master-Prompt) — jede Anfrage wird dort als Lead angelegt,
- * idempotent über einen pro Formular-Sitzung erzeugten Key. Die SMTP-Mail
- * (Mailcow, siehe src/lib/mailer.ts) läuft unabhängig davon als
- * Benachrichtigung weiter, damit ein ONE-Ausfall keine Anfrage verschluckt
- * (§17: keine Anfrage darf durch einen temporären Fehler verloren gehen).
+ * (§28/§50 Master-Prompt) — jede Anfrage geht dort in den bestehenden
+ * öffentlichen Endpunkt POST /api/public/inquiries (apps/sales/backend), der
+ * Company/Kontakt/Lead anlegt, per Round-Robin einem Sales-Mitarbeiter
+ * zuweist und einen Angebots-Entwurf vorbereitet. Die SMTP-Mail (Mailcow,
+ * siehe src/lib/mailer.ts) läuft unabhängig davon als Benachrichtigung
+ * weiter, damit ein ONE-Ausfall keine Anfrage verschluckt (§17).
  */
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -128,29 +129,36 @@ export async function POST(req: NextRequest) {
       ]
     : undefined;
 
-  const [nameParts, mailResult] = await Promise.all([
-    Promise.resolve(splitName(inquiry.name)),
-    sendMail({
-      to: SITE.inquiryEmail,
-      replyTo: inquiry.email,
-      subject: `Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
-      text: lines.join("\n"),
-      attachments,
-    }),
-  ]);
+  const mailResult = await sendMail({
+    to: SITE.inquiryEmail,
+    replyTo: inquiry.email,
+    subject: `Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
+    text: lines.join("\n"),
+    attachments,
+  });
 
-  const transfer = await submitLead({
-    firstName: nameParts.firstName,
-    lastName: nameParts.lastName,
+  const transfer = await submitInquiry({
+    // companyName ist bei /api/public/inquiries Pflichtfeld — Privatpersonen
+    // (kein Firmenname angegeben) laufen trotzdem durch, statt die Anfrage
+    // abzulehnen.
+    companyName: inquiry.company || `${inquiry.name || inquiry.email} (Privatperson)`,
+    contactName: inquiry.name || inquiry.email,
     email: inquiry.email,
-    company: inquiry.company,
-    phone: inquiry.phone,
-    notes: lines.join("\n"),
-    kind: inquiry.kind,
-    campaign: inquiry.campaign || undefined,
-    language: inquiry.language,
-    consent: inquiry.consent,
+    phone: inquiry.phone || undefined,
+    // "digital": das Formular liefert bereits strukturierte Bedarfsdaten,
+    // löst damit die automatische Deal-/Angebots-Vorbereitung auf ONE-Seite
+    // aus (siehe apps/sales/backend/src/routes/inquiries.ts).
+    contactMethod: "digital",
+    privacyConsent: inquiry.consent,
+    otherInfo: lines.join("\n"),
+    trainingType: inquiry.course || inquiry.topic || undefined,
+    format: inquiry.format || undefined,
+    participantCount: inquiry.participants || undefined,
+    startDate: inquiry.preferredDate || undefined,
     idempotencyKey: inquiry.idempotencyKey,
+    attachment: attachments?.[0]
+      ? { filename: attachments[0].filename, content: attachments[0].content, contentType: attachments[0].contentType ?? "application/octet-stream" }
+      : null,
   });
 
   // Die Anfrage gilt als erfolgreich, sobald die Mail-Benachrichtigung ODER
@@ -169,11 +177,4 @@ export async function POST(req: NextRequest) {
     leadId: transfer.ok ? transfer.leadId : undefined,
     transferredToOne: transfer.ok,
   });
-}
-
-function splitName(fullName: string): { firstName: string; lastName: string } {
-  const parts = fullName.trim().split(/\s+/);
-  if (parts.length === 0 || !parts[0]) return { firstName: "Unbekannt", lastName: "Unbekannt" };
-  if (parts.length === 1) return { firstName: parts[0], lastName: "-" };
-  return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
 }
