@@ -9,20 +9,34 @@ export async function SiteFooter({
   lang,
   dict,
   socialLinks = [],
+  whatsapp,
 }: {
   lang: Locale;
   dict: Dictionary;
   socialLinks?: ContactData["socialLinks"];
+  whatsapp?: string;
 }) {
   const { blogEnabled } = await getSiteSettings();
+  const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.replace(/[^\d]/g, "")}` : undefined;
   return (
     <footer className="border-t border-line py-16">
       <Container className="grid gap-12 md:grid-cols-4">
         <div>
           <p className="font-display text-2xl text-brand-strong mb-3">Interlexico</p>
           <p className="font-sans text-sm text-paper-dim leading-relaxed">{dict.footer.tagline}</p>
-          {socialLinks.length > 0 && (
+          {(socialLinks.length > 0 || whatsappHref) && (
             <div className="mt-5 flex gap-3">
+              {whatsappHref && (
+                <a
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center border border-line text-paper-dim transition-colors hover:border-brand hover:text-brand"
+                  aria-label="WhatsApp"
+                >
+                  <SocialIcon platform="whatsapp" />
+                </a>
+              )}
               {socialLinks.map((s) => (
                 <a
                   key={s.url}

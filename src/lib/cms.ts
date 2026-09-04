@@ -77,6 +77,7 @@ export interface LegalData {
   responsiblePerson?: string;
   phone?: string;
   phoneMobile?: string;
+  whatsapp?: string;
   disputeResolutionParticipation?: boolean;
   dataProtectionContact?: string;
   supervisoryAuthority?: string;

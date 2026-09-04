@@ -112,6 +112,7 @@ export default async function RootLayout({
   const dict = getDictionary(lang);
   const [legal, contact] = await Promise.all([getLegal(), getContact()]);
   const phone = legal.phone ?? SITE.phone;
+  const whatsapp = legal.whatsapp ?? SITE.whatsapp;
   const sameAs = contact.socialLinks.map((s) => s.url);
 
   return (
@@ -130,7 +131,7 @@ export default async function RootLayout({
           <main id="main" className="flex-1">
             {children}
           </main>
-          <SiteFooter lang={lang} dict={dict} socialLinks={contact.socialLinks} />
+          <SiteFooter lang={lang} dict={dict} socialLinks={contact.socialLinks} whatsapp={whatsapp} />
           <LexiWidget lang={lang} dict={dict} />
           <CommandPalette lang={lang} dict={dict} />
           <AdaptiveUI />

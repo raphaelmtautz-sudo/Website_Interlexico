@@ -14,4 +14,5 @@ export const SITE = {
   careerEmail: "career@interlexico.com", // Bewerbungen aus dem Karriere-Formular
   phone: "+49 8142 4624046",
   phoneMobile: "+49 1515 3646471",
+  whatsapp: "+49 1515 3646471",
 } as const;
