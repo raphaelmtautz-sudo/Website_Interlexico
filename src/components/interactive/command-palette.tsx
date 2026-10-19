@@ -127,7 +127,7 @@ export function CommandPalette({ lang, dict }: { lang: Locale; dict: Dictionary 
                 onMouseEnter={() => setActive(i)}
                 onClick={() => go(it)}
                 className={`flex w-full items-baseline justify-between gap-4 px-4 py-2.5 text-left font-sans text-sm transition-colors ${
-                  i === active ? "bg-brand/10 text-brand" : "text-paper hover:bg-brand/5"
+                  i === active ? "bg-brand/10 text-brand-text" : "text-paper hover:bg-brand/5"
                 }`}
               >
                 <span>{it.label}</span>

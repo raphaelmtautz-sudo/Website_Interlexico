@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { TrialSignupForm } from "@/components/trial/trial-signup-form";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 export async function generateMetadata({
   params,
@@ -14,11 +15,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.testen.metaTitle,
-    description: dict.testen.text,
-    alternates: { canonical: lh(lang, "/testen") },
-  };
+  return pageMetadata({ lang, path: "/testen", title: dict.testen.metaTitle, description: dict.testen.text });
 }
 
 export default async function TestenPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -30,7 +27,7 @@ export default async function TestenPage({ params }: { params: Promise<{ lang: s
   return (
     <Section className="pt-24 lg:pt-32">
       <Container className="mx-auto max-w-lg">
-        <div className="animate-fade-up text-center">
+        <div className="animate-rise text-center">
           <Eyebrow>{t.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-4xl mb-4 text-balance sm:text-5xl">{t.title}</h1>
           <p className="mx-auto max-w-md font-sans text-base leading-relaxed text-paper-dim mb-10">{t.text}</p>

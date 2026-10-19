@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -8,7 +9,7 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { SITE } from "@/lib/site";
 import { getLegal, getContact } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 // Siehe Kommentar in rechtliches/datenschutz/page.tsx: Telefonnummer aus dem
 // CMS pro Anfrage frisch laden statt beim (netzwerkisolierten) Build zu backen.
@@ -22,11 +23,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.nav.kontakt,
-    description: dict.kontakt.text,
-    alternates: { canonical: lh(lang, "/kontakt") },
-  };
+  return pageMetadata({ lang, path: "/kontakt", title: dict.nav.kontakt, description: dict.kontakt.text });
 }
 
 const SOCIAL_LABEL: Record<string, string> = {
@@ -57,7 +54,7 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
     <>
       <Section className="pt-24 lg:pt-32">
         <Container className="grid gap-16 lg:grid-cols-2">
-          <div className="animate-fade-up">
+          <div className="animate-rise">
             <Eyebrow>{t.eyebrow}</Eyebrow>
             <h1 className="kinetic font-display text-5xl mb-6 text-balance sm:text-6xl lg:text-7xl">
               {t.title}
@@ -89,14 +86,14 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
                 </a>
               </p>
               <p className="font-sans text-sm text-paper-dim">
-                <span className="text-paper-dim/70">{t.telefonLabel}:</span>{" "}
+                <span className="text-paper-dim">{t.telefonLabel}:</span>{" "}
                 <a href={telHref(phone)} className="link-underline text-paper">
                   {phone}
                 </a>
                 {mobile && (
                   <>
                     {" · "}
-                    <span className="text-paper-dim/70">{t.mobilLabel}:</span>{" "}
+                    <span className="text-paper-dim">{t.mobilLabel}:</span>{" "}
                     <a href={telHref(mobile)} className="link-underline text-paper">
                       {mobile}
                     </a>
@@ -105,7 +102,7 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
               </p>
               {whatsapp && (
                 <p className="font-sans text-sm text-paper-dim">
-                  <span className="text-paper-dim/70">{t.whatsappLabel}:</span>{" "}
+                  <span className="text-paper-dim">{t.whatsappLabel}:</span>{" "}
                   <a
                     href={whatsappHref(whatsapp)}
                     target="_blank"
@@ -118,7 +115,7 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
               )}
               {addressLine && (
                 <p className="font-sans text-sm text-paper-dim">
-                  <span className="text-paper-dim/70">{t.adresseLabel}:</span> {addressLine}
+                  <span className="text-paper-dim">{t.adresseLabel}:</span> {addressLine}
                   {mapsHref && (
                     <>
                       {" — "}
@@ -131,7 +128,7 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
               )}
               {contact.officeHours && (
                 <p className="font-sans text-sm text-paper-dim">
-                  <span className="text-paper-dim/70">{t.erreichbarkeitLabel}:</span> {contact.officeHours}
+                  <span className="text-paper-dim">{t.erreichbarkeitLabel}:</span> {contact.officeHours}
                 </p>
               )}
             </div>
@@ -199,7 +196,7 @@ export default async function KontaktPage({ params }: { params: Promise<{ lang: 
           <div className="grid gap-8 border-t border-paper/10 pt-16 sm:grid-cols-3">
             {t.steps.map((step) => (
               <div key={step.n} className="animate-fade-up">
-                <p className="font-display text-3xl text-brand mb-3">{step.n}</p>
+                <p className="font-display text-3xl text-brand-text mb-3">{step.n}</p>
                 <p className="font-sans text-base font-semibold text-paper mb-1.5">{step.t}</p>
                 <p className="font-sans text-sm leading-relaxed text-paper-dim">{step.d}</p>
               </div>

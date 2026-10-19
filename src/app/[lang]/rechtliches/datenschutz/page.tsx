@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { LegalDoc } from "@/components/legal/legal";
 import { DatenschutzContent } from "@/components/legal/datenschutz-content";
 import { getLegal, getLegalExtras } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 // Rechtstext-Fakten (Hosting, Fristen etc.) kommen aus dem CMS und ändern
 // sich unabhängig vom Deploy. Der Docker-Build hat keine CMS-Netzwerk-
@@ -38,12 +39,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return {
-    title: titles[lang],
-    description: descriptions[lang],
-    robots: { index: true, follow: true },
-    alternates: { canonical: lh(lang, "/rechtliches/datenschutz") },
-  };
+  return pageMetadata({ lang, path: "/rechtliches/datenschutz", title: titles[lang], description: descriptions[lang] });
 }
 
 export default async function DatenschutzPage({ params }: { params: Promise<{ lang: string }> }) {

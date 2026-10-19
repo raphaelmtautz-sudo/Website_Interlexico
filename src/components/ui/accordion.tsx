@@ -23,7 +23,7 @@ export function Accordion({ items }: { items: { question: string; answer: ReactN
               className="flex w-full items-center justify-between gap-4 py-6 text-left"
             >
               <span className="font-display text-2xl text-paper text-balance">{item.question}</span>
-              <span aria-hidden="true" className="shrink-0 font-display text-2xl text-brand">
+              <span aria-hidden="true" className="shrink-0 font-display text-2xl text-brand-text">
                 {expanded ? "−" : "+"}
               </span>
             </button>

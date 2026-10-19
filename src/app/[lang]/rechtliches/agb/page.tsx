@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { LegalDoc } from "@/components/legal/legal";
 import { AgbContent } from "@/components/legal/agb-content";
 import { getLegal, getLegalExtras } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 // Siehe Kommentar in rechtliches/datenschutz/page.tsx: CMS-Rechtstext-Fakten
 // pro Anfrage frisch laden statt beim (netzwerkisolierten) Build zu backen.
@@ -35,12 +36,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return {
-    title: titles[lang],
-    description: descriptions[lang],
-    robots: { index: true, follow: true },
-    alternates: { canonical: lh(lang, "/rechtliches/agb") },
-  };
+  return pageMetadata({ lang, path: "/rechtliches/agb", title: titles[lang], description: descriptions[lang] });
 }
 
 export default async function AgbPage({ params }: { params: Promise<{ lang: string }> }) {

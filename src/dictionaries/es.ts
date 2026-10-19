@@ -2,10 +2,10 @@ import type { Dictionary } from "./de";
 
 export const es: Dictionary = {
   meta: {
-    titleDefault: "Interlexico — Formación de idiomas para empresas: inglés de negocios y alemán",
+    titleDefault: "Inglés de negocios y alemán para empresas | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
-      "Formación de idiomas corporativa para empresas de la región DACH: inglés de negocios y alemán como lengua extranjera, con evaluación individual, progreso medible y organización a través de Interlexico ONE.",
+      "Formación de idiomas para empresas en la región DACH: inglés de negocios y alemán como lengua extranjera, con evaluación individual y progreso medible.",
   },
   skipLink: "Saltar al contenido",
   nav: {
@@ -208,7 +208,7 @@ export const es: Dictionary = {
   kurse: {
     eyebrow: "Programas",
     title: "Todos los cursos",
-    metaTitle: "Inglés de negocios y alemán como lengua extranjera — Todos los cursos",
+    metaTitle: "Cursos: inglés de negocios y alemán para empresas",
     metaDescription:
       "Toda la formación de idiomas para empresas de un vistazo: inglés de negocios y alemán como lengua extranjera, en clases individuales, en grupo o por departamento — con evaluación de nivel individual y enfoque sectorial.",
     verfuegbar: "Disponible",
@@ -399,7 +399,7 @@ export const es: Dictionary = {
   },
   nachhaltigkeit: {
     eyebrow: "Sostenibilidad — aportamos futuro",
-    metaTitle: "Sostenibilidad en Interlexico — Formación de idiomas con impacto social",
+    metaTitle: "Sostenibilidad — idiomas con impacto social",
     title: "Formación de idiomas que genera impacto",
     text: "Combinamos la formación de idiomas con impacto social y ecológico. Una parte fija de nuestros ingresos se destina directamente a proyectos sociales y ecológicos verificados — así los equipos no solo mejoran su comunicación, sino que también contribuyen a construir el futuro.",
     soFunktioniertEyebrow: "Cómo funciona",
@@ -441,7 +441,7 @@ export const es: Dictionary = {
   },
   einstufung: {
     eyebrow: "Test de nivel",
-    metaTitle: "Test de nivel gratuito — Inglés de negocios y alemán",
+    metaTitle: "Test de nivel gratuito: inglés y alemán",
     title: "Oriéntese en un minuto",
     text: "Cinco breves autoevaluaciones — obtendrá al instante una orientación de nivel sin compromiso (MCER A1–C1) y el siguiente paso adecuado. La evaluación precisa se realiza al inicio de la formación.",
   },

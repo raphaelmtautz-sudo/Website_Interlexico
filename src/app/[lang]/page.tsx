@@ -65,7 +65,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <StickyMobileCta href={lh(lang, "/kontakt")} label={dict.common.beratungsgespraechBuchen} />
 
       <Section id="start" className="pt-24 lg:pt-36">
-        <div className="max-w-4xl animate-fade-up">
+        <div className="max-w-4xl animate-rise">
           <Eyebrow>{dict.home.eyebrow}</Eyebrow>
           <h1 className="font-display text-balance text-5xl leading-[1.05] sm:text-6xl lg:text-[5.25rem]">
             {dict.home.heroTitleBefore}
@@ -139,7 +139,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             </p>
             <Link
               href={lh(lang, "/einstufung")}
-              className="link-underline mt-4 inline-block font-sans text-sm uppercase tracking-[0.08em] text-brand"
+              className="link-underline mt-4 inline-block font-sans text-sm uppercase tracking-[0.08em] text-brand-text"
             >
               {dict.home.konfiguratorSelfTest}
             </Link>
@@ -176,7 +176,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                   <li>
                     <Link
                       href={group.href}
-                      className="link-underline font-display text-2xl text-paper hover:text-brand"
+                      className="link-underline font-display text-2xl text-paper hover:text-brand-text"
                     >
                       {group.courseName}
                     </Link>

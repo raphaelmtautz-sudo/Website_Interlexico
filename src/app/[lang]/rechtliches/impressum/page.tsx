@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import {
   LegalDoc,
@@ -9,7 +10,7 @@ import {
 } from "@/components/legal/legal";
 import { getLegal } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 // Siehe Kommentar in rechtliches/datenschutz/page.tsx: Pflichtangaben aus dem
 // CMS pro Anfrage frisch laden statt beim (netzwerkisolierten) Build zu backen.
@@ -23,12 +24,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.legal.impressum.title,
-    description: dict.legal.impressum.metaDescription,
-    robots: { index: true, follow: true },
-    alternates: { canonical: lh(lang, "/rechtliches/impressum") },
-  };
+  return pageMetadata({ lang, path: "/rechtliches/impressum", title: dict.legal.impressum.title, description: dict.legal.impressum.metaDescription });
 }
 
 export default async function ImpressumPage({ params }: { params: Promise<{ lang: string }> }) {

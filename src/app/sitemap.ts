@@ -11,8 +11,12 @@ function alternates(path: string): Record<string, string> {
   return langs;
 }
 
+// Zeitpunkt des Server-Starts (= Deploy) statt "jetzt" pro Abruf: ein lastmod,
+// das sich bei jedem Crawl ändert, stuft Google als unzuverlässig ein und ignoriert es.
+const DEPLOYED_AT = new Date();
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
+  const now = DEPLOYED_AT;
   const { blogEnabled } = await getSiteSettings();
 
   const staticPaths = [

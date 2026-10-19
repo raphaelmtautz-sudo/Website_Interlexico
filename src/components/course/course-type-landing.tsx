@@ -46,7 +46,7 @@ export function CourseTypeLanding({
       />
 
       <Section id="start" className="pt-24 lg:pt-32">
-        <div className="max-w-3xl animate-fade-up">
+        <div className="max-w-3xl animate-rise">
           <Eyebrow>{course.tagline}</Eyebrow>
           <h1 className="kinetic font-display text-balance text-5xl leading-[1.05] sm:text-6xl lg:text-7xl">
             {course.heroTitle}
@@ -87,9 +87,9 @@ export function CourseTypeLanding({
               <div className="space-y-8">
                 {course.benefits.map((b) => (
                   <div key={b.title}>
-                    <h3 className="font-display text-2xl text-paper mb-2">
+                    <h2 className="font-display text-2xl text-paper mb-2">
                       {b.title}
-                    </h3>
+                    </h2>
                     <p className="font-sans text-sm leading-relaxed text-paper-dim">
                       {b.description}
                     </p>

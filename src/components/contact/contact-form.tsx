@@ -217,7 +217,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
   if (status === "sent") {
     return (
       <div className="border border-brand bg-brand/5 p-10 text-center animate-fade-up">
-        <div className="animate-ring-pop mx-auto mb-6 flex h-14 w-14 items-center justify-center border border-brand text-brand">
+        <div className="animate-ring-pop mx-auto mb-6 flex h-14 w-14 items-center justify-center border border-brand text-brand-text">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path className="il-check-path" d="M5 12.5l4 4 10-10" stroke="currentColor" strokeWidth="2" />
           </svg>
@@ -243,7 +243,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
             setLeadRef(null);
             setStep(1);
           }}
-          className="font-sans text-xs uppercase tracking-[0.1em] text-brand hover:underline"
+          className="font-sans text-xs uppercase tracking-[0.1em] text-brand-text hover:underline"
         >
           {t.neueAnfrage}
         </button>
@@ -267,7 +267,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           className={`flex h-[26px] w-[26px] items-center justify-center rounded-full border font-sans text-xs transition-colors duration-200 ${
             step === 1
               ? "border-brand bg-brand text-on-brand"
-              : "border-brand text-brand"
+              : "border-brand text-brand-text"
           }`}
         >
           1
@@ -335,7 +335,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
                     poppedBranch === b ? "animate-chip-pop" : ""
                   } ${
                     active
-                      ? "border-brand bg-brand/10 text-brand"
+                      ? "border-brand bg-brand/10 text-brand-text"
                       : "border-line text-paper-dim hover:border-brand hover:text-paper"
                   }`}
                 >
@@ -405,7 +405,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           <button
             type="button"
             onClick={() => setStep(1)}
-            className="font-sans text-xs uppercase tracking-[0.1em] text-paper-dim hover:text-brand"
+            className="font-sans text-xs uppercase tracking-[0.1em] text-paper-dim hover:text-brand-text"
           >
             ← {t.zurueck}
           </button>
@@ -559,7 +559,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
               — ein Hinweistext genügt. */}
           <p className="font-sans text-xs leading-relaxed text-paper-dim">
             {t.dsgvoHinweis}{" "}
-            <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
+            <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand-text">
               {t.datenschutzLink}
             </a>
             .
@@ -611,7 +611,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           {status === "error" && (
             <p role="alert" className="font-sans text-sm text-error">
               {t.errorText}{" "}
-              <a href="mailto:contact@interlexico.com" className="link-underline text-brand">
+              <a href="mailto:contact@interlexico.com" className="link-underline text-brand-text">
                 contact@interlexico.com
               </a>
               {t.errorSuffix}

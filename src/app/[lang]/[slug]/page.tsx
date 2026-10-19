@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound, redirect, permanentRedirect } from "next/navigation";
 import { Section } from "@/components/ui/section";
 import { getPage, getRedirect } from "@/lib/cms";
 import { renderLexical } from "@/lib/lexical-render";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 // Freie CMS-Landingpages (siehe "pages"-Collection in interlexico-cms).
 // Liegt bewusst auf dieser Ebene: Next.js gibt fest programmierten Routen
@@ -20,19 +21,7 @@ export async function generateMetadata({
   const page = await getPage(slug, lang);
   if (!page) return {};
   const title = page.seoTitle || page.title;
-  const url = lh(lang, `/${slug}`);
-  return {
-    title,
-    description: page.seoDescription,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "website",
-      title,
-      description: page.seoDescription,
-      url,
-      images: page.ogImageUrl ? [{ url: page.ogImageUrl }] : undefined,
-    },
-  };
+  return pageMetadata({ lang, path: `/${slug}`, title, description: page.seoDescription, image: page.ogImageUrl });
 }
 
 export default async function CmsPage({

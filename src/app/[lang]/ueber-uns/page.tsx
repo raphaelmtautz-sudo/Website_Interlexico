@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
@@ -17,11 +18,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.nav.ueberUns,
-    description: dict.ueberUns.intro,
-    alternates: { canonical: lh(lang, "/ueber-uns") },
-  };
+  return pageMetadata({ lang, path: "/ueber-uns", title: dict.nav.ueberUns, description: dict.ueberUns.intro });
 }
 
 export default async function UeberUnsPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -35,7 +32,7 @@ export default async function UeberUnsPage({ params }: { params: Promise<{ lang:
       <StickyMobileCta href={lh(lang, "/kontakt")} label={dict.common.beratungsgespraechBuchen} finalCtaId="ueber-uns-cta" />
 
       <Section id="start" className="pt-24 lg:pt-32">
-        <div className="max-w-2xl animate-fade-up">
+        <div className="max-w-2xl animate-rise">
           <Eyebrow>{t.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-5xl mb-6 text-balance sm:text-6xl lg:text-7xl">
             {t.title}
@@ -52,7 +49,7 @@ export default async function UeberUnsPage({ params }: { params: Promise<{ lang:
           <Container className="grid gap-12 px-0 md:grid-cols-3">
             {t.values.map((v) => (
               <div key={v.title} className="border-t border-gold-dim pt-6">
-                <h3 className="font-display text-2xl text-paper mb-3">{v.title}</h3>
+                <h2 className="font-display text-2xl text-paper mb-3">{v.title}</h2>
                 <p className="font-sans text-sm leading-relaxed text-paper-dim">
                   {v.description}
                 </p>

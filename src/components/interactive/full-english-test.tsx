@@ -103,7 +103,7 @@ export function FullEnglishTest({
     return (
       <Frame>
         <p className="font-sans text-xs uppercase tracking-[0.12em] text-gold mb-4">{t.intro}</p>
-        <h3 className="font-display text-3xl text-paper mb-2 text-balance">{t.leadTitle}</h3>
+        <h2 className="font-display text-3xl text-paper mb-2 text-balance">{t.leadTitle}</h2>
         <p className="font-sans text-paper-dim mb-6">{t.leadText}</p>
         <div className="flex flex-col gap-4 max-w-md">
           <input
@@ -167,7 +167,7 @@ export function FullEnglishTest({
           {t.resultPrefix} · {t.englisch}
         </p>
         <div className="flex items-baseline gap-4 mb-4">
-          <span className="font-display text-5xl text-brand">{result.level}</span>
+          <span className="font-display text-5xl text-brand-text">{result.level}</span>
           <span className="font-display text-2xl text-paper">{result.title}</span>
         </div>
         <p className="font-sans leading-relaxed text-paper-dim mb-4 max-w-lg">
@@ -207,7 +207,7 @@ export function FullEnglishTest({
           <button
             type="button"
             onClick={() => setStep(step - 1)}
-            className="font-sans text-xs uppercase tracking-[0.1em] text-paper-dim hover:text-brand"
+            className="font-sans text-xs uppercase tracking-[0.1em] text-paper-dim hover:text-brand-text"
           >
             {t.zurueck}
           </button>
@@ -272,9 +272,9 @@ function StepBody({
             Your browser does not support audio playback.
           </audio>
         )}
-        <h3 className="font-display text-2xl text-paper mb-6 text-balance sm:text-3xl">
+        <h2 className="font-display text-2xl text-paper mb-6 text-balance sm:text-3xl">
           {q.question}
-        </h3>
+        </h2>
         <div role="radiogroup" aria-label={q.question} className="grid gap-3 sm:grid-cols-2">
           {q.options.map((opt) => {
             const selected = value === opt;
@@ -287,7 +287,7 @@ function StepBody({
                 onClick={() => onChange(opt)}
                 className={`border px-4 py-3 text-left font-sans text-sm transition-colors ${
                   selected
-                    ? "border-brand text-brand"
+                    ? "border-brand text-brand-text"
                     : "border-line text-paper-dim hover:border-brand hover:text-paper"
                 }`}
               >
@@ -304,9 +304,9 @@ function StepBody({
     const task = step.data;
     return (
       <div>
-        <h3 className="font-display text-2xl text-paper mb-6 text-balance sm:text-3xl">
+        <h2 className="font-display text-2xl text-paper mb-6 text-balance sm:text-3xl">
           {task.prompt}
-        </h3>
+        </h2>
         <textarea
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value)}
@@ -322,9 +322,9 @@ function StepBody({
   const task = step.data;
   return (
     <div>
-      <h3 className="font-display text-2xl text-paper mb-4 text-balance sm:text-3xl">
+      <h2 className="font-display text-2xl text-paper mb-4 text-balance sm:text-3xl">
         {task.prompt}
-      </h3>
+      </h2>
       <p className="mb-6 font-sans text-sm leading-relaxed text-paper-dim">
         {t.recordConsent}
       </p>
@@ -410,7 +410,7 @@ function AudioRecorder({
           <button
             type="button"
             onClick={() => onChange(null)}
-            className="inline-flex w-fit items-center justify-center font-sans text-sm uppercase tracking-[0.08em] text-paper-dim underline decoration-line underline-offset-4 hover:text-brand"
+            className="inline-flex w-fit items-center justify-center font-sans text-sm uppercase tracking-[0.08em] text-paper-dim underline decoration-line underline-offset-4 hover:text-brand-text"
           >
             {skipLabel}
           </button>

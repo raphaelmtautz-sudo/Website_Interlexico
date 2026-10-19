@@ -2,10 +2,10 @@ import type { Dictionary } from "./de";
 
 export const en: Dictionary = {
   meta: {
-    titleDefault: "Interlexico — Corporate Language Training: Business English & German",
+    titleDefault: "Business English & German Training for Companies | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
-      "Corporate language training for companies across the DACH region: Business English and German as a Foreign Language, individually assessed, with measurable progress — organised through Interlexico ONE.",
+      "Corporate language training in the DACH region: Business English & German as a Foreign Language — individually assessed, industry-specific, measurable progress.",
   },
   skipLink: "Skip to content",
   nav: {
@@ -208,7 +208,7 @@ export const en: Dictionary = {
   kurse: {
     eyebrow: "Programs",
     title: "Course overview",
-    metaTitle: "Business English & German as a Foreign Language — Course Overview",
+    metaTitle: "Courses: Business English & German as a Foreign Language",
     metaDescription:
       "All corporate language training programs at a glance: Business English and German as a Foreign Language, as one-on-one, group, or class training — individually assessed and industry-specific.",
     verfuegbar: "Available",
@@ -309,7 +309,7 @@ export const en: Dictionary = {
   },
   demo: {
     eyebrow: "Demo · no obligation",
-    metaTitle: "Free demo — see Interlexico language training live",
+    metaTitle: "Free Demo — See Our Language Training Live",
     title: "Experience Interlexico in a short demo call",
     text: "In 20 minutes we'll show you, using your own use case, how assessment, training, and reporting come together in Interlexico ONE — tailored to your industry and team size. Free of charge and without obligation.",
     whatEyebrow: "What to expect",
@@ -399,7 +399,7 @@ export const en: Dictionary = {
   },
   nachhaltigkeit: {
     eyebrow: "Sustainability — Giving Back",
-    metaTitle: "Sustainability at Interlexico — Language Training with Social Impact",
+    metaTitle: "Sustainability — Language Training with Social Impact",
     title: "Language training that makes an impact",
     text: "We combine language training with social and environmental impact. A fixed share of our revenue goes directly to vetted social and environmental projects — so teams don't just develop their communication, they also help shape the future.",
     soFunktioniertEyebrow: "How it works",
@@ -441,7 +441,7 @@ export const en: Dictionary = {
   },
   einstufung: {
     eyebrow: "Level check",
-    metaTitle: "Free Language Level Self-Test — Business English & German",
+    metaTitle: "Free Language Level Test: English & German",
     title: "Get your bearings in one minute",
     text: "Five short self-assessments — you'll instantly get a no-obligation level orientation (CEFR A1–C1) and the right next step. The precise assessment happens at the start of training.",
   },

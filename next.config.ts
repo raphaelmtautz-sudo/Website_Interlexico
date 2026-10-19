@@ -50,6 +50,10 @@ const nextConfig: NextConfig = {
   experimental: {
     globalNotFound: true,
   },
+  // Browser und Crawler fragen /favicon.ico fest an — auf das generierte Icon umleiten statt 404.
+  async rewrites() {
+    return [{ source: "/favicon.ico", destination: "/icon" }];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

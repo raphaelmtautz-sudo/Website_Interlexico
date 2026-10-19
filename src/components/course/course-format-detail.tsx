@@ -20,7 +20,7 @@ export function CourseFormatDetail({
   return (
     <Section className="pt-24 lg:pt-32">
       <Container className="max-w-3xl">
-        <div className="animate-fade-up">
+        <div className="animate-rise">
           <Eyebrow>
             {course.name} — {format.name}
           </Eyebrow>

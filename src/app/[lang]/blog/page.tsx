@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,10 +7,28 @@ import { Section, Eyebrow } from "@/components/ui/section";
 import { getPosts, getSiteSettings } from "@/lib/cms";
 import { hasLocale, lh, type Locale } from "@/lib/i18n";
 
-const t: Record<Locale, { eyebrow: string; title: string; empty: string }> = {
-  de: { eyebrow: "Aktuelles", title: "Blog", empty: "Noch keine Artikel veröffentlicht." },
-  en: { eyebrow: "Latest", title: "Blog", empty: "No articles published yet." },
-  es: { eyebrow: "Actualidad", title: "Blog", empty: "Aún no hay artículos publicados." },
+const t: Record<Locale, { eyebrow: string; title: string; metaTitle: string; description: string; empty: string }> = {
+  de: {
+    eyebrow: "Aktuelles",
+    title: "Blog",
+    metaTitle: "Blog — Business English & Sprachtraining im Beruf",
+    description: "Praxistipps, Methodik und Neuigkeiten rund um Business English, Deutsch als Fremdsprache und Sprachtraining für Unternehmen.",
+    empty: "Noch keine Artikel veröffentlicht.",
+  },
+  en: {
+    eyebrow: "Latest",
+    title: "Blog",
+    metaTitle: "Blog — Business English & Corporate Language Training",
+    description: "Practical tips, methodology and news on Business English, German as a foreign language and language training for companies.",
+    empty: "No articles published yet.",
+  },
+  es: {
+    eyebrow: "Actualidad",
+    title: "Blog",
+    metaTitle: "Blog — Inglés de negocios y formación de idiomas",
+    description: "Consejos prácticos, metodología y novedades sobre inglés de negocios, alemán como lengua extranjera y formación de idiomas para empresas.",
+    empty: "Aún no hay artículos publicados.",
+  },
 };
 
 export async function generateMetadata({
@@ -19,10 +38,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
-  return {
-    title: t[lang].title,
-    alternates: { canonical: lh(lang, "/blog") },
-  };
+  return pageMetadata({ lang, path: "/blog", title: t[lang].metaTitle, description: t[lang].description });
 }
 
 export default async function BlogPage({ params }: { params: Promise<{ lang: string }> }) {

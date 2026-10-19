@@ -8,6 +8,7 @@ import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -17,11 +18,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.kurse.metaTitle,
-    description: dict.kurse.metaDescription,
-    alternates: { canonical: lh(lang, "/kurse") },
-  };
+  return pageMetadata({ lang, path: "/kurse", title: dict.kurse.metaTitle, description: dict.kurse.metaDescription });
 }
 
 export default async function KursePage({ params }: { params: Promise<{ lang: string }> }) {
@@ -32,7 +29,7 @@ export default async function KursePage({ params }: { params: Promise<{ lang: st
 
   return (
     <Section className="pt-24 lg:pt-32">
-      <div className="animate-fade-up">
+      <div className="animate-rise">
         <Eyebrow>{dict.kurse.eyebrow}</Eyebrow>
         <h1 className="kinetic font-display text-5xl mb-16 text-balance sm:text-6xl lg:text-7xl">
           {dict.kurse.title}

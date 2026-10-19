@@ -137,7 +137,13 @@ export default async function RootLayout({
           <AdaptiveUI />
           <Analytics />
         </ThemeProvider>
-        <OrganizationJsonLd lang={lang} phone={phone} sameAs={sameAs} />
+        <OrganizationJsonLd
+          lang={lang}
+          phone={phone}
+          sameAs={sameAs}
+          legalName={legal.companyName}
+          address={{ street: legal.street, zipCity: legal.zipCity, country: legal.country }}
+        />
         <WebSiteJsonLd lang={lang} />
       </body>
     </html>

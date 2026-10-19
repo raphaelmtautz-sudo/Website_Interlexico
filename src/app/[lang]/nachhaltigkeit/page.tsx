@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
@@ -18,18 +19,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  const url = lh(lang, "/nachhaltigkeit");
-  return {
-    title: dict.nachhaltigkeit.metaTitle,
-    description: dict.nachhaltigkeit.text,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "website",
-      title: dict.nachhaltigkeit.metaTitle,
-      description: dict.nachhaltigkeit.text,
-      url,
-    },
-  };
+  return pageMetadata({ lang, path: "/nachhaltigkeit", title: dict.nachhaltigkeit.metaTitle, description: dict.nachhaltigkeit.text });
 }
 
 export default async function NachhaltigkeitPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -43,7 +33,7 @@ export default async function NachhaltigkeitPage({ params }: { params: Promise<{
       <StickyMobileCta href={lh(lang, "/kontakt")} label={t.ctaTraining} finalCtaId="nachhaltigkeit-cta" />
 
       <Section id="start" className="bg-success/5 pt-24 lg:pt-32">
-        <div className="max-w-3xl animate-fade-up">
+        <div className="max-w-3xl animate-rise">
           <Eyebrow tone="success">{t.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-5xl leading-[1.05] text-balance sm:text-6xl lg:text-7xl">
             {t.title}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getCourseTypes, getCourseType } from "@/lib/cms";
 import { CourseTypeLanding } from "@/components/course/course-type-landing";
@@ -24,18 +25,13 @@ export async function generateMetadata({
   if (!hasLocale(lang)) return {};
   const course = await getCourseType(lang, kurstyp);
   if (!course) return {};
-  const url = lh(lang, `/kurse/${course.slug}`);
-  return {
-    title: { absolute: course.seo.title },
+  return pageMetadata({
+    lang,
+    path: `/kurse/${course.slug}`,
+    title: course.seo.title,
+    absoluteTitle: true,
     description: course.seo.description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "website",
-      title: course.seo.title,
-      description: course.seo.description,
-      url,
-    },
-  };
+  });
 }
 
 export default async function KurstypPage({

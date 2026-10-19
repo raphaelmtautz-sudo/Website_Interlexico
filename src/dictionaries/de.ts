@@ -1,9 +1,9 @@
 export const de = {
   meta: {
-    titleDefault: "Interlexico — Sprachtraining für Unternehmen: Business English & Deutsch",
+    titleDefault: "Business English & Deutsch für Unternehmen | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
-      "Corporate Language Training für Unternehmen in der DACH-Region: Business English und Deutsch als Fremdsprache, individuell eingestuft, mit messbarem Fortschritt und über Interlexico ONE organisiert.",
+      "Sprachtraining für Unternehmen in DACH: Business English & Deutsch als Fremdsprache — individuell eingestuft, mit Branchenvokabular und messbarem Fortschritt.",
   },
   skipLink: "Zum Inhalt springen",
   nav: {
@@ -206,7 +206,7 @@ export const de = {
   kurse: {
     eyebrow: "Trainingsangebot",
     title: "Kursübersicht",
-    metaTitle: "Business English & Deutsch als Fremdsprache — Kursübersicht",
+    metaTitle: "Kurse: Business English & Deutsch als Fremdsprache",
     metaDescription:
       "Alle Sprachtrainings für Unternehmen im Überblick: Business English und Deutsch als Fremdsprache, in Einzel-, Gruppen- oder Klassentraining — individuell eingestuft und branchenspezifisch.",
     verfuegbar: "Verfügbar",
@@ -307,7 +307,7 @@ export const de = {
   },
   demo: {
     eyebrow: "Demo · unverbindlich",
-    metaTitle: "Kostenlose Demo — Interlexico Sprachtraining live erleben",
+    metaTitle: "Kostenlose Demo — Sprachtraining live erleben",
     title: "Erleben Sie Interlexico in einem kurzen Demo-Gespräch",
     text: "In 20 Minuten zeigen wir Ihnen anhand Ihres Anwendungsfalls, wie Einstufung, Training und Reporting über Interlexico ONE zusammenspielen — konkret für Ihre Branche und Teamgröße. Kostenlos und ohne Verpflichtung.",
     whatEyebrow: "Was Sie erwartet",
@@ -397,7 +397,7 @@ export const de = {
   },
   nachhaltigkeit: {
     eyebrow: "Nachhaltigkeit — Zukunft schenken",
-    metaTitle: "Nachhaltigkeit bei Interlexico — Sprachtraining mit sozialem Impact",
+    metaTitle: "Nachhaltigkeit — Sprachtraining mit sozialem Impact",
     title: "Sprachtraining, das Wirkung schenkt",
     text: "Wir verbinden Sprachtraining mit sozialem und ökologischem Impact. Ein fester Anteil unserer Erlöse fließt direkt in geprüfte soziale und ökologische Projekte — so entwickeln Teams nicht nur ihre Kommunikation weiter, sondern gestalten auch Zukunft mit.",
     soFunktioniertEyebrow: "So funktioniert es",
@@ -439,7 +439,7 @@ export const de = {
   },
   einstufung: {
     eyebrow: "Einstufung",
-    metaTitle: "Kostenloser Sprachlevel-Selbsttest — Business English & Deutsch",
+    metaTitle: "Kostenloser Sprachtest: Englisch & Deutsch",
     title: "In einer Minute zur Orientierung",
     text: "Fünf kurze Selbsteinschätzungen — Sie erhalten sofort eine unverbindliche Niveau-Orientierung (GER A1–C1) und den passenden nächsten Schritt. Die genaue Einstufung erfolgt zu Trainingsbeginn.",
   },

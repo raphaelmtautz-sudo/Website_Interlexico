@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Section } from "@/components/ui/section";
 import { getPost, getSiteSettings } from "@/lib/cms";
 import { renderLexical } from "@/lib/lexical-render";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 // ISR statt reinem SSR: Blogartikel ändern sich nicht pro Request, ein
 // stündlicher Revalidate reicht — vermeidet einen Live-CMS-Fetch bei jedem
@@ -22,19 +23,7 @@ export async function generateMetadata({
   if (!post) return {};
   const title = post.seoTitle || post.title;
   const description = post.seoDescription || post.excerpt;
-  const url = lh(lang, `/blog/${slug}`);
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "article",
-      title,
-      description,
-      url,
-      images: post.ogImageUrl ? [{ url: post.ogImageUrl }] : undefined,
-    },
-  };
+  return pageMetadata({ lang, path: `/blog/${slug}`, title, description, type: "article", image: post.ogImageUrl });
 }
 
 export default async function BlogPostPage({

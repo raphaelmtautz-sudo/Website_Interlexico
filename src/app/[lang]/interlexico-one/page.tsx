@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
@@ -17,11 +18,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.nav.interlexicoOne,
-    description: dict.interlexicoOne.intro,
-    alternates: { canonical: lh(lang, "/interlexico-one") },
-  };
+  return pageMetadata({ lang, path: "/interlexico-one", title: dict.nav.interlexicoOne, description: dict.interlexicoOne.intro });
 }
 
 export default async function InterlexicoOnePage({ params }: { params: Promise<{ lang: string }> }) {
@@ -35,7 +32,7 @@ export default async function InterlexicoOnePage({ params }: { params: Promise<{
       <StickyMobileCta href={lh(lang, "/demo")} label={dict.common.beratungsgespraechBuchen} finalCtaId="interlexico-one-cta" />
 
       <Section id="start" className="pt-24 lg:pt-32">
-        <div className="max-w-2xl animate-fade-up">
+        <div className="max-w-2xl animate-rise">
           <Eyebrow>{t.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-5xl mb-6 text-balance sm:text-6xl lg:text-7xl">
             {t.title}

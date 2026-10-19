@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { ContactForm } from "@/components/contact/contact-form";
 import { getDictionary } from "@/dictionaries";
-import { hasLocale, lh } from "@/lib/i18n";
+import { hasLocale } from "@/lib/i18n";
 
 export async function generateMetadata({
   params,
@@ -15,11 +16,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return {
-    title: dict.demo.metaTitle,
-    description: dict.demo.text,
-    alternates: { canonical: lh(lang, "/demo") },
-  };
+  return pageMetadata({ lang, path: "/demo", title: dict.demo.metaTitle, description: dict.demo.text });
 }
 
 export default async function DemoPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -31,7 +28,7 @@ export default async function DemoPage({ params }: { params: Promise<{ lang: str
   return (
     <Section className="pt-24 lg:pt-32">
       <Container className="grid gap-16 lg:grid-cols-2">
-        <div className="animate-fade-up">
+        <div className="animate-rise">
           <Eyebrow>{t.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-5xl mb-6 text-balance sm:text-6xl lg:text-7xl">
             {t.title}
@@ -59,7 +56,7 @@ export default async function DemoPage({ params }: { params: Promise<{ lang: str
             <ol className="space-y-6 border-t border-paper/10 pt-6">
               {t.what.map((item, i) => (
                 <li key={item.title} className="flex gap-4">
-                  <span className="font-display text-2xl text-brand shrink-0">
+                  <span className="font-display text-2xl text-brand-text shrink-0">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>

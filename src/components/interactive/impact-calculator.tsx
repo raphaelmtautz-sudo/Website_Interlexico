@@ -78,7 +78,7 @@ export function ImpactCalculator({ dict, nabuUrl, dappUrl }: { dict: ImpactDict;
             href={dappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline mt-3 inline-block font-sans text-xs uppercase tracking-[0.08em] text-brand-strong"
+            className="link-underline mt-3 inline-block font-sans text-xs uppercase tracking-[0.08em] text-brand-text"
           >
             {dict.materialsVia} ↗
           </a>

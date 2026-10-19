@@ -31,7 +31,7 @@ export async function SiteFooter({
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center border border-line text-paper-dim transition-colors hover:border-brand hover:text-brand"
+                  className="flex h-9 w-9 items-center justify-center border border-line text-paper-dim transition-colors hover:border-brand hover:text-brand-text"
                   aria-label="WhatsApp"
                 >
                   <SocialIcon platform="whatsapp" />
@@ -43,7 +43,7 @@ export async function SiteFooter({
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center border border-line text-paper-dim transition-colors hover:border-brand hover:text-brand"
+                  className="flex h-9 w-9 items-center justify-center border border-line text-paper-dim transition-colors hover:border-brand hover:text-brand-text"
                   aria-label={s.platform}
                 >
                   <SocialIcon platform={s.platform} />

@@ -4,6 +4,7 @@ import { CourseFormatDetail } from "@/components/course/course-format-detail";
 import { CourseJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, locales, lh, type Locale } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/seo";
 
 /** Analog zu content/course-types#getCourseFormat, aber über die CMS-gestützten getCourseType(s). */
 async function getCourseFormat(lang: Locale, courseSlug: string, formatSlug: string) {
@@ -32,19 +33,12 @@ export async function generateMetadata({
   if (!hasLocale(lang)) return {};
   const result = await getCourseFormat(lang, kurstyp, format);
   if (!result) return {};
-  const title = `${result.format.name} — ${result.course.name} | Interlexico`;
-  const url = lh(lang, `/kurse/${result.course.slug}/${result.format.slug}`);
-  return {
-    title: { absolute: title },
+  return pageMetadata({
+    lang,
+    path: `/kurse/${result.course.slug}/${result.format.slug}`,
+    title: `${result.format.name} — ${result.course.name}`,
     description: result.format.description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "website",
-      title,
-      description: result.format.description,
-      url,
-    },
-  };
+  });
 }
 
 export default async function CourseFormatPage({

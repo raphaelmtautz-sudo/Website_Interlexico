@@ -53,6 +53,9 @@ export async function buildLlmsTxt(lang: Locale): Promise<string> {
     `- ${lang === "de" ? "Sprachen der Website" : lang === "en" ? "Website languages" : "Idiomas del sitio"}: ${(["de", "en", "es"] as Locale[]).map((l) => LANG_NAMES[l]).join(", ")}`,
     `- ${lang === "de" ? "Einsatzgebiet" : lang === "en" ? "Area served" : "Área de cobertura"}: ${SITE.areaServed.join(", ")}`,
     "",
+    `## ${lang === "de" ? "Ausführliche Fassung" : lang === "en" ? "Full version" : "Versión completa"}`,
+    `- [llms-full.txt](${SITE.url}${lang === "de" ? "" : `/${lang}`}/llms-full.txt)`,
+    "",
     (["de", "en", "es"] as Locale[])
       .filter((l) => l !== lang)
       .map((l) => `${SITE.url}${l === "de" ? "" : `/${l}`}/llms.txt`)

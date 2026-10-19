@@ -141,7 +141,7 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
             <button
               type="button"
               onClick={applyResume}
-              className="border border-brand px-4 py-2 font-sans text-xs uppercase tracking-[0.08em] text-brand transition-colors hover:bg-brand hover:text-on-brand"
+              className="border border-brand px-4 py-2 font-sans text-xs uppercase tracking-[0.08em] text-brand-text transition-colors hover:bg-brand hover:text-on-brand"
             >
               {dict.configurator.resumeContinue}
             </button>
@@ -233,7 +233,7 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
                 {plan.groups.map((size, i) => (
                   <span
                     key={i}
-                    className="border border-brand/50 bg-brand/5 px-3 py-1.5 font-sans text-xs text-brand"
+                    className="border border-brand/50 bg-brand/5 px-3 py-1.5 font-sans text-xs text-brand-text"
                   >
                     {dict.configurator.gruppe} {i + 1} · {size}
                   </span>
@@ -255,7 +255,7 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
 
         <div>
           <div className="border-t border-line pt-4">
-            <p className="font-display text-2xl text-brand">{dict.configurator.individuellesAngebot}</p>
+            <p className="font-display text-2xl text-brand-text">{dict.configurator.individuellesAngebot}</p>
             <p className="mt-1 font-sans text-sm text-paper-dim">
               {dict.configurator.individuellesAngebotText}
             </p>
@@ -299,7 +299,7 @@ function StepBtn({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex w-12 items-center justify-center border border-line font-display text-2xl text-paper transition-colors hover:border-brand hover:text-brand"
+      className="flex w-12 items-center justify-center border border-line font-display text-2xl text-paper transition-colors hover:border-brand hover:text-brand-text"
     >
       {children}
     </button>
@@ -324,7 +324,7 @@ function Choice({
       aria-pressed={active}
       className={`border ${compact ? "px-3 py-2" : "px-4 py-3"} text-left font-sans text-sm transition-colors ${
         active
-          ? "border-brand text-brand"
+          ? "border-brand text-brand-text"
           : "border-line text-paper-dim hover:border-brand hover:text-paper"
       }`}
     >

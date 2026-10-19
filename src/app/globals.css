@@ -18,6 +18,7 @@
   --color-petrol-strong: #125b66;
   --color-brand: #2db1fb;       /* Markenblau — Wortmarke & CTA */
   --color-brand-strong: #1a93e0;/* Markenblau — Hover */
+  --color-brand-text: #0a72bd;  /* Markenblau als Schrift auf Weiß (5:1, WCAG AA) */
   --color-on-brand: #06233a;    /* dunkler Text auf Markenblau (AA) */
   --color-line: color-mix(in srgb, #e2e6ea, #000 var(--contrast)); /* helle Trennlinien */
   --color-error: #b23b3b;
@@ -38,6 +39,7 @@
   --color-petrol-strong: #6fc6d3;
   --color-brand: #2db1fb;
   --color-brand-strong: #52c0ff;
+  --color-brand-text: #2db1fb;
   --color-on-brand: #06233a;
   --color-line: color-mix(in srgb, #273443, #fff var(--contrast));
   --color-error: #e08a7a;
@@ -58,6 +60,7 @@
   --color-petrol-strong: #063a44;
   --color-brand: #0a63a8;
   --color-brand-strong: #084a80;
+  --color-brand-text: #0a63a8;
   --color-on-brand: #ffffff;
   --color-line: #000000;
   --color-error: #8a1f1f;
@@ -77,6 +80,7 @@
   --color-petrol-strong: var(--color-petrol-strong);
   --color-brand: var(--color-brand);
   --color-brand-strong: var(--color-brand-strong);
+  --color-brand-text: var(--color-brand-text);
   --color-on-brand: var(--color-on-brand);
   --color-line: var(--color-line);
   --color-error: var(--color-error);
@@ -155,6 +159,21 @@ body {
 
 .animate-fade-up {
   animation: fade-up 0.7s ease both;
+}
+
+/* Hero-Variante ohne Opacity: Text mit opacity:0 zählt nicht als gezeichnet —
+   die Einblendung verschob das LCP (Hero-H1) um >2 s. Nur die Bewegung bleibt. */
+@keyframes rise {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.7s ease both;
 }
 
 /* --- Sanfter Theme-Übergang (Calm UI) --- */

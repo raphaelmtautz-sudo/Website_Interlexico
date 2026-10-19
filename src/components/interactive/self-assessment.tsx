@@ -46,16 +46,16 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
         <p className="font-sans text-xs uppercase tracking-[0.12em] text-gold mb-4">
           {t.intro}
         </p>
-        <h3 className="font-display text-3xl text-paper mb-6 text-balance">
+        <h2 className="font-display text-3xl text-paper mb-6 text-balance">
           {t.langQuestion}
-        </h3>
+        </h2>
         <div className="flex flex-col gap-3 sm:flex-row">
           {(["englisch", "deutsch"] as Lang[]).map((l) => (
             <button
               key={l}
               type="button"
               onClick={() => setAssessLang(l)}
-              className="flex-1 border border-line px-6 py-4 text-left font-sans text-paper transition-colors hover:border-brand hover:text-brand"
+              className="flex-1 border border-line px-6 py-4 text-left font-sans text-paper transition-colors hover:border-brand hover:text-brand-text"
             >
               {l === "englisch" ? t.englisch : t.deutsch}
             </button>
@@ -64,7 +64,7 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
         <button
           type="button"
           onClick={() => setFullTest(true)}
-          className="mt-6 font-sans text-sm text-paper-dim underline decoration-line underline-offset-4 transition-colors hover:text-brand"
+          className="mt-6 font-sans text-sm text-paper-dim underline decoration-line underline-offset-4 transition-colors hover:text-brand-text"
         >
           {t.fullTestOffer}
         </button>
@@ -82,7 +82,7 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
           {t.resultPrefix} · {assessLang === "englisch" ? t.englisch : t.deutsch}
         </p>
         <div className="flex items-baseline gap-4 mb-4">
-          <span className="font-display text-5xl text-brand">{result.level}</span>
+          <span className="font-display text-5xl text-brand-text">{result.level}</span>
           <span className="font-display text-2xl text-paper">{result.title}</span>
         </div>
         <p className="font-sans leading-relaxed text-paper-dim mb-8 max-w-lg">
@@ -120,7 +120,7 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
           <button
             type="button"
             onClick={() => setStep(step - 1)}
-            className="font-sans text-xs uppercase tracking-[0.1em] text-paper-dim hover:text-brand"
+            className="font-sans text-xs uppercase tracking-[0.1em] text-paper-dim hover:text-brand-text"
           >
             {t.zurueck}
           </button>
@@ -130,9 +130,9 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
         <div className="h-full origin-left bg-brand transition-transform duration-300" style={{ transform: `scaleX(${progress})` }} />
       </div>
 
-      <h3 className="font-display text-2xl text-paper mb-6 text-balance sm:text-3xl">
+      <h2 className="font-display text-2xl text-paper mb-6 text-balance sm:text-3xl">
         {question.prompt}
-      </h3>
+      </h2>
       <div
         role="radiogroup"
         aria-label={question.prompt}
@@ -149,7 +149,7 @@ export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary 
               onClick={() => choose(opt.value)}
               className={`border px-4 py-3 text-left font-sans text-sm transition-colors ${
                 selected
-                  ? "border-brand text-brand"
+                  ? "border-brand text-brand-text"
                   : "border-line text-paper-dim hover:border-brand hover:text-paper"
               }`}
             >

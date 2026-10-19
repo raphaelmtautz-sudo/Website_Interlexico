@@ -25,11 +25,18 @@ export function OrganizationJsonLd({
   lang,
   phone = SITE.phone,
   sameAs = SITE.sameAs,
+  legalName,
+  address,
 }: {
   lang: Locale;
   phone?: string;
   sameAs?: string[];
+  legalName?: string;
+  /** Aus dem CMS-Global "legal" — fehlt das CMS, entfällt die Adresse statt geraten zu werden. */
+  address?: { street?: string; zipCity?: string; country?: string };
 }) {
+  // "82194 Gröbenzell" -> PLZ + Ort für PostalAddress.
+  const zip = address?.zipCity?.match(/^\s*(\d{4,5})\s+(.+)$/);
   return (
     <JsonLd
       data={{
@@ -37,8 +44,22 @@ export function OrganizationJsonLd({
         "@type": "EducationalOrganization",
         "@id": `${SITE.url}#organization`,
         name: SITE.name,
-        legalName: SITE.legalName,
+        legalName: legalName ?? SITE.legalName,
         url: SITE.url,
+        // Google verlangt für das Organisations-Logo mind. 112×112 px.
+        logo: { "@type": "ImageObject", url: `${SITE.url}/apple-icon`, width: 180, height: 180 },
+        image: `${SITE.url}${lh(lang, "/opengraph-image")}`,
+        ...(address?.street && address.zipCity
+          ? {
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: address.street,
+                postalCode: zip?.[1],
+                addressLocality: zip?.[2] ?? address.zipCity,
+                addressCountry: address.country || "DE",
+              },
+            }
+          : {}),
         email: SITE.email,
         telephone: phone,
         description: SITE.description,
@@ -48,7 +69,11 @@ export function OrganizationJsonLd({
           "Business English",
           "Deutsch als Fremdsprache",
           "Sprachtraining für Unternehmen",
+          "Corporate Language Training",
+          "Englisch für Verhandlungen und Präsentationen",
+          "Fachsprache für Branchen",
         ],
+        slogan: "Corporate Language Training · Englisch & Deutsch",
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "sales",
@@ -73,6 +98,7 @@ export function WebSiteJsonLd({ lang }: { lang: Locale }) {
         "@id": `${SITE.url}#website`,
         name: SITE.name,
         url: `${SITE.url}${lh(lang)}`,
+        description: SITE.description,
         inLanguage: bcp47[lang],
         publisher: { "@id": `${SITE.url}#organization` },
       }}
