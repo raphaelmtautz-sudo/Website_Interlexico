@@ -112,6 +112,8 @@ export const en: Dictionary = {
     invalidEmail: "That doesn't look like a valid email address. Please enter it again.",
     sending: "Submitting your enquiry…",
     closing: "Thank you! I've forwarded your enquiry to our team — you'll hear back by email shortly.",
+    careerRedirect: "Sounds like a job application! I'm not the right way to submit that — please use our application form instead, where you can also upload your CV:",
+    careerRedirectLink: "Go to application form →",
   },
   home: {
     eyebrow: "Corporate Language Training · English & German",

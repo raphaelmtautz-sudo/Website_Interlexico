@@ -7,10 +7,17 @@ import { sendMail } from "@/lib/mailer";
  * Serverseitige Entgegennahme von Bewerbungen (Karriere-Formular).
  *
  * Primärpfad: direkter Server-zu-Server-Call an den öffentlichen Endpoint des
- * trainer-mgmt-Backends (POST /api/public/trainer-applications, intern über
+ * Recruiting-Trichters (POST /api/public/trainer-applications, intern über
  * das ix-public Docker-Netz erreichbar) — legt die Bewerbung sofort im
- * Recruiting-Trichter (NEW → SCREENING → …) an, statt auf den 5-Minuten-
- * IMAP-Poller von career@interlexico.com zu warten.
+ * Trichter (NEW → SCREENING → …) an, statt auf den 5-Minuten-IMAP-Poller von
+ * career@interlexico.com zu warten.
+ *
+ * Läuft seit der trainer-mgmt-App-Archivierung (2026-09-02) im quality-
+ * Backend (identischer Code, siehe dessen routes/trainer-management.ts) —
+ * der alte Hostname "ix_trainer_mgmt_backend" existiert nicht mehr, zeigte
+ * hier aber weiter drauf und lief seither IMMER auf den SMTP-Fallback
+ * (stiller Fehlschlag, Bewerbungen kamen trotzdem an, nur 5 Min. verzögert
+ * statt sofort im Trichter). Auf den echten laufenden Dienst korrigiert.
  *
  * Fallback: schlägt der direkte Call fehl (Backend down, Netzwerkproblem),
  * verschickt diese Route wie bisher per SMTP an SITE.careerEmail — die
@@ -19,7 +26,7 @@ import { sendMail } from "@/lib/mailer";
  * siehe /api/inquiry — keine eigene DB-Persistenz.
  */
 const TRAINER_MGMT_APPLICATIONS_URL =
-  process.env.TRAINER_MGMT_INTERNAL_URL ?? "http://ix_trainer_mgmt_backend:4007/api/public/trainer-applications";
+  process.env.TRAINER_MGMT_INTERNAL_URL ?? "http://ix_quality_backend:4006/api/public/trainer-applications";
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
 }

@@ -110,6 +110,8 @@ export const de = {
     invalidEmail: "Das sieht nicht nach einer gültigen E-Mail-Adresse aus. Bitte nochmal eingeben.",
     sending: "Ihre Anfrage wird übermittelt…",
     closing: "Vielen Dank! Ich habe Ihre Anfrage an unser Team weitergeleitet — Sie erhalten in Kürze eine Rückmeldung per E-Mail.",
+    careerRedirect: "Klingt nach einer Bewerbung! Dafür bin ich nicht der richtige Weg — bitte nutzen Sie unser Bewerbungsformular, dort können Sie auch gleich Ihren Lebenslauf hochladen:",
+    careerRedirectLink: "Zum Bewerbungsformular →",
   },
   home: {
     eyebrow: "Corporate Language Training · Englisch & Deutsch",

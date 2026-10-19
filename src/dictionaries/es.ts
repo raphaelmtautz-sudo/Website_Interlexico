@@ -112,6 +112,8 @@ export const es: Dictionary = {
     invalidEmail: "Eso no parece una dirección de correo válida. Por favor, introdúzcala de nuevo.",
     sending: "Enviando su solicitud…",
     closing: "¡Gracias! He reenviado su solicitud a nuestro equipo — recibirá una respuesta por correo en breve.",
+    careerRedirect: "¡Suena a una solicitud de empleo! No soy el canal adecuado para eso — utilice nuestro formulario de candidatura, donde también puede subir su currículum:",
+    careerRedirectLink: "Ir al formulario de candidatura →",
   },
   home: {
     eyebrow: "Formación de idiomas corporativa · Inglés y alemán",

@@ -1,13 +1,24 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import type { Locale } from "@/lib/i18n";
+import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+  href?: string;
+  hrefLabel?: string;
 }
+
+// Lexi ist ein reiner B2B-Anfrage-Flow (siehe submitInquiry -> /api/inquiry),
+// hat aber keine eigene Behandlung fuer Bewerbungen — landete eine Bewerbung
+// hier, wurde sie bisher als generischer Lead im Marketing-/Sales-CRM
+// abgelegt statt im QA-Bewerbungstrichter (/karriere -> quality-backend).
+// Erkennung im ersten (freien) Themen-Feld bricht den Anfrage-Flow ab und
+// verweist stattdessen auf das echte Bewerbungsformular mit CV-Upload.
+const CAREER_INTENT_RE =
+  /\b(bewerb\w*|stelle\s+als|job\s*application|apply(?:ing)?\s+(?:for|as)|career\s+(?:opportunit|opening)|vacanc\w*|hiring|postula\w*|solicitud\s+de\s+empleo|trabajar\s+como|empleo)\b/i;
 
 // Minimale Typen für die Web Speech API (nicht in lib.dom enthalten).
 interface SpeechRecognitionLike {
@@ -139,6 +150,15 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Dictionary }) {
       return;
     }
 
+    if (step === "topic" && CAREER_INTENT_RE.test(value)) {
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: dict.lexi.careerRedirect, href: lh(lang, "/karriere"), hrefLabel: dict.lexi.careerRedirectLink },
+      ]);
+      setStep("done");
+      return;
+    }
+
     const a = answersRef.current;
     if (step === "topic") a.topic = value;
     else if (step === "company") a.company = value;
@@ -204,6 +224,11 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Dictionary }) {
                   {m.role === "user" ? dict.lexi.you : "Lexi"}
                 </span>
                 <p>{m.content}</p>
+                {m.href && (
+                  <a href={m.href} className="mt-1 inline-block link-underline text-gold">
+                    {m.hrefLabel}
+                  </a>
+                )}
               </div>
             ))}
             {loading && (

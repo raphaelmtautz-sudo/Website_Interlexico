@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Field, inputClasses } from "@/components/ui/form-field";
+import { Field, FileField, Checkbox, inputClasses } from "@/components/ui/form-field";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 import { track } from "@/lib/track";
@@ -181,8 +181,8 @@ export function CareerForm({ lang, dict }: { lang: Locale; dict: Dictionary }) {
       </Field>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <FileField label={t.lebenslaufLabel} file={resume} onChange={handleFile(setResume)} chooseLabel={t.dateiWaehlen} />
-        <FileField label={t.anschreibenLabel} file={coverLetter} onChange={handleFile(setCoverLetter)} chooseLabel={t.dateiWaehlen} />
+        <FileField label={t.lebenslaufLabel} file={resume} onChange={handleFile(setResume)} chooseLabel={t.dateiWaehlen} accept=".pdf,.doc,.docx" />
+        <FileField label={t.anschreibenLabel} file={coverLetter} onChange={handleFile(setCoverLetter)} chooseLabel={t.dateiWaehlen} accept=".pdf,.doc,.docx" />
       </div>
       <p className="-mt-4 font-sans text-[11px] text-paper-dim">{t.dateiHinweis}</p>
       {fileError && (
@@ -191,22 +191,13 @@ export function CareerForm({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         </p>
       )}
 
-      <label className="flex items-start gap-3">
-        <input
-          type="checkbox"
-          required
-          checked={form.consent}
-          onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
-          className="mt-0.5 h-4 w-4 shrink-0 border border-line bg-ink accent-brand"
-        />
-        <span className="font-sans text-xs leading-relaxed text-paper-dim">
-          {dict.contactForm.dsgvoPre}{" "}
-          <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
-            {dict.contactForm.datenschutzLink}
-          </a>{" "}
-          {dict.contactForm.dsgvoPost}
-        </span>
-      </label>
+      <Checkbox required checked={form.consent} onChange={(checked) => setForm((f) => ({ ...f, consent: checked }))}>
+        {dict.contactForm.dsgvoPre}{" "}
+        <a href={lh(lang, "/rechtliches/datenschutz")} className="link-underline text-brand">
+          {dict.contactForm.datenschutzLink}
+        </a>{" "}
+        {dict.contactForm.dsgvoPost}
+      </Checkbox>
 
       {/* Honeypot */}
       <input
@@ -248,45 +239,5 @@ export function CareerForm({ lang, dict }: { lang: Locale; dict: Dictionary }) {
         </p>
       )}
     </form>
-  );
-}
-
-function FileField({
-  label,
-  file,
-  onChange,
-  chooseLabel,
-}: {
-  label: string;
-  file: File | null;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  chooseLabel: string;
-}) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  return (
-    <div className="block">
-      <span className="mb-2 block font-sans text-[10px] uppercase tracking-[0.16em] text-gold">{label}</span>
-      {/* Nativer Datei-Dialog-Button ist vom Browser lokalisiert, nicht von
-          unserer App — daher visuell versteckt und durch einen eigenen,
-          übersetzten Button ersetzt (Klick delegiert an das Input). */}
-      <input
-        ref={inputRef}
-        type="file"
-        aria-label={label}
-        accept=".pdf,.doc,.docx"
-        onChange={onChange}
-        className="sr-only"
-      />
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        className="flex w-full items-center gap-2 border border-line bg-ink px-4 py-2.5 font-sans text-sm text-paper-dim transition-colors hover:border-brand hover:text-paper"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-          <path d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <span className="truncate">{file ? file.name : chooseLabel}</span>
-      </button>
-    </div>
   );
 }
