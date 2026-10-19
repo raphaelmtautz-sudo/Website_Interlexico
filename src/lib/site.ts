@@ -12,7 +12,7 @@ export const SITE = {
   email: "info@interlexico.com",
   inquiryEmail: "contact@interlexico.com", // Anfragen aus Formularen/Buchung
   careerEmail: "career@interlexico.com", // Bewerbungen aus dem Karriere-Formular
-  phone: "+49 8142 4624046",
+  phone: "+49 8094 6689 803", // Fallback — maßgeblich ist das CMS-Global "legal"
   phoneMobile: "+49 1515 3646471",
   whatsapp: "+49 1515 3646471",
 } as const;

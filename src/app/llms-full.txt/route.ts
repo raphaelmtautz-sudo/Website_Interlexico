@@ -1,5 +1,5 @@
 import { SITE } from "@/lib/site";
-import { getCourseTypes, getFaq } from "@/lib/cms";
+import { getCourseTypes, getFaq, getLegal } from "@/lib/cms";
 import { getIndustries } from "@/content/industries";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
@@ -72,7 +72,7 @@ const L: Record<
 export async function buildLlmsFullTxt(lang: Locale): Promise<string> {
   const dict = getDictionary(lang);
   const t = L[lang];
-  const [courses, faq] = await Promise.all([getCourseTypes(lang), getFaq(lang)]);
+  const [courses, faq, legal] = await Promise.all([getCourseTypes(lang), getFaq(lang), getLegal()]);
   const url = (path: string) => `${SITE.url}${lh(lang, path)}`;
 
   const lines: string[] = [
@@ -84,7 +84,8 @@ export async function buildLlmsFullTxt(lang: Locale): Promise<string> {
     "",
     `- Website: ${url("")}`,
     `- E-Mail: ${SITE.email}`,
-    `- Tel.: ${SITE.phone}`,
+    `- Tel.: ${legal.phone ?? SITE.phone}`,
+    ...(legal.street && legal.zipCity ? [`- ${lang === "de" ? "Adresse" : lang === "en" ? "Address" : "Dirección"}: ${legal.street}, ${legal.zipCity}`] : []),
     `- Region: ${SITE.areaServed.join(", ")}`,
     "",
   ];
