@@ -317,7 +317,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
 
       {/* Branchen — nur bei Business English */}
       {form.topic === BRANCH_TOPIC && (
-        <fieldset className="animate-fade-up">
+        <fieldset className="animate-rise">
           <legend className="mb-3 font-sans text-[10px] uppercase tracking-[0.16em] text-gold">
             {t.brancheLabel}
           </legend>

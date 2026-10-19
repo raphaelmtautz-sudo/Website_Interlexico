@@ -87,7 +87,7 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
           </dl>
         </div>
 
-        <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <div className="animate-rise" style={{ animationDelay: "120ms" }}>
           <Suspense>
             <CareerForm lang={lang} dict={dict} />
           </Suspense>

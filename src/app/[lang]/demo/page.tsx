@@ -73,7 +73,7 @@ export default async function DemoPage({ params }: { params: Promise<{ lang: str
           </div>
         </div>
 
-        <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <div className="animate-rise" style={{ animationDelay: "120ms" }}>
           <Suspense>
             <ContactForm lang={lang} dict={dict} />
           </Suspense>
