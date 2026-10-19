@@ -389,11 +389,14 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
         <Button
           type="button"
           onClick={() => {
-            if (!step1Valid) return;
+            if (!step1Valid) {
+              setTouched((prev) => ({ ...prev, firstName: true, lastName: true, email: true }));
+              return;
+            }
             track("form_start", { form: "kontakt" });
             setStep(2);
           }}
-          className={`w-full sm:w-auto ${step1Valid ? "" : "pointer-events-none opacity-50"}`}
+          className="w-full sm:w-auto"
         >
           {t.weiter}
         </Button>
