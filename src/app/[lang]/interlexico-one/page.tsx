@@ -32,7 +32,7 @@ export default async function InterlexicoOnePage({ params }: { params: Promise<{
 
   return (
     <>
-      <StickyMobileCta href={lh(lang, "/kontakt")} label={dict.common.beratungsgespraechBuchen} finalCtaId="interlexico-one-cta" />
+      <StickyMobileCta href={lh(lang, "/demo")} label={dict.common.beratungsgespraechBuchen} finalCtaId="interlexico-one-cta" />
 
       <Section id="start" className="pt-24 lg:pt-32">
         <div className="max-w-2xl animate-fade-up">
@@ -92,7 +92,7 @@ export default async function InterlexicoOnePage({ params }: { params: Promise<{
             <h2 className="font-display text-4xl text-paper max-w-xl text-balance">{t.ctaTitle}</h2>
             <p className="font-sans text-paper-dim max-w-xl">{t.ctaText}</p>
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button href={lh(lang, "/kontakt")}>{t.ctaButton}</Button>
+              <Button href={lh(lang, "/demo")}>{t.ctaButton}</Button>
               <Button href={lh(lang, "/kurse")} variant="secondary">
                 {dict.nav.kurse}
               </Button>

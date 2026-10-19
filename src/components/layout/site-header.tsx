@@ -26,6 +26,7 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },
     { href: lh(lang, "/karriere"), label: dict.nav.karriere },
     ...(blogEnabled ? [{ href: lh(lang, "/blog"), label: dict.nav.blog }] : []),
+    { href: lh(lang, "/demo"), label: dict.nav.demo },
   ];
   const mobileItems = [...primaryItems, ...secondaryItems, { href: lh(lang, "/kontakt"), label: dict.nav.kontakt }];
 

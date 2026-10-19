@@ -28,6 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/karriere", priority: 0.5, changeFrequency: "monthly" as const },
     ...(blogEnabled ? [{ path: "/blog", priority: 0.5, changeFrequency: "weekly" as const }] : []),
     { path: "/kontakt", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/demo", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/rechtliches/impressum", priority: 0.2, changeFrequency: "yearly" as const },
     { path: "/rechtliches/datenschutz", priority: 0.2, changeFrequency: "yearly" as const },
     { path: "/rechtliches/agb", priority: 0.2, changeFrequency: "yearly" as const },
