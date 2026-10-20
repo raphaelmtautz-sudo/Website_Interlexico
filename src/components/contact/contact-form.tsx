@@ -74,6 +74,9 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     const parts: string[] = [];
     const dynamicText = getContactFormText(lang);
     if (course) parts.push(dynamicText.interesseCourse(course.name));
+    // Link "Jetzt anfragen" aus der Gutschein-Mail: Code landet in der Nachricht und so beim Vertrieb
+    const gutschein = (params.get("gutschein") ?? "").toUpperCase();
+    if (/^IX-2UE-[A-Z0-9]{6}$/.test(gutschein)) parts.unshift(dict.voucher.contactPrefill.replace("{code}", gutschein));
     return { ...initial, topic, participants: teilnehmer, message: parts.join(" ") };
   });
   const [status, setStatus] = useState<Status>("idle");

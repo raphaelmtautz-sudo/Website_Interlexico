@@ -91,6 +91,7 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           items={[
             "Darstellungspräferenz (hell/dunkel/Kontrast) — dauerhaft im Browser, rein lokal",
             "Zwischenspeicherung Ihrer Angaben im Buchungsprozess bis zum Abschluss — nur in Ihrer aktuellen Sitzung",
+            "ob Ihnen der Gutschein-Hinweis bereits angezeigt wurde bzw. ob Sie einen Gutschein angefordert haben, damit er nicht wiederholt erscheint — im Browser, rein lokal",
           ]}
         />
         <LegalP>
@@ -190,6 +191,50 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           jeder weiteren E-Mail — weisen wir dabei klar hin; ein Widerspruch
           ist kostenfrei und formlos möglich (z. B. per Abmeldelink oder an
           unsere Kontaktadresse).
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6b. Gutschein-Aktion „2 kostenfreie Unterrichtseinheiten“</LegalH2>
+        <LegalP>
+          Über ein Hinweisfenster auf unserer Website können Sie bis zum
+          31.12.2026 einen Gutschein-Code anfordern. Dafür verarbeiten wir Ihren
+          Namen, Ihre E-Mail-Adresse, die Sprache der Website sowie den
+          Zeitpunkt, zu dem Sie bestätigt haben, diese Datenschutzerklärung
+          gelesen zu haben. Den Code erzeugen wir erst, nachdem Sie Ihre
+          E-Mail-Adresse über den Link in unserer Bestätigungs-E-Mail bestätigt
+          haben. Danach speichern wir zusätzlich den Code, den Zeitpunkt der
+          Bestätigung und, sobald Sie ihn einlösen, wann und von wem er als
+          eingelöst markiert wurde. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b
+          DSGVO (Durchführung der von Ihnen angeforderten Aktion).
+        </LegalP>
+        <LegalP>
+          Nach der Bestätigung legen wir in unserem Kundenverwaltungssystem
+          einen Interessenten-Eintrag mit Name und E-Mail-Adresse an, damit wir
+          den Code Ihrer Anfrage oder Buchung zuordnen und ein passendes Angebot
+          vorbereiten können (Art. 6 Abs. 1 lit. f DSGVO, berechtigtes Interesse
+          an der Vertragsanbahnung). Dieser Verarbeitung können Sie jederzeit
+          widersprechen, z. B. per E-Mail an unsere Kontaktadresse. Ohne Ihre
+          gesonderte Newsletter-Einwilligung erhalten Sie von uns keine
+          Werbe-E-Mails.
+        </LegalP>
+        <LegalP>Speicherdauer:</LegalP>
+        <LegalList
+          items={[
+            "nicht bestätigte Anfragen: automatische Löschung nach 30 Tagen",
+            "nicht eingelöste Codes: Löschung am 30.06.2027, drei Monate nach Ende des Einlösezeitraums (31.03.2027)",
+            "eingelöste Codes: werden Teil Ihrer Buchungsunterlagen und unterliegen den gesetzlichen Aufbewahrungsfristen",
+            "Interessenten-Eintrag: Löschung bzw. Anonymisierung, wenn innerhalb von 24 Monaten kein Vertrag zustande kommt",
+          ]}
+        />
+        <LegalP>
+          Freiwillig können Sie sich im Hinweisfenster, auf der
+          Bestätigungsseite oder über die E-Mail mit Ihrem Code zusätzlich für
+          unseren Newsletter anmelden. Der Gutschein hängt davon nicht ab. Die
+          Anmeldung wird erst wirksam, wenn Sie sie nach Bestätigung Ihrer
+          E-Mail-Adresse mit einem eigenen Klick auslösen; als Nachweis speichern
+          wir Zeitpunkt, IP-Adresse und Wortlaut Ihrer Einwilligung. Im Übrigen
+          gilt Abschnitt 6a.
         </LegalP>
       </div>
 
@@ -326,6 +371,7 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           items={[
             "display preference (light/dark/contrast) — stored permanently in the browser, purely local",
             "temporary storage of your inputs during the enquiry configurator until completion — only for your current session",
+            "whether the voucher notice has already been shown to you or whether you have requested a voucher, so that it does not appear repeatedly — in the browser, purely local",
           ]}
         />
         <LegalP>
@@ -419,6 +465,47 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           where permitted by applicable law — always with a clear,
           cost-free right to object, both at booking and in every further
           email.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6b. &quot;2 free lessons&quot; voucher promotion</LegalH2>
+        <LegalP>
+          Via a notice window on our website you can request a voucher code
+          until 31 December 2026. For this we process your name, your email
+          address, the language of the website and the time at which you
+          confirmed that you have read this privacy policy. We only generate the
+          code after you have confirmed your email address via the link in our
+          confirmation email. We then also store the code, the time of
+          confirmation and, once you redeem it, when and by whom it was marked
+          as redeemed. Legal basis: Art. 6(1)(b) GDPR (carrying out the
+          promotion you requested).
+        </LegalP>
+        <LegalP>
+          After confirmation we create a prospect entry with your name and email
+          address in our customer management system so that we can match the
+          code to your enquiry or booking and prepare a suitable offer
+          (Art. 6(1)(f) GDPR, legitimate interest in preparing a contract). You
+          can object to this processing at any time, e.g. by email to our
+          contact address. Without your separate newsletter consent you will not
+          receive any advertising emails from us.
+        </LegalP>
+        <LegalP>Storage period:</LegalP>
+        <LegalList
+          items={[
+            "unconfirmed requests: deleted automatically after 30 days",
+            "codes not redeemed: deleted on 30 June 2027, three months after the end of the redemption period (31 March 2027)",
+            "redeemed codes: become part of your booking records and are subject to the statutory retention periods",
+            "prospect entry: deleted or anonymised if no contract is concluded within 24 months",
+          ]}
+        />
+        <LegalP>
+          You may also voluntarily subscribe to our newsletter in the notice
+          window, on the confirmation page or via the email containing your
+          code. The voucher does not depend on this. The subscription only takes
+          effect once you trigger it with a separate click after confirming your
+          email address; as proof we store the time, IP address and wording of
+          your consent. Otherwise section 6a applies.
         </LegalP>
       </div>
 
@@ -556,6 +643,7 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           items={[
             "preferencia de visualización (claro/oscuro/contraste) — almacenada de forma permanente en el navegador, puramente local",
             "almacenamiento temporal de sus datos durante el proceso del configurador hasta su finalización — solo en su sesión actual",
+            "si ya se le ha mostrado el aviso del vale o si ha solicitado un vale, para que no aparezca repetidamente — en el navegador, puramente local",
           ]}
         />
         <LegalP>
@@ -654,6 +742,50 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           consentimiento independiente, cuando la legislación aplicable lo
           permita — siempre con un derecho de oposición claro y gratuito,
           tanto en la reserva como en cada correo posterior.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6b. Promoción «2 clases gratuitas»</LegalH2>
+        <LegalP>
+          A través de una ventana informativa de nuestro sitio web puede
+          solicitar un código de vale hasta el 31/12/2026. Para ello tratamos su
+          nombre, su dirección de correo electrónico, el idioma del sitio web y
+          el momento en que confirmó haber leído esta política de privacidad.
+          Solo generamos el código después de que haya confirmado su dirección
+          de correo mediante el enlace de nuestro correo de confirmación. A
+          continuación almacenamos además el código, el momento de la
+          confirmación y, cuando lo canjee, cuándo y por quién se marcó como
+          canjeado. Base jurídica: artículo 6.1.b del RGPD (ejecución de la
+          promoción que usted ha solicitado).
+        </LegalP>
+        <LegalP>
+          Tras la confirmación creamos en nuestro sistema de gestión de clientes
+          una entrada de cliente potencial con su nombre y dirección de correo,
+          para poder asignar el código a su solicitud o contratación y preparar
+          una oferta adecuada (artículo 6.1.f del RGPD, interés legítimo en la
+          preparación de un contrato). Puede oponerse a este tratamiento en
+          cualquier momento, p. ej., por correo electrónico a nuestra dirección
+          de contacto. Sin su consentimiento específico para el boletín no
+          recibirá de nosotros correos publicitarios.
+        </LegalP>
+        <LegalP>Plazo de conservación:</LegalP>
+        <LegalList
+          items={[
+            "solicitudes no confirmadas: eliminación automática a los 30 días",
+            "códigos no canjeados: eliminación el 30/06/2027, tres meses después del fin del periodo de canje (31/03/2027)",
+            "códigos canjeados: pasan a formar parte de la documentación de su contratación y están sujetos a los plazos legales de conservación",
+            "entrada de cliente potencial: eliminación o anonimización si no se celebra ningún contrato en un plazo de 24 meses",
+          ]}
+        />
+        <LegalP>
+          De forma voluntaria, puede suscribirse además a nuestro boletín en la
+          ventana informativa, en la página de confirmación o a través del correo
+          con su código. El vale no depende de ello. La suscripción solo es
+          efectiva cuando usted la activa con un clic propio tras confirmar su
+          dirección de correo; como prueba almacenamos la fecha y hora, la
+          dirección IP y el texto de su consentimiento. Por lo demás, se aplica
+          el apartado 6a.
         </LegalP>
       </div>
 

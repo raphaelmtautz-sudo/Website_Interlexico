@@ -10,6 +10,7 @@ import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/json-ld";
 import { Analytics } from "@/components/analytics/analytics";
 import { CommandPalette } from "@/components/interactive/command-palette";
 import { AdaptiveUI } from "@/components/interactive/adaptive-ui";
+import { VoucherPopup } from "@/components/interactive/voucher-popup";
 import { locales, hasLocale, lh, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/dictionaries";
 import { getLegal, getContact } from "@/lib/cms";
@@ -135,6 +136,7 @@ export default async function RootLayout({
           <LexiWidget lang={lang} dict={dict} />
           <CommandPalette lang={lang} dict={dict} />
           <AdaptiveUI />
+          <VoucherPopup lang={lang} t={dict.voucher} />
           <Analytics />
         </ThemeProvider>
         <OrganizationJsonLd

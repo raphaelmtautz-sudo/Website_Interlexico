@@ -414,3 +414,10 @@ html.js .reveal.is-visible {
     stroke-dashoffset: 0;
   }
 }
+
+/* Gutschein-Kärtchen auf dem Handy (voucher-popup.tsx): solange es offen ist,
+   weder die feste "Anfragen"-Leiste noch den Chat darüberlegen. */
+html[data-voucher-sheet] [data-sticky-cta],
+html[data-voucher-sheet] [data-distraction="chat"] {
+  display: none;
+}
