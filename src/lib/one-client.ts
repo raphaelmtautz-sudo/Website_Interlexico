@@ -15,8 +15,12 @@ import { randomUUID } from "crypto";
  * schlankerer Lead-Endpunkt würde das nur redundant und schlechter nachbauen.
  */
 
+// Intern über das gemeinsame Docker-Netz statt über die öffentliche Domain: über
+// Traefik sah das Backend alle Website-Besucher als einen Absender (die Server-IP)
+// und das IP-Rate-Limit (10/h) galt für die ganze Website. Die echte Besucher-IP
+// geht jetzt als x-ix-client-ip mit; das Backend vertraut ihr nur bei internen Aufrufen.
 const ONE_INQUIRIES_URL =
-  process.env.ONE_INQUIRIES_URL || "https://interlexico.one/sales/api/public/inquiries";
+  process.env.ONE_INQUIRIES_URL || "http://ix_sales_backend:4003/api/public/inquiries";
 const RETRY_DELAYS_MS = [300, 1000]; // Retry 1, Retry 2 — danach gilt der Versuch als fehlgeschlagen
 
 export type InquiryPayload = {
@@ -35,6 +39,8 @@ export type InquiryPayload = {
   startDate?: string;
   /** Stabil pro Formular-Sitzung — der Zielendpunkt hat kein Idempotency-Konzept, daher nur zur eigenen Fehlerkorrelation im Log. */
   idempotencyKey: string;
+  /** Echte Besucher-IP für das Pro-Besucher-Rate-Limit in ONE. */
+  clientIp?: string;
   attachment?: { filename: string; content: Buffer; contentType: string } | null;
 };
 
@@ -75,6 +81,7 @@ export async function submitInquiry(payload: InquiryPayload): Promise<InquiryTra
       const res = await fetch(ONE_INQUIRIES_URL, {
         method: "POST",
         body: form,
+        headers: payload.clientIp ? { "x-ix-client-ip": payload.clientIp } : undefined,
         signal: controller.signal,
       }).finally(() => clearTimeout(timeout));
 

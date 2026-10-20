@@ -1,8 +1,10 @@
 import { type NextRequest } from "next/server";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 
+// Intern statt über die öffentliche Domain, Besucher-IP als x-ix-client-ip
+// (Begründung siehe lib/one-client.ts).
 const ONE_NEWSLETTER_URL =
-  process.env.ONE_NEWSLETTER_URL || "https://interlexico.one/sales/api/public/newsletter";
+  process.env.ONE_NEWSLETTER_URL || "http://ix_sales_backend:4003/api/public/newsletter";
 
 function clean(v: unknown, max: number): string {
   return typeof v === "string" ? v.trim().slice(0, max) : "";
@@ -41,7 +43,7 @@ export async function POST(req: NextRequest) {
     const timeout = setTimeout(() => controller.abort(), 8000);
     const res = await fetch(ONE_NEWSLETTER_URL, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", "x-ix-client-ip": clientKey(req) },
       body: JSON.stringify({ email, source, website }),
       signal: controller.signal,
     }).finally(() => clearTimeout(timeout));

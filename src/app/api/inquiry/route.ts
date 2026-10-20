@@ -157,6 +157,7 @@ export async function POST(req: NextRequest) {
     participantCount: inquiry.participants || undefined,
     startDate: inquiry.preferredDate || undefined,
     idempotencyKey: inquiry.idempotencyKey,
+    clientIp: clientKey(req),
     attachment: attachments?.[0]
       ? { filename: attachments[0].filename, content: attachments[0].content, contentType: attachments[0].contentType ?? "application/octet-stream" }
       : null,
