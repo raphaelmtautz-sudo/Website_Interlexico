@@ -61,6 +61,8 @@ export async function SiteFooter({
             <li><Link className="link-underline" href={lh(lang, "/kurse/business-english")}>Business English</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/kurse/deutsch-als-fremdsprache")}>{dict.commandPalette.items.daf}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/einstufung")}>{dict.footer.einstufungLink}</Link></li>
+            <li><Link className="link-underline" href={lh(lang, "/branchen")}>{dict.nav.branchen}</Link></li>
+            <li><Link className="link-underline" href={lh(lang, "/ratgeber")}>{dict.nav.ratgeber}</Link></li>
           </ul>
         </div>
         <div>

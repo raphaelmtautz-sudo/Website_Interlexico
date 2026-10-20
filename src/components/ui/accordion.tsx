@@ -27,11 +27,11 @@ export function Accordion({ items }: { items: { question: string; answer: ReactN
                 {expanded ? "−" : "+"}
               </span>
             </button>
-            {expanded && (
-              <div className="animate-fade-up pb-6 font-sans text-sm leading-relaxed text-paper-dim">
-                {item.answer}
-              </div>
-            )}
+            {/* Antwort immer im HTML (nur per `hidden` eingeklappt): Suchmaschinen und
+                KI-Crawler lesen das ausgelieferte HTML, nicht den Klick-Zustand. */}
+            <div hidden={!expanded} className="animate-fade-up pb-6 font-sans text-sm leading-relaxed text-paper-dim">
+              {item.answer}
+            </div>
           </div>
         );
       })}

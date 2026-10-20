@@ -21,6 +21,25 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   );
 }
 
+const COUNTRY_CODES: Record<string, string> = {
+  deutschland: "DE", germany: "DE", alemania: "DE",
+  österreich: "AT", austria: "AT",
+  schweiz: "CH", switzerland: "CH", suiza: "CH",
+};
+function countryCode(country?: string): string {
+  const c = country?.trim();
+  if (!c) return "DE";
+  return /^[A-Z]{2}$/.test(c) ? c : COUNTRY_CODES[c.toLowerCase()] ?? c;
+}
+
+const COUNTRY_NAMES: Record<string, string> = { DE: "Germany", AT: "Austria", CH: "Switzerland" };
+
+// Unterrichtete Sprache je Kurstyp (Schema.org "inLanguage" eines Sprachkurses).
+const TAUGHT_LANGUAGE: Record<string, { code: string; teaches: string }> = {
+  "business-english": { code: "en", teaches: "Business English" },
+  "deutsch-als-fremdsprache": { code: "de", teaches: "German as a foreign language (CEFR A1–C1)" },
+};
+
 export function OrganizationJsonLd({
   lang,
   phone = SITE.phone,
@@ -56,15 +75,26 @@ export function OrganizationJsonLd({
                 streetAddress: address.street,
                 postalCode: zip?.[1],
                 addressLocality: zip?.[2] ?? address.zipCity,
-                addressCountry: address.country || "DE",
+                // ISO-3166-Code statt CMS-Klartext ("Deutschland"), wie von Google empfohlen.
+                addressCountry: countryCode(address.country),
               },
             }
           : {}),
         email: SITE.email,
         telephone: phone,
         description: SITE.description,
-        areaServed: SITE.areaServed,
+        areaServed: SITE.areaServed.map((c) => ({ "@type": "Country", identifier: c, name: COUNTRY_NAMES[c] ?? c })),
         knowsLanguage: ["de", "en", "es"],
+        // Verknüpft die Organisation mit ihren Kursen — hilft Suchmaschinen und
+        // KI-Systemen, "Interlexico" eindeutig als Anbieter dieser Trainings einzuordnen.
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Corporate Language Training",
+          itemListElement: Object.keys(TAUGHT_LANGUAGE).map((slug) => ({
+            "@type": "Offer",
+            itemOffered: { "@id": `${SITE.url}${lh(lang, `/kurse/${slug}`)}#course` },
+          })),
+        },
         knowsAbout: [
           "Business English",
           "Deutsch als Fremdsprache",
@@ -123,22 +153,36 @@ export function FaqJsonLd({ items }: { items: FaqItem[] }) {
 }
 
 export function CourseJsonLd({ course, lang }: { course: CourseType; lang: Locale }) {
+  const url = `${SITE.url}${lh(lang, `/kurse/${course.slug}`)}`;
+  const taught = TAUGHT_LANGUAGE[course.slug];
   return (
     <JsonLd
       data={{
         "@context": "https://schema.org",
         "@type": "Course",
+        "@id": `${url}#course`,
         name: course.name,
         description: course.seo.description,
-        url: `${SITE.url}${lh(lang, `/kurse/${course.slug}`)}`,
-        provider: { "@id": `${SITE.url}#organization` },
-        inLanguage: bcp47[lang],
-        // Bewusst ohne Preis-/Offer-Angaben (keine Preise auf der Website).
+        url,
+        provider: { "@type": "EducationalOrganization", "@id": `${SITE.url}#organization`, name: SITE.name, sameAs: SITE.url },
+        // Unterrichtssprache des Kurses, nicht die Sprache der Seite.
+        inLanguage: taught?.code ?? bcp47[lang],
+        ...(taught ? { teaches: taught.teaches } : {}),
+        audience: { "@type": "BusinessAudience", audienceType: course.audience.join("; ") },
+        // Bewusst ohne Preis (keine Preise auf der Website) — "Paid" + Anfrage-URL.
+        offers: {
+          "@type": "Offer",
+          category: "Paid",
+          url: `${SITE.url}${lh(lang, "/kontakt")}?kurs=${course.slug}`,
+          availability: "https://schema.org/InStock",
+          areaServed: SITE.areaServed,
+        },
         hasCourseInstance: course.formats.map((f) => ({
           "@type": "CourseInstance",
           name: `${course.name} — ${f.name}`,
           description: f.description,
-          courseMode: "blended",
+          url: `${url}/${f.slug}`,
+          courseMode: ["Online", "Onsite", "Blended"],
         })),
       }}
     />
@@ -161,6 +205,78 @@ export function BreadcrumbJsonLd({
           name: item.name,
           item: `${SITE.url}${item.path}`,
         })),
+      }}
+    />
+  );
+}
+
+/** Ratgeber-Artikel (Schema.org Article) mit Autor/Herausgeber = Interlexico. */
+export function ArticleJsonLd({
+  lang,
+  path,
+  headline,
+  description,
+  published,
+  updated,
+  author,
+}: {
+  lang: Locale;
+  path: string;
+  headline: string;
+  description: string;
+  published: string;
+  updated: string;
+  author: string;
+}) {
+  const url = `${SITE.url}${lh(lang, path)}`;
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${url}#article`,
+        mainEntityOfPage: url,
+        headline,
+        description,
+        inLanguage: bcp47[lang],
+        datePublished: published,
+        dateModified: updated,
+        image: `${SITE.url}${lh(lang, "/opengraph-image")}`,
+        author: { "@type": "Organization", name: author, url: SITE.url },
+        publisher: { "@id": `${SITE.url}#organization` },
+      }}
+    />
+  );
+}
+
+/** Branchen-Landingpage als Dienstleistung des Anbieters (Schema.org Service). */
+export function ServiceJsonLd({
+  lang,
+  path,
+  name,
+  description,
+  serviceType,
+}: {
+  lang: Locale;
+  path: string;
+  name: string;
+  description: string;
+  serviceType: string;
+}) {
+  const url = `${SITE.url}${lh(lang, path)}`;
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${url}#service`,
+        name,
+        description,
+        url,
+        serviceType,
+        inLanguage: bcp47[lang],
+        provider: { "@id": `${SITE.url}#organization` },
+        areaServed: SITE.areaServed.map((c) => ({ "@type": "Country", identifier: c, name: COUNTRY_NAMES[c] ?? c })),
       }}
     />
   );

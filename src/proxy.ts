@@ -36,6 +36,8 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     // Alles außer _next, statischen Assets und API-Routen (die bleiben sprachneutral).
-    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|llms.txt|llms-full.txt|\\.well-known|opengraph-image|icon|apple-icon|manifest.webmanifest).*)",
+    // 7137db0cfdcc73c1c6d4b491f56f58f9.txt = IndexNow-Schlüssel (muss im Wurzelverzeichnis liegen, siehe scripts/indexnow.mjs);
+    // google…html / BingSiteAuth.xml = Bestätigungsdateien für Search Console / Bing Webmaster Tools.
+    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|llms.txt|llms-full.txt|7137db0cfdcc73c1c6d4b491f56f58f9.txt|google[0-9a-f]+\\.html|BingSiteAuth.xml|\\.well-known|opengraph-image|icon|apple-icon|manifest.webmanifest).*)",
   ],
 };

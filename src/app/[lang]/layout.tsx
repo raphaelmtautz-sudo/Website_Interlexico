@@ -114,7 +114,7 @@ export default async function RootLayout({
   const [legal, contact] = await Promise.all([getLegal(), getContact()]);
   const phone = legal.phone ?? SITE.phone;
   const whatsapp = legal.whatsapp ?? SITE.whatsapp;
-  const sameAs = contact.socialLinks.map((s) => s.url);
+  const sameAs = [...new Set([...SITE.sameAs, ...contact.socialLinks.map((s) => s.url)])];
 
   return (
     <html
@@ -144,7 +144,11 @@ export default async function RootLayout({
           phone={phone}
           sameAs={sameAs}
           legalName={legal.companyName}
-          address={{ street: legal.street, zipCity: legal.zipCity, country: legal.country }}
+          address={
+            legal.street && legal.zipCity
+              ? { street: legal.street, zipCity: legal.zipCity, country: legal.country }
+              : SITE.address
+          }
         />
         <WebSiteJsonLd lang={lang} />
       </body>

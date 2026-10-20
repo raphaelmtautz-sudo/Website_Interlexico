@@ -9,6 +9,9 @@ import { StoryLaneNav } from "@/components/interactive/story-lane-nav";
 import { Reveal } from "@/components/interactive/reveal";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
 import { TestimonialCarousel } from "@/components/interactive/testimonial-carousel";
+import { Accordion } from "@/components/ui/accordion";
+import type { FaqItem } from "@/content/faq";
+import { industrySlugByName } from "@/content/branchen";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 
@@ -16,10 +19,12 @@ export function CourseTypeLanding({
   course,
   lang,
   dict,
+  faq = [],
 }: {
   course: CourseType;
   lang: Locale;
   dict: Dictionary;
+  faq?: FaqItem[];
 }) {
   const t = dict.courseType;
   const lanes = [
@@ -32,6 +37,7 @@ export function CourseTypeLanding({
     ...(course.testimonials.length > 0
       ? [{ id: "stimmen", label: t.lanes.stimmen }]
       : []),
+    ...(faq.length > 0 ? [{ id: "faq", label: t.lanes.faq }] : []),
     { id: "anfrage", label: t.lanes.anfrage },
   ];
 
@@ -138,14 +144,15 @@ export function CourseTypeLanding({
                 {t.branchenTitle}
               </h2>
               <ul className="flex flex-wrap gap-2 md:col-span-2">
-                {course.industries.map((i) => (
-                  <li
-                    key={i}
-                    className="border border-line px-4 py-2 font-sans text-sm text-paper-dim transition-colors hover:border-brand hover:text-paper"
-                  >
-                    {i}
-                  </li>
-                ))}
+                {course.industries.map((i) => {
+                  const slug = course.slug === "business-english" ? industrySlugByName(lang, i) : undefined;
+                  const cls = "block border border-line px-4 py-2 font-sans text-sm text-paper-dim transition-colors hover:border-brand hover:text-paper";
+                  return (
+                    <li key={i}>
+                      {slug ? <Link href={lh(lang, `/branchen/${slug}`)} className={cls}>{i}</Link> : <span className={cls}>{i}</span>}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </Section>
@@ -159,6 +166,17 @@ export function CourseTypeLanding({
             <TestimonialCarousel
               testimonials={course.testimonials.map((t) => ({ quote: t.quote, role: `${t.role}, ${t.company}` }))}
             />
+          </Section>
+        </Reveal>
+      )}
+
+      {faq.length > 0 && (
+        <Reveal as="section" id="faq" className="border-t border-line">
+          <Section>
+            <Eyebrow>{dict.home.faqEyebrow}</Eyebrow>
+            <div className="mx-auto max-w-3xl">
+              <Accordion items={faq} />
+            </div>
           </Section>
         </Reveal>
       )}

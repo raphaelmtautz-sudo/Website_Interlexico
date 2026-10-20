@@ -11,6 +11,8 @@ export const es: Dictionary = {
   nav: {
     kurse: "Cursos",
     einstufung: "Test de nivel gratis",
+    branchen: "Sectores",
+    ratgeber: "Guías",
     ueberUns: "Sobre nosotros",
     interlexicoOne: "Interlexico ONE",
     nachhaltigkeit: "Sostenibilidad",
@@ -217,7 +219,7 @@ export const es: Dictionary = {
     inVorbereitung: "En preparación",
   },
   courseType: {
-    lanes: { start: "Inicio", fuerWen: "Para quién", formate: "Formatos", branchen: "Sectores", stimmen: "Testimonios", anfrage: "Consulta" },
+    lanes: { start: "Inicio", fuerWen: "Para quién", formate: "Formatos", branchen: "Sectores", stimmen: "Testimonios", faq: "Preguntas", anfrage: "Consulta" },
     ctaBeratungAnfragen: "Solicitar una consulta",
     ctaBeratungsgespraech: "Reservar una consulta",
     fuerWenEyebrow: "Para quién",
@@ -663,9 +665,9 @@ export const es: Dictionary = {
       title: "Su dirección de correo está confirmada",
       codeLabel: "Su código de vale",
       codeNote: "También le hemos enviado el código por correo. Canjeable hasta el {date} al contratar {min} clases o más.",
+      courseNote: "El curso debe realizarse entre el {from} y el {until}.",
       redeemed: "Este código ya se ha canjeado.",
       cta: "Enviar una solicitud sin compromiso",
-      courseNote: "El curso debe realizarse entre el {from} y el {until}.",
       copy: "Copiar código",
       copied: "Copiado",
       invalidTitle: "Este enlace no es válido",

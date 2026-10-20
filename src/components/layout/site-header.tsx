@@ -21,6 +21,8 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
   ];
   const { logoUrl, logoAlt, blogEnabled } = await getSiteSettings();
   const secondaryItems = [
+    { href: lh(lang, "/branchen"), label: dict.nav.branchen },
+    { href: lh(lang, "/ratgeber"), label: dict.nav.ratgeber },
     { href: lh(lang, "/ueber-uns"), label: dict.nav.ueberUns },
     { href: lh(lang, "/interlexico-one"), label: dict.nav.interlexicoOne },
     { href: lh(lang, "/nachhaltigkeit"), label: dict.nav.nachhaltigkeit },

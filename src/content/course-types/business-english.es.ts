@@ -91,15 +91,8 @@ export const businessEnglish: CourseType = {
     },
   ],
   industries: getIndustries("es"),
-  testimonials: [
-    {
-      quote:
-        "Nuestros directores comerciales ahora llevan las conversaciones internacionales con notable más seguridad. Los informes nos ayudaron a justificar el presupuesto internamente.",
-      name: "anónimo",
-      role: "Head of People & Culture",
-      company: "empresa industrial mediana (nombre bajo petición)",
-    },
-  ],
+  // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
+  testimonials: [],
   seo: {
     title: "Formación en Inglés de Negocios para Empresas | Interlexico",
     description:

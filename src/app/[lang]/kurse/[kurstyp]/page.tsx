@@ -3,7 +3,8 @@ import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getCourseTypes, getCourseType } from "@/lib/cms";
 import { CourseTypeLanding } from "@/components/course/course-type-landing";
-import { CourseJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { CourseJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
+import { getCourseFaq } from "@/content/course-faq";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, locales, lh } from "@/lib/i18n";
 
@@ -44,11 +45,13 @@ export default async function KurstypPage({
   const course = await getCourseType(lang, kurstyp);
   if (!course || course.status !== "aktiv") notFound();
   const dict = getDictionary(lang);
+  const faq = getCourseFaq(lang, course.slug);
 
   return (
     <>
-      <CourseTypeLanding course={course} lang={lang} dict={dict} />
+      <CourseTypeLanding course={course} lang={lang} dict={dict} faq={faq} />
       <CourseJsonLd course={course} lang={lang} />
+      {faq.length > 0 && <FaqJsonLd items={faq} />}
       <BreadcrumbJsonLd
         items={[
           { name: dict.home.lanes.start, path: lh(lang) },

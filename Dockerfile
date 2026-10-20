@@ -7,6 +7,10 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# CMS beim Build erreichbar machen (siehe scripts/docker-build.sh): sonst werden
+# statische Seiten mit Fallback-Werten vorgerendert (Blog-Link sichtbar, Firmen-
+# daten unvollständig), bis ISR sie neu erzeugt. Ohne Build-Arg bleibt der Fallback.
+ARG CMS_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 RUN npm run build

@@ -11,6 +11,8 @@ export const en: Dictionary = {
   nav: {
     kurse: "Courses",
     einstufung: "Free level test",
+    branchen: "Industries",
+    ratgeber: "Guides",
     ueberUns: "About",
     interlexicoOne: "Interlexico ONE",
     nachhaltigkeit: "Sustainability",
@@ -217,7 +219,7 @@ export const en: Dictionary = {
     inVorbereitung: "In preparation",
   },
   courseType: {
-    lanes: { start: "Start", fuerWen: "Who it's for", formate: "Formats", branchen: "Industries", stimmen: "Voices", anfrage: "Enquiry" },
+    lanes: { start: "Start", fuerWen: "Who it's for", formate: "Formats", branchen: "Industries", stimmen: "Voices", faq: "FAQ", anfrage: "Enquiry" },
     ctaBeratungAnfragen: "Request a consultation",
     ctaBeratungsgespraech: "Book a consultation",
     fuerWenEyebrow: "Who it's for",
@@ -663,9 +665,9 @@ export const en: Dictionary = {
       title: "Your email address is confirmed",
       codeLabel: "Your voucher code",
       codeNote: "We have also emailed the code to you. Redeemable until {date} when you book {min} lessons or more.",
+      courseNote: "The course must take place between {from} and {until}.",
       redeemed: "This code has already been redeemed.",
       cta: "Send a no-obligation enquiry",
-      courseNote: "The course must take place between {from} and {until}.",
       copy: "Copy code",
       copied: "Copied",
       invalidTitle: "This link is invalid",

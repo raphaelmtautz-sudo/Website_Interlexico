@@ -9,6 +9,8 @@ export const de = {
   nav: {
     kurse: "Kurse",
     einstufung: "Einstufungstest",
+    branchen: "Branchen",
+    ratgeber: "Ratgeber",
     ueberUns: "Über uns",
     interlexicoOne: "Interlexico ONE",
     nachhaltigkeit: "Nachhaltigkeit",
@@ -215,7 +217,7 @@ export const de = {
     inVorbereitung: "In Vorbereitung",
   },
   courseType: {
-    lanes: { start: "Start", fuerWen: "Für wen", formate: "Formate", branchen: "Branchen", stimmen: "Stimmen", anfrage: "Anfrage" },
+    lanes: { start: "Start", fuerWen: "Für wen", formate: "Formate", branchen: "Branchen", stimmen: "Stimmen", faq: "FAQ", anfrage: "Anfrage" },
     ctaBeratungAnfragen: "Beratung anfragen",
     ctaBeratungsgespraech: "Beratungsgespräch",
     fuerWenEyebrow: "Für wen",
@@ -661,9 +663,9 @@ export const de = {
       title: "Ihre E-Mail-Adresse ist bestätigt",
       codeLabel: "Ihr Gutschein-Code",
       codeNote: "Wir haben Ihnen den Code zusätzlich per E-Mail geschickt. Einlösbar bis {date} bei Buchung ab {min} UE.",
+      courseNote: "Der Kurs muss zwischen dem {from} und dem {until} stattfinden.",
       redeemed: "Dieser Code wurde bereits eingelöst.",
       cta: "Jetzt unverbindlich anfragen",
-      courseNote: "Der Kurs muss zwischen dem {from} und dem {until} stattfinden.",
       copy: "Code kopieren",
       copied: "Kopiert",
       invalidTitle: "Dieser Link ist ungültig",

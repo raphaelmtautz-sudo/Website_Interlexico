@@ -91,15 +91,8 @@ export const businessEnglish: CourseType = {
     },
   ],
   industries: getIndustries("de"),
-  testimonials: [
-    {
-      quote:
-        "Unsere Vertriebsleiter führen internationale Kundengespräche heute spürbar souveräner. Das Reporting hat uns geholfen, das Budget intern zu rechtfertigen.",
-      name: "anonymisiert",
-      role: "Head of People & Culture",
-      company: "mittelständisches Industrieunternehmen (Name auf Anfrage)",
-    },
-  ],
+  // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
+  testimonials: [],
   seo: {
     title: "Business English Training für Unternehmen | Interlexico",
     description:

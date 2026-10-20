@@ -13,6 +13,7 @@ import { FaqJsonLd } from "@/components/seo/json-ld";
 import { Accordion } from "@/components/ui/accordion";
 import { getFaq, getTestimonials, getIndustries } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
+import { industrySlugByName } from "@/content/branchen";
 import { hasLocale, lh } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 
@@ -26,17 +27,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     getIndustries(lang),
   ]);
 
-  // Echte, freigegebene Kundenstimmen aus dem CMS haben Vorrang; solange
-  // dort keine veröffentlicht ist, zeigen wir die illustrativen Beispiel-
-  // zitate aus dem Dictionary (anonymisiert, keine echten Personen/Firmen).
-  const testimonials = cmsTestimonials.length
-    ? cmsTestimonials.map((t) => ({
-        quote: t.quote,
-        role: [t.personName, [t.personRole, t.companyName].filter(Boolean).join(", ")]
-          .filter(Boolean)
-          .join(" — "),
-      }))
-    : dict.home.testimonials;
+  // Nur echte, freigegebene Kundenstimmen aus dem CMS. Ohne sie entfällt der
+  // Abschnitt: erfundene Beispielzitate wirken auf Besucher echt (UWG-Risiko,
+  // schwächt Vertrauenssignale für Google). Die Beispiele bleiben im Dictionary.
+  const testimonials = cmsTestimonials.map((t) => ({
+    quote: t.quote,
+    role: [t.personName, [t.personRole, t.companyName].filter(Boolean).join(", ")]
+      .filter(Boolean)
+      .join(" — "),
+  }));
 
   const offering = dict.home.offering.map((o) => ({
     ...o,
@@ -53,7 +52,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     { id: "konfigurator", label: dict.home.lanes.konfigurator },
     { id: "angebot", label: dict.home.lanes.angebot },
     { id: "ablauf", label: dict.home.lanes.ablauf },
-    { id: "stimmen", label: dict.home.lanes.stimmen },
+    ...(testimonials.length ? [{ id: "stimmen", label: dict.home.lanes.stimmen }] : []),
     { id: "nachhaltigkeit", label: dict.home.lanes.nachhaltigkeit },
     { id: "faq", label: dict.home.lanes.faq },
     { id: "kontakt-cta", label: dict.home.lanes.kontakt },
@@ -193,14 +192,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                   </p>
                 ) : (
                   <ul className="flex flex-wrap gap-2">
-                    {group.industries.map((i) => (
-                      <li
-                        key={i}
-                        className="border border-line px-3 py-1.5 font-sans text-xs text-paper-dim transition-colors hover:border-brand hover:text-paper"
-                      >
-                        {i}
-                      </li>
-                    ))}
+                    {group.industries.map((i) => {
+                      const slug = industrySlugByName(lang, i);
+                      const cls = "block border border-line px-3 py-1.5 font-sans text-xs text-paper-dim transition-colors hover:border-brand hover:text-paper";
+                      return (
+                        <li key={i}>
+                          {slug ? <Link href={lh(lang, `/branchen/${slug}`)} className={cls}>{i}</Link> : <span className={cls}>{i}</span>}
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
@@ -228,12 +228,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </Section>
       </Reveal>
 
-      <Reveal as="section" id="stimmen" variant="scale" className="border-t border-line">
-        <Section>
-          <GoldRule className="mx-auto mb-10" />
-          <TestimonialCarousel testimonials={testimonials} />
-        </Section>
-      </Reveal>
+      {testimonials.length > 0 && (
+        <Reveal as="section" id="stimmen" variant="scale" className="border-t border-line">
+          <Section>
+            <GoldRule className="mx-auto mb-10" />
+            <TestimonialCarousel testimonials={testimonials} />
+          </Section>
+        </Reveal>
+      )}
 
       <Reveal as="section" id="nachhaltigkeit" variant="right" className="border-t border-line bg-success/5">
         <Section>

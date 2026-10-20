@@ -90,6 +90,7 @@ export const deutschAlsFremdsprache: CourseType = {
       ],
     },
   ],
+  // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
     title: "Deutsch als Fremdsprache für Unternehmen | Interlexico",

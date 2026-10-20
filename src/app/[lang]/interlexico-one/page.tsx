@@ -18,7 +18,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return pageMetadata({ lang, path: "/interlexico-one", title: dict.nav.interlexicoOne, description: dict.interlexicoOne.intro });
+  return pageMetadata({ lang, path: "/interlexico-one", title: `${dict.nav.interlexicoOne} — ${dict.interlexicoOne.title}`, absoluteTitle: true, description: dict.interlexicoOne.intro });
 }
 
 export default async function InterlexicoOnePage({ params }: { params: Promise<{ lang: string }> }) {

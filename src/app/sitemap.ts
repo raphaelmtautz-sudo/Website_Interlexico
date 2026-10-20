@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { getCourseTypes } from "@/content/course-types";
+import { getIndustryPages } from "@/content/branchen";
+import { getGuides } from "@/content/ratgeber";
 import { getPosts, getSiteSettings } from "@/lib/cms";
 import { locales, lh, defaultLocale, type Locale } from "@/lib/i18n";
 
@@ -25,6 +27,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // "/de/" 308-redirected auf "/de"). Sitemap-URLs dürfen nicht redirecten.
     { path: "", priority: 1, changeFrequency: "weekly" as const },
     { path: "/kurse", priority: 0.9, changeFrequency: "weekly" as const },
+    { path: "/branchen", priority: 0.8, changeFrequency: "monthly" as const },
+    { path: "/ratgeber", priority: 0.7, changeFrequency: "weekly" as const },
     { path: "/interlexico-one", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/einstufung", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/ueber-uns", priority: 0.6, changeFrequency: "monthly" as const },
@@ -70,6 +74,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           alternates: { languages: alternates(`/kurse/${course.slug}/${format.slug}`) },
         });
       }
+    }
+
+    for (const industry of getIndustryPages(l as Locale)) {
+      entries.push({
+        url: `${SITE.url}${lh(l, `/branchen/${industry.slug}`)}`,
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.8,
+        alternates: { languages: alternates(`/branchen/${industry.slug}`) },
+      });
+    }
+
+    for (const guide of getGuides(l as Locale)) {
+      entries.push({
+        url: `${SITE.url}${lh(l, `/ratgeber/${guide.slug}`)}`,
+        lastModified: new Date(`${guide.updated}T12:00:00Z`),
+        changeFrequency: "monthly",
+        priority: 0.7,
+        alternates: { languages: alternates(`/ratgeber/${guide.slug}`) },
+      });
     }
 
     if (blogEnabled) {

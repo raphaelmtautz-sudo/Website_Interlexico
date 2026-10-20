@@ -2,6 +2,8 @@ import { SITE } from "@/lib/site";
 import { getCourseTypes } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
+import { getIndustryLabels, getIndustryPages } from "@/content/branchen";
+import { getGuideLabels, getGuides } from "@/content/ratgeber";
 
 /**
  * llms.txt (siehe llmstxt.org) — kuratierte Klartext-Übersicht der Website
@@ -38,6 +40,12 @@ export async function buildLlmsTxt(lang: Locale): Promise<string> {
     ...courses.map(
       (c) => `- [${c.name}](${SITE.url}${lh(lang, `/kurse/${c.slug}`)}): ${c.seo.description}`,
     ),
+    "",
+    `## ${getIndustryLabels(lang).hubTitle}`,
+    ...getIndustryPages(lang).map((i) => `- [${i.title}](${SITE.url}${lh(lang, `/branchen/${i.slug}`)}): ${i.description}`),
+    "",
+    `## ${getGuideLabels(lang).hubTitle}`,
+    ...getGuides(lang).map((g) => `- [${g.title}](${SITE.url}${lh(lang, `/ratgeber/${g.slug}`)}): ${g.summary}`),
     "",
     `## ${labels.unternehmen}`,
     `- [${dict.nav.ueberUns}](${SITE.url}${lh(lang, "/ueber-uns")})`,
