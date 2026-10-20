@@ -326,6 +326,8 @@ function VoucherDialog({
           {expanded ? fields : (
             <Button onClick={() => setExpanded(true)} className="w-full">{t.openForm}</Button>
           )}
+          {/* Aktionsbedingungen auch mobil sichtbar (stehen nur im Kleingedruckten). */}
+          <p className="border-t border-line pt-2.5 font-sans text-[11px] leading-snug text-paper-dim">{t.fine}</p>
         </>
       )}
     </div>
