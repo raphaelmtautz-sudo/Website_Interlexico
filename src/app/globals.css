@@ -269,6 +269,13 @@ html.js .reveal-left {
 html.js .reveal-right {
   transform: translateX(24px);
 }
+/* Seitlich einfahrende Abschnitte (reveal-left/-right) liegen vor dem Einblenden
+   24px neben ihrer Position — ohne Begrenzung entstand dadurch auf dem Handy
+   horizontaler Überlauf (Seite leicht herausgezoomt, fixierte Elemente am Rand
+   angeschnitten). clip statt hidden: erzeugt keinen Scroll-Container. */
+#main {
+  overflow-x: clip;
+}
 html.js .reveal.is-visible {
   opacity: 1;
   transform: none;

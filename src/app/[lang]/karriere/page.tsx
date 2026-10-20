@@ -35,9 +35,10 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
   return (
     <Section className="pt-24 lg:pt-32">
       <Container className="grid gap-16 lg:grid-cols-2">
-        <div className="animate-rise">
+        <div className="animate-rise min-w-0">
           <Eyebrow>{t.eyebrow}</Eyebrow>
-          <h1 className="kinetic font-display text-5xl mb-6 text-balance sm:text-6xl lg:text-7xl">
+          {/* text-4xl auf dem Handy: "Sprachtrainer:innen" ist in text-5xl breiter als der Bildschirm */}
+          <h1 className="kinetic font-display text-4xl mb-6 text-balance break-words sm:text-6xl lg:text-7xl">
             {t.title}
           </h1>
           <p className="font-sans text-lg leading-relaxed text-paper-dim mb-8">{t.text}</p>
@@ -87,7 +88,7 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
           </dl>
         </div>
 
-        <div className="animate-rise" style={{ animationDelay: "120ms" }}>
+        <div className="animate-rise min-w-0" style={{ animationDelay: "120ms" }}>
           <Suspense>
             <CareerForm lang={lang} dict={dict} />
           </Suspense>
