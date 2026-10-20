@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -98,7 +99,10 @@ export function MobileNav({
         />
       </button>
 
-      {open && (
+      {/* Portal nach body: der Header hat backdrop-filter und wäre sonst der
+          Containing Block für "fixed" — das Panel bliebe auf Header-Höhe
+          begrenzt und der Rest des Menüs läge ohne Hintergrund über der Seite. */}
+      {open && createPortal(
         <div
           ref={panelRef}
           onTouchStart={onTouchStart}
@@ -147,7 +151,8 @@ export function MobileNav({
               <ThemeControl dict={dict} />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
