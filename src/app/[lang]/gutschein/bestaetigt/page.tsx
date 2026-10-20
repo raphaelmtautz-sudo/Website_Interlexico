@@ -74,7 +74,7 @@ export default async function VoucherConfirmedPage({
         </div>
 
         <p className="text-center font-sans text-sm text-paper-dim">
-          {result.redeemed ? p.redeemed : p.codeNote.replace("{date}", date)}
+          {result.redeemed ? p.redeemed : p.codeNote.replace("{date}", date).replace("{min}", String(result.minUnits))}
         </p>
 
         {!result.redeemed && (

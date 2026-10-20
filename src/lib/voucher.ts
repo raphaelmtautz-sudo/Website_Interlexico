@@ -10,12 +10,37 @@ import "server-only";
 export const VOUCHER_API_URL =
   process.env.ONE_VOUCHER_URL || "http://ix_sales_backend:4003/api/public/voucher";
 
+export type VoucherTextKey = "eyebrow" | "eyebrowMobile" | "titleBefore" | "titleHighlight" | "lead" | "leadMobile" | "fine";
+
+// Laufende Aktion fürs Pop-up, gepflegt im Marketing-Dashboard (Gutscheine).
+// Texte kommen fertig (Platzhalter ersetzt) je Sprache. Ist ONE nicht
+// erreichbar, bleibt das Pop-up aus: Anfordern würde dann ohnehin scheitern.
+export type VoucherCampaign = {
+  requestEndsAt: string;
+  texts: Record<"de" | "en" | "es", Record<VoucherTextKey, string>>;
+};
+
+export async function getVoucherCampaign(): Promise<VoucherCampaign | null> {
+  try {
+    const res = await fetch(`${VOUCHER_API_URL}/campaign`, {
+      next: { revalidate: 60, tags: ["voucher-campaign"] },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.active ? { requestEndsAt: data.requestEndsAt, texts: data.texts } : null;
+  } catch {
+    return null;
+  }
+}
+
 export type VoucherConfirmResult =
   | {
       ok: true;
       name: string;
       code: string;
       expiresAt: string;
+      minUnits: number;
       redeemed: boolean;
       newsletter: "none" | "requested" | "subscribed";
     }

@@ -195,10 +195,11 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
       </div>
 
       <div className="space-y-3">
-        <LegalH2>6b. Gutschein-Aktion „2 kostenfreie Unterrichtseinheiten“</LegalH2>
+        <LegalH2>6b. Gutschein-Aktionen</LegalH2>
         <LegalP>
-          Über ein Hinweisfenster auf unserer Website können Sie bis zum
-          31.12.2026 einen Gutschein-Code anfordern. Dafür verarbeiten wir Ihren
+          Über ein Hinweisfenster auf unserer Website können Sie während einer
+          laufenden Aktion einen Gutschein-Code anfordern; Angebot und Fristen
+          nennen wir im Hinweisfenster. Dafür verarbeiten wir Ihren
           Namen, Ihre E-Mail-Adresse, die Sprache der Website sowie den
           Zeitpunkt, zu dem Sie bestätigt haben, diese Datenschutzerklärung
           gelesen zu haben. Den Code erzeugen wir erst, nachdem Sie Ihre
@@ -222,7 +223,7 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
         <LegalList
           items={[
             "nicht bestätigte Anfragen: automatische Löschung nach 30 Tagen",
-            "nicht eingelöste Codes: Löschung am 30.06.2027, drei Monate nach Ende des Einlösezeitraums (31.03.2027)",
+            "nicht eingelöste Codes: Löschung drei Monate nach Ende des Einlösezeitraums, den wir im Hinweisfenster und in der E-Mail mit Ihrem Code nennen",
             "eingelöste Codes: werden Teil Ihrer Buchungsunterlagen und unterliegen den gesetzlichen Aufbewahrungsfristen",
             "Interessenten-Eintrag: Löschung bzw. Anonymisierung, wenn innerhalb von 24 Monaten kein Vertrag zustande kommt",
           ]}
@@ -469,10 +470,11 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
       </div>
 
       <div className="space-y-3">
-        <LegalH2>6b. &quot;2 free lessons&quot; voucher promotion</LegalH2>
+        <LegalH2>6b. Voucher promotions</LegalH2>
         <LegalP>
           Via a notice window on our website you can request a voucher code
-          until 31 December 2026. For this we process your name, your email
+          while a promotion is running; we state the offer and deadlines in the
+          notice window. For this we process your name, your email
           address, the language of the website and the time at which you
           confirmed that you have read this privacy policy. We only generate the
           code after you have confirmed your email address via the link in our
@@ -494,7 +496,7 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
         <LegalList
           items={[
             "unconfirmed requests: deleted automatically after 30 days",
-            "codes not redeemed: deleted on 30 June 2027, three months after the end of the redemption period (31 March 2027)",
+            "codes not redeemed: deleted three months after the end of the redemption period stated in the notice window and in the email with your code",
             "redeemed codes: become part of your booking records and are subject to the statutory retention periods",
             "prospect entry: deleted or anonymised if no contract is concluded within 24 months",
           ]}
@@ -746,10 +748,12 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
       </div>
 
       <div className="space-y-3">
-        <LegalH2>6b. Promoción «2 clases gratuitas»</LegalH2>
+        <LegalH2>6b. Promociones con vale</LegalH2>
         <LegalP>
           A través de una ventana informativa de nuestro sitio web puede
-          solicitar un código de vale hasta el 31/12/2026. Para ello tratamos su
+          solicitar un código de vale mientras haya una promoción en curso; la
+          oferta y los plazos se indican en la ventana informativa. Para ello
+          tratamos su
           nombre, su dirección de correo electrónico, el idioma del sitio web y
           el momento en que confirmó haber leído esta política de privacidad.
           Solo generamos el código después de que haya confirmado su dirección
@@ -773,7 +777,7 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
         <LegalList
           items={[
             "solicitudes no confirmadas: eliminación automática a los 30 días",
-            "códigos no canjeados: eliminación el 30/06/2027, tres meses después del fin del periodo de canje (31/03/2027)",
+            "códigos no canjeados: eliminación tres meses después del fin del periodo de canje indicado en la ventana informativa y en el correo con su código",
             "códigos canjeados: pasan a formar parte de la documentación de su contratación y están sujetos a los plazos legales de conservación",
             "entrada de cliente potencial: eliminación o anonimización si no se celebra ningún contrato en un plazo de 24 meses",
           ]}

@@ -9,16 +9,17 @@ import { Field, inputClasses } from "@/components/ui/form-field";
 import { track } from "@/lib/track";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
+import type { VoucherTextKey } from "@/lib/voucher";
 
-type T = Dictionary["voucher"];
+// Feste Texte aus dem Wörterbuch + Aktionstexte (Angebot, Fristen) aus ONE.
+type T = Dictionary["voucher"] & Record<VoucherTextKey, string>;
 
-// Gutschein-Aktion "2 kostenfreie Unterrichtseinheiten". Desktop: Exit-Intent
+// Gutschein-Aktion (Schalter, Fristen, Angebot und Texte im Marketing-Dashboard
+// unter "Gutscheine", geladen über /api/voucher/campaign). Desktop: Exit-Intent
 // (Maus verlässt das Fenster nach oben). Handy: kleines Kärtchen von unten nach
 // Interesse statt Vollbild-Overlay (Google wertet frühe Vollbild-Overlays auf
 // Mobilgeräten ab). Pro Besucher einmal; nach "Nein danke" 14 Tage Ruhe, nach
-// dem Absenden nie wieder. Die Fristen hier müssen zu PROMO_REQUEST_UNTIL in
-// apps/sales/backend/src/lib/promo-codes.ts passen.
-const REQUEST_UNTIL = new Date("2026-12-31T23:59:59+01:00").getTime();
+// dem Absenden nie wieder.
 const STORAGE_KEY = "il-voucher";
 const SNOOZE_MS = 14 * 24 * 60 * 60 * 1000;
 const DESKTOP_ARM_MS = 10_000;
@@ -45,9 +46,10 @@ function writeState(v: { submitted?: boolean; until?: number }) {
   }
 }
 
-export function VoucherPopup({ lang, t }: { lang: Locale; t: T }) {
+export function VoucherPopup({ lang, t: dict }: { lang: Locale; t: Dictionary["voucher"] }) {
   const pathname = usePathname() || "";
   const [variant, setVariant] = useState<Variant | null>(null);
+  const [campaign, setCampaign] = useState<{ requestEndsAt: number; texts: Record<VoucherTextKey, string> } | null>(null);
   const formTouched = useRef(false);
 
   const excluded = EXCLUDED.some((p) => pathname.startsWith(lh(lang, p)));
@@ -63,8 +65,22 @@ export function VoucherPopup({ lang, t }: { lang: Locale; t: T }) {
     track("voucher_shown", { variant: v });
   }, []);
 
+  // Aktion erst laden, wenn das Pop-up für diesen Besucher überhaupt in Frage kommt.
   useEffect(() => {
-    if (excluded || Date.now() > REQUEST_UNTIL || variant) return;
+    const s = readState();
+    if (s.submitted || (s.until && s.until > Date.now())) return;
+    let cancelled = false;
+    fetch(`/api/voucher/campaign?lang=${lang}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled && d?.active) setCampaign({ requestEndsAt: Date.parse(d.requestEndsAt), texts: d.texts });
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [lang]);
+
+  useEffect(() => {
+    if (!campaign || excluded || Date.now() > campaign.requestEndsAt || variant) return;
     const s = readState();
     if (s.submitted || (s.until && s.until > Date.now())) return;
 
@@ -94,12 +110,12 @@ export function VoucherPopup({ lang, t }: { lang: Locale; t: T }) {
       cleanups.push(() => window.clearTimeout(timer), () => window.removeEventListener("scroll", onScroll));
     }
     return () => cleanups.forEach((c) => c());
-  }, [excluded, variant, show]);
+  }, [campaign, excluded, variant, show]);
 
   // Auf ausgeschlossenen Seiten (auch nach clientseitigem Seitenwechsel dorthin) nie anzeigen
-  if (!variant || excluded) return null;
+  if (!variant || excluded || !campaign) return null;
   return createPortal(
-    <VoucherDialog lang={lang} t={t} variant={variant} onClose={(reason) => {
+    <VoucherDialog lang={lang} t={{ ...dict, ...campaign.texts }} variant={variant} onClose={(reason) => {
       if (reason === "dismiss") track("voucher_dismissed", { variant });
       setVariant(null);
     }} />,
