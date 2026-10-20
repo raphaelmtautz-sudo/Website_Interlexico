@@ -55,9 +55,16 @@ export default async function VoucherConfirmedPage({
     );
   }
 
-  const date = new Date(result.expiresAt).toLocaleDateString(dateTag[lang], {
+  const fmt = (d: Date) => d.toLocaleDateString(dateTag[lang], {
     day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Berlin",
   });
+  const date = fmt(new Date(result.expiresAt));
+  // Zeitraum, in dem der Kurs stattfinden muss (pro Code gespeichert, optional)
+  const course = result.courseFrom && result.courseUntil
+    ? p.courseNote
+        .replace("{from}", fmt(new Date(`${result.courseFrom}T12:00:00Z`)))
+        .replace("{until}", fmt(new Date(`${result.courseUntil}T12:00:00Z`)))
+    : "";
 
   return (
     <Section className="pt-24 lg:pt-32">
@@ -75,6 +82,7 @@ export default async function VoucherConfirmedPage({
 
         <p className="text-center font-sans text-sm text-paper-dim">
           {result.redeemed ? p.redeemed : p.codeNote.replace("{date}", date).replace("{min}", String(result.minUnits))}
+          {!result.redeemed && course && <> <strong className="font-medium text-paper">{course}</strong></>}
         </p>
 
         {!result.redeemed && (

@@ -665,6 +665,7 @@ export const en: Dictionary = {
       codeNote: "We have also emailed the code to you. Redeemable until {date} when you book {min} lessons or more.",
       redeemed: "This code has already been redeemed.",
       cta: "Send a no-obligation enquiry",
+      courseNote: "The course must take place between {from} and {until}.",
       copy: "Copy code",
       copied: "Copied",
       invalidTitle: "This link is invalid",

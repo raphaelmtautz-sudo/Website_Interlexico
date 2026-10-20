@@ -663,6 +663,7 @@ export const de = {
       codeNote: "Wir haben Ihnen den Code zusätzlich per E-Mail geschickt. Einlösbar bis {date} bei Buchung ab {min} UE.",
       redeemed: "Dieser Code wurde bereits eingelöst.",
       cta: "Jetzt unverbindlich anfragen",
+      courseNote: "Der Kurs muss zwischen dem {from} und dem {until} stattfinden.",
       copy: "Code kopieren",
       copied: "Kopiert",
       invalidTitle: "Dieser Link ist ungültig",

@@ -665,6 +665,7 @@ export const es: Dictionary = {
       codeNote: "También le hemos enviado el código por correo. Canjeable hasta el {date} al contratar {min} clases o más.",
       redeemed: "Este código ya se ha canjeado.",
       cta: "Enviar una solicitud sin compromiso",
+      courseNote: "El curso debe realizarse entre el {from} y el {until}.",
       copy: "Copiar código",
       copied: "Copiado",
       invalidTitle: "Este enlace no es válido",

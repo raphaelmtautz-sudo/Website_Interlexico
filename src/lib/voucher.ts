@@ -41,6 +41,8 @@ export type VoucherConfirmResult =
       code: string;
       expiresAt: string;
       minUnits: number;
+      courseFrom: string | null;
+      courseUntil: string | null;
       redeemed: boolean;
       newsletter: "none" | "requested" | "subscribed";
     }
