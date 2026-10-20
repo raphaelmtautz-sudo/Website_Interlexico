@@ -30,11 +30,11 @@ export default async function VoucherConfirmedPage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ token?: string; from?: string }>;
+  searchParams: Promise<{ token?: string; from?: string; nl?: string }>;
 }) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  const { token = "", from } = await searchParams;
+  const { token = "", from, nl } = await searchParams;
   const t = getDictionary(lang).voucher;
   const p = t.page;
   const result = await confirmVoucher(token);
@@ -100,7 +100,7 @@ export default async function VoucherConfirmedPage({
           </Button>
         )}
 
-        <NewsletterBox lang={lang} token={token} initial={result.newsletter} fromMail={from === "mail"} t={t} />
+        <NewsletterBox lang={lang} token={token} initial={result.newsletter} fromMail={from === "mail"} autoSubscribe={from === "mail" && nl === "1"} t={t} />
       </Container>
     </Section>
   );
