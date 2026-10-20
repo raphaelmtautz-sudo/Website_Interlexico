@@ -666,6 +666,8 @@ export const en: Dictionary = {
       codeLabel: "Your voucher code",
       codeNote: "We have also emailed the code to you. Redeemable until {date} when you book {min} lessons or more.",
       courseNote: "The course must take place between {from} and {until}.",
+      donation: "And for each of the {units} free lessons we donate to a project of your choice: education in Namibia or new forests with NABU.",
+      donationFine: "For each of the {units} free lessons we donate €{amount} to DAPP Namibia or NABU (project chosen when you sign the contract).",
       redeemed: "This code has already been redeemed.",
       cta: "Send a no-obligation enquiry",
       copy: "Copy code",

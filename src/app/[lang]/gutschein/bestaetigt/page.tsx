@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CopyCode, NewsletterBox } from "@/components/voucher/voucher-confirmation";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh, type Locale } from "@/lib/i18n";
-import { confirmVoucher } from "@/lib/voucher";
+import { confirmVoucher, VOUCHER_DONATION_EUR } from "@/lib/voucher";
 
 // Ziel des Bestätigungslinks aus der Gutschein-Mail (und des Newsletter-Buttons
 // in der Code-Mail). Jeder Aufruf bestätigt idempotent und zeigt den Code; der
@@ -84,6 +84,15 @@ export default async function VoucherConfirmedPage({
           {result.redeemed ? p.redeemed : p.codeNote.replace("{date}", date).replace("{min}", String(result.minUnits))}
           {!result.redeemed && course && <> <strong className="font-medium text-paper">{course}</strong></>}
         </p>
+
+        {!result.redeemed && (
+          <div className="border-l-2 border-success bg-success/5 px-5 py-4 font-sans text-sm text-paper">
+            <p>{p.donation.replace("{units}", String(result.freeUnits))}</p>
+            <p className="mt-2 text-[11px] leading-snug text-paper-dim">
+              {p.donationFine.replace("{units}", String(result.freeUnits)).replace("{amount}", String(VOUCHER_DONATION_EUR))}
+            </p>
+          </div>
+        )}
 
         {!result.redeemed && (
           <Button href={`${lh(lang, "/kontakt")}?gutschein=${encodeURIComponent(result.code)}`} className="self-center">

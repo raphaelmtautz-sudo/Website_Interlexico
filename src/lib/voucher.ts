@@ -34,12 +34,17 @@ export async function getVoucherCampaign(): Promise<VoucherCampaign | null> {
   }
 }
 
+// Spende je kostenfreier Unterrichtseinheit (gleicher Betrag wie in der Code-Mail,
+// PROMO_DONATION_EUR in apps/sales/backend/src/lib/promo-codes.ts, und im Pop-up-Kleingedruckten).
+export const VOUCHER_DONATION_EUR = 10;
+
 export type VoucherConfirmResult =
   | {
       ok: true;
       name: string;
       code: string;
       expiresAt: string;
+      freeUnits: number;
       minUnits: number;
       courseFrom: string | null;
       courseUntil: string | null;

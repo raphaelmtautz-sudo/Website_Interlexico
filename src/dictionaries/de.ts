@@ -664,6 +664,8 @@ export const de = {
       codeLabel: "Ihr Gutschein-Code",
       codeNote: "Wir haben Ihnen den Code zusätzlich per E-Mail geschickt. Einlösbar bis {date} bei Buchung ab {min} UE.",
       courseNote: "Der Kurs muss zwischen dem {from} und dem {until} stattfinden.",
+      donation: "Und für jede der {units} kostenfreien Einheiten spenden wir an ein Projekt Ihrer Wahl: Bildung in Namibia oder neue Wälder mit dem NABU.",
+      donationFine: "Für jede der {units} kostenfreien Unterrichtseinheiten spenden wir {amount} € an DAPP Namibia oder den NABU (Projektwahl bei Vertragsabschluss).",
       redeemed: "Dieser Code wurde bereits eingelöst.",
       cta: "Jetzt unverbindlich anfragen",
       copy: "Code kopieren",

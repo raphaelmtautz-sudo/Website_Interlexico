@@ -666,6 +666,8 @@ export const es: Dictionary = {
       codeLabel: "Su código de vale",
       codeNote: "También le hemos enviado el código por correo. Canjeable hasta el {date} al contratar {min} clases o más.",
       courseNote: "El curso debe realizarse entre el {from} y el {until}.",
+      donation: "Y por cada una de las {units} clases gratuitas donamos a un proyecto de su elección: educación en Namibia o nuevos bosques con NABU.",
+      donationFine: "Por cada una de las {units} clases gratuitas donamos {amount} € a DAPP Namibia o NABU (el proyecto se elige al firmar el contrato).",
       redeemed: "Este código ya se ha canjeado.",
       cta: "Enviar una solicitud sin compromiso",
       copy: "Copiar código",
