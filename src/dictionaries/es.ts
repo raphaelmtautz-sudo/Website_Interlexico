@@ -2,7 +2,7 @@ import type { Dictionary } from "./de";
 
 export const es: Dictionary = {
   meta: {
-    titleDefault: "Academia de idiomas para empresas: inglés de negocios y alemán | Interlexico",
+    titleDefault: "Academia de idiomas para empresas: inglés y alemán | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
       "Academia de idiomas para empresas: inglés de negocios y alemán para su plantilla – presencial en el área de Múnich u online, con evaluación y progreso medible.",
@@ -222,10 +222,11 @@ export const es: Dictionary = {
   },
   kurse: {
     eyebrow: "Programas",
-    title: "Todos los cursos",
-    metaTitle: "Cursos: inglés de negocios y alemán para empresas",
+    title: "Cursos de idiomas para empresas",
+    intro: "Interlexico ofrece dos formaciones de idiomas para empresas: Business English para equipos con contacto internacional y alemán para la plantilla internacional. Ambas existen como formación individual, en grupo de máximo siete personas y en clase para departamentos completos – presencial en el área de Múnich, online en toda la región DACH o híbrida. Cada persona es evaluada antes; el precio se indica en una oferta individual.",
+    metaTitle: "Cursos de idiomas para empresas: Business English y alemán",
     metaDescription:
-      "Toda la formación de idiomas para empresas de un vistazo: inglés de negocios y alemán como lengua extranjera, en clases individuales, en grupo o por departamento — con evaluación de nivel individual y enfoque sectorial.",
+      "Cursos de idiomas para empresas: Business English y alemán para la plantilla internacional – individual, en grupo o en clase, en el área de Múnich u online.",
     verfuegbar: "Disponible",
     baldVerfuegbar: "Próximamente",
     detailsAnsehen: "Ver detalles",
@@ -550,8 +551,8 @@ export const es: Dictionary = {
       "Esta traducción se ofrece solo con fines informativos. La versión en alemán es la única jurídicamente vinculante.",
     impressum: {
       title: "Aviso legal",
-      metaDescription: "Identificación del proveedor conforme al artículo 5 de la Ley alemana de Telemedios (TMG).",
-      tmgHeading: "Datos conforme al artículo 5 TMG",
+      metaDescription: "Aviso legal de Interlexico UG (haftungsbeschränkt), Olching: identificación del proveedor conforme al artículo 5 de la Ley alemana de Servicios Digitales (DDG).",
+      tmgHeading: "Datos conforme al artículo 5 DDG",
       firmennameLabel: "Nombre de la empresa / forma jurídica",
       strasseLabel: "Calle y número",
       plzOrtLabel: "Código postal y localidad",

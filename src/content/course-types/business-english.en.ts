@@ -7,7 +7,7 @@ export const businessEnglish: CourseType = {
   shortName: "Business English",
   status: "aktiv",
   tagline: "Negotiate, present, and communicate with confidence — in English",
-  heroTitle: "Business English for leaders and teams",
+  heroTitle: "Business English training for companies",
   heroSubtitle:
     "No off-the-shelf language course. Training built around your industry, your meetings, and your goals.",
   intro:
@@ -94,8 +94,8 @@ export const businessEnglish: CourseType = {
   // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
-    title: "Business English Training for Companies | Interlexico",
+    title: "Business English Training for Companies: On-site & Online | Interlexico",
     description:
-      "Business English training for executives and teams across the DACH region. Tailored, industry-specific, with measurable progress.",
+      "Business English training for companies: meetings, negotiations, presentations. One-to-one, group or class – on-site in the Munich area or online across DACH.",
   },
 };

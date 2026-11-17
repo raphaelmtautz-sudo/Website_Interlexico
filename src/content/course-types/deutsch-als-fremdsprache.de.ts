@@ -6,7 +6,7 @@ export const deutschAlsFremdsprache: CourseType = {
   shortName: "Deutsch",
   status: "aktiv",
   tagline: "Ankommen in der Unternehmenssprache",
-  heroTitle: "Deutsch als Fremdsprache für internationale Teams",
+  heroTitle: "Deutsch für Unternehmen: Deutschkurse für internationale Mitarbeitende",
   heroSubtitle:
     "Damit internationale Fachkräfte im deutschsprachigen Arbeitsumfeld schnell ankommen — fachlich sicher, kulturell souverän, sofort einsatzbereit.",
   intro:
@@ -93,8 +93,8 @@ export const deutschAlsFremdsprache: CourseType = {
   // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
-    title: "Deutsch als Fremdsprache für Unternehmen | Interlexico",
+    title: "Deutsch für Unternehmen: Deutschkurse für Mitarbeitende | Interlexico",
     description:
-      "Deutsch-als-Fremdsprache-Training für internationale Fach- und Führungskräfte in der DACH-Region. Praxisnah, integrationsstark, mit messbarem Fortschritt.",
+      "Deutschkurse für internationale Mitarbeitende: berufsbezogen von A1 bis C2, als Einzel-, Gruppen- oder Klassentraining – vor Ort im Raum München oder online.",
   },
 };

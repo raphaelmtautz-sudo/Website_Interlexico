@@ -7,7 +7,7 @@ export const businessEnglish: CourseType = {
   shortName: "Inglés de negocios",
   status: "aktiv",
   tagline: "Negocie, presente y comunique con seguridad — en inglés",
-  heroTitle: "Inglés de negocios para directivos y equipos",
+  heroTitle: "Formación de Business English para empresas",
   heroSubtitle:
     "Nada de cursos de idiomas estándar. Formación diseñada según su sector, sus reuniones y sus objetivos.",
   intro:
@@ -94,8 +94,8 @@ export const businessEnglish: CourseType = {
   // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
-    title: "Formación en Inglés de Negocios para Empresas | Interlexico",
+    title: "Business English para empresas: presencial y online | Interlexico",
     description:
-      "Formación en inglés de negocios para directivos y equipos de la región DACH. Individual, especializada, con progreso medible.",
+      "Formación de inglés de negocios para empresas: reuniones, negociaciones, presentaciones. Individual, en grupo o en clase – en el área de Múnich u online.",
   },
 };

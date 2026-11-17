@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { getCourseTypes, getCourseType } from "@/lib/cms";
+import { getFormatDetail } from "@/content/course-details";
 import { CourseFormatDetail } from "@/components/course/course-format-detail";
-import { CourseJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { CourseJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, locales, lh, type Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
@@ -33,11 +34,13 @@ export async function generateMetadata({
   if (!hasLocale(lang)) return {};
   const result = await getCourseFormat(lang, kurstyp, format);
   if (!result) return {};
+  const detail = getFormatDetail(lang, result.format.kind, result.course.name, result.course.shortName);
   return pageMetadata({
     lang,
     path: `/kurse/${result.course.slug}/${result.format.slug}`,
-    title: `${result.format.name} — ${result.course.name}`,
-    description: result.format.description,
+    title: detail.seoTitle,
+    absoluteTitle: true,
+    description: detail.seoDescription,
   });
 }
 
@@ -52,10 +55,12 @@ export default async function CourseFormatPage({
   if (!result) notFound();
   const dict = getDictionary(lang);
   const { course, format: fmt } = result;
+  const detail = getFormatDetail(lang, fmt.kind, course.name, course.shortName);
 
   return (
     <>
-      <CourseFormatDetail course={course} format={fmt} lang={lang} dict={dict} />
+      <CourseFormatDetail course={course} format={fmt} detail={detail} lang={lang} dict={dict} />
+      <FaqJsonLd items={detail.faq} />
       <CourseJsonLd course={course} lang={lang} />
       <BreadcrumbJsonLd
         items={[

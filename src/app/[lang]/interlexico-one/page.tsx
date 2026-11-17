@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getPageSeo } from "@/content/page-seo";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return pageMetadata({ lang, path: "/interlexico-one", title: `${dict.nav.interlexicoOne} — ${dict.interlexicoOne.title}`, absoluteTitle: true, description: dict.interlexicoOne.intro });
+  return pageMetadata({ lang, path: "/interlexico-one", title: getPageSeo(lang, "interlexicoOne").title, absoluteTitle: true, description: getPageSeo(lang, "interlexicoOne").description });
 }
 
 export default async function InterlexicoOnePage({ params }: { params: Promise<{ lang: string }> }) {

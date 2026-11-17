@@ -19,7 +19,7 @@ const titles = {
 
 const descriptions = {
   de: "Allgemeine Geschäftsbedingungen für Trainingsleistungen von Interlexico.",
-  en: "Terms and conditions for training services provided by Interlexico.",
+  en: "Terms and conditions for language training services provided by Interlexico to businesses (B2B).",
   es: "Términos y condiciones para los servicios de formación de Interlexico.",
 } as const;
 

@@ -7,7 +7,7 @@ export const businessEnglish: CourseType = {
   shortName: "Business English",
   status: "aktiv",
   tagline: "Sicher verhandeln, präsentieren und kommunizieren — auf Englisch",
-  heroTitle: "Business English für Führungskräfte und Teams",
+  heroTitle: "Business English Training für Unternehmen",
   heroSubtitle:
     "Kein Sprachkurs von der Stange. Trainings, die sich an Ihrer Branche, Ihren Meetings und Ihren Zielen orientieren.",
   intro:
@@ -94,8 +94,8 @@ export const businessEnglish: CourseType = {
   // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
-    title: "Business English Training für Unternehmen | Interlexico",
+    title: "Business English für Unternehmen: Training vor Ort & online | Interlexico",
     description:
-      "Business English Training für Führungskräfte und Teams in der DACH-Region. Individuell, fachbezogen, mit messbarem Fortschritt.",
+      "Business English Training für Unternehmen: Meetings, Verhandlungen, Präsentationen. Einzel, Gruppe oder Klasse – vor Ort im Raum München oder online in DACH.",
   },
 };

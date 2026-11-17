@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getPageSeo, getCompanyFacts } from "@/content/page-seo";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return pageMetadata({ lang, path: "/ueber-uns", title: dict.nav.ueberUns, description: dict.ueberUns.intro });
+  return pageMetadata({ lang, path: "/ueber-uns", title: getPageSeo(lang, "ueberUns").title, description: getPageSeo(lang, "ueberUns").description });
 }
 
 export default async function UeberUnsPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -42,6 +43,20 @@ export default async function UeberUnsPage({ params }: { params: Promise<{ lang:
           </p>
         </div>
       </Section>
+
+      <section id="in-kuerze" className="border-t border-line">
+        <Section>
+          <h2 className="mb-8 font-display text-3xl text-paper">{getCompanyFacts(lang).title}</h2>
+          <dl className="grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {getCompanyFacts(lang).items.map((f) => (
+              <div key={f.label} className="bg-ink-raised p-5">
+                <dt className="font-sans text-xs uppercase tracking-[0.12em] text-gold mb-2">{f.label}</dt>
+                <dd className="font-sans text-sm leading-relaxed text-paper">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Section>
+      </section>
 
       <Reveal as="section" className="border-t border-line">
         <Section>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getPageSeo } from "@/content/page-seo";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return pageMetadata({ lang, path: "/karriere", title: dict.nav.karriere, description: dict.karriere.text });
+  return pageMetadata({ lang, path: "/karriere", title: getPageSeo(lang, "karriere").title, description: getPageSeo(lang, "karriere").description });
 }
 
 export default async function KarrierePage({ params }: { params: Promise<{ lang: string }> }) {

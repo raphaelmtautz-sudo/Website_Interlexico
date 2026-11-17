@@ -220,10 +220,11 @@ export const de = {
   },
   kurse: {
     eyebrow: "Trainingsangebot",
-    title: "Kursübersicht",
-    metaTitle: "Kurse: Business English & Deutsch als Fremdsprache",
+    title: "Sprachkurse für Unternehmen",
+    intro: "Interlexico bietet zwei Sprachtrainings für Unternehmen an: Business English für Teams mit internationalem Kontakt und Deutsch für internationale Mitarbeitende. Beide gibt es als Einzeltraining, als Gruppentraining mit höchstens sieben Personen und als Klassentraining für ganze Abteilungen – vor Ort im Großraum München, online in ganz DACH oder hybrid. Jede Person wird vorab eingestuft; Preise erhalten Sie als individuelles Angebot.",
+    metaTitle: "Sprachkurse für Unternehmen: Business English & Deutsch",
     metaDescription:
-      "Alle Sprachtrainings für Unternehmen im Überblick: Business English und Deutsch als Fremdsprache, in Einzel-, Gruppen- oder Klassentraining — individuell eingestuft und branchenspezifisch.",
+      "Sprachkurse für Unternehmen im Überblick: Business English und Deutsch für internationale Mitarbeitende – Einzel, Gruppe oder Klasse, vor Ort im Raum München oder online.",
     verfuegbar: "Verfügbar",
     baldVerfuegbar: "Bald verfügbar",
     detailsAnsehen: "Details ansehen",
@@ -548,8 +549,8 @@ export const de = {
       "Diese Übersetzung dient der Information. Rechtlich verbindlich ist ausschließlich die deutsche Fassung.",
     impressum: {
       title: "Impressum",
-      metaDescription: "Anbieterkennzeichnung gemäß § 5 TMG.",
-      tmgHeading: "Angaben gemäß § 5 TMG",
+      metaDescription: "Impressum der Interlexico UG (haftungsbeschränkt), Olching: Anbieterkennzeichnung gemäß § 5 DDG, Kontakt, Registereintrag und USt-ID.",
+      tmgHeading: "Angaben gemäß § 5 DDG",
       firmennameLabel: "Firmenname / Rechtsform",
       strasseLabel: "Straße und Hausnummer",
       plzOrtLabel: "PLZ und Ort",

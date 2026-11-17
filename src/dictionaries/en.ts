@@ -222,10 +222,11 @@ export const en: Dictionary = {
   },
   kurse: {
     eyebrow: "Programs",
-    title: "Course overview",
-    metaTitle: "Courses: Business English & German as a Foreign Language",
+    title: "Language courses for companies",
+    intro: "Interlexico offers two language training programmes for companies: Business English for teams with international contacts and German for international staff. Both are available as one-to-one training, group training with no more than seven people and class training for whole departments – on-site in the Munich area, online across DACH or hybrid. Everyone is assessed beforehand; pricing comes as an individual proposal.",
+    metaTitle: "Language Courses for Companies: Business English & German",
     metaDescription:
-      "All corporate language training programs at a glance: Business English and German as a Foreign Language, as one-on-one, group, or class training — individually assessed and industry-specific.",
+      "Language courses for companies at a glance: Business English and German for international staff – one-to-one, group or class, on-site in the Munich area or online.",
     verfuegbar: "Available",
     baldVerfuegbar: "Coming soon",
     detailsAnsehen: "View details",
@@ -550,8 +551,8 @@ export const en: Dictionary = {
       "This translation is provided for information only. The German version is the sole legally binding version.",
     impressum: {
       title: "Legal Notice",
-      metaDescription: "Provider identification pursuant to Section 5 of the German Telemedia Act (TMG).",
-      tmgHeading: "Information pursuant to Section 5 TMG",
+      metaDescription: "Legal notice of Interlexico UG (haftungsbeschränkt), Olching: provider identification pursuant to Section 5 of the German Digital Services Act (DDG).",
+      tmgHeading: "Information pursuant to Section 5 DDG",
       firmennameLabel: "Company name / legal form",
       strasseLabel: "Street and house number",
       plzOrtLabel: "Postal code and city",

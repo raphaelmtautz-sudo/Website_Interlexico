@@ -31,9 +31,10 @@ export default async function KursePage({ params }: { params: Promise<{ lang: st
     <Section className="pt-24 lg:pt-32">
       <div className="animate-rise">
         <Eyebrow>{dict.kurse.eyebrow}</Eyebrow>
-        <h1 className="kinetic font-display text-5xl mb-16 text-balance sm:text-6xl lg:text-7xl">
+        <h1 className="kinetic font-display text-5xl mb-8 text-balance sm:text-6xl lg:text-7xl">
           {dict.kurse.title}
         </h1>
+        <p className="mb-16 max-w-3xl font-sans text-lg leading-relaxed text-paper-dim">{dict.kurse.intro}</p>
       </div>
       <div className="grid gap-px bg-line md:grid-cols-2">
         {courseTypes.map((course, i) => (

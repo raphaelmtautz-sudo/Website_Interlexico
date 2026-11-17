@@ -83,7 +83,11 @@ export function OrganizationJsonLd({
         email: SITE.email,
         telephone: phone,
         description: SITE.description,
-        areaServed: SITE.areaServed.map((c) => ({ "@type": "Country", identifier: c, name: COUNTRY_NAMES[c] ?? c })),
+        areaServed: [
+          { "@type": "City", name: "München" },
+          { "@type": "AdministrativeArea", name: "Oberbayern" },
+          ...SITE.areaServed.map((c) => ({ "@type": "Country", identifier: c, name: COUNTRY_NAMES[c] ?? c })),
+        ],
         knowsLanguage: ["de", "en", "es"],
         // Verknüpft die Organisation mit ihren Kursen — hilft Suchmaschinen und
         // KI-Systemen, "Interlexico" eindeutig als Anbieter dieser Trainings einzuordnen.
@@ -102,8 +106,12 @@ export function OrganizationJsonLd({
           "Corporate Language Training",
           "Englisch für Verhandlungen und Präsentationen",
           "Fachsprache für Branchen",
+          "Deutschkurse für internationale Mitarbeitende",
+          "Executive Language Coaching",
+          "Interkulturelle Kommunikation",
+          "Firmensprachkurse München",
         ],
-        slogan: "Corporate Language Training · Englisch & Deutsch",
+        slogan: "Sprachakademie für Unternehmen · Business English & Deutsch",
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "sales",
@@ -169,6 +177,7 @@ export function CourseJsonLd({ course, lang }: { course: CourseType; lang: Local
         inLanguage: taught?.code ?? bcp47[lang],
         ...(taught ? { teaches: taught.teaches } : {}),
         audience: { "@type": "BusinessAudience", audienceType: course.audience.join("; ") },
+        educationalLevel: "A1–C2 (CEFR)",
         // Bewusst ohne Preis (keine Preise auf der Website) — "Paid" + Anfrage-URL.
         offers: {
           "@type": "Offer",

@@ -5,7 +5,7 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
  * Cookieloser, first-party Analytics-Endpunkt (Privacy by Design).
  *
  * - Setzt KEINE Cookies und speichert KEINE IP-Adresse oder personenbezogenen
- *   Merkmale → nach DSGVO/TTDSG ohne Einwilligung/Banner zulässig.
+ *   Merkmale → nach DSGVO/TDDDG ohne Einwilligung/Banner zulässig.
  * - Respektiert Do-Not-Track (DNT) und Global Privacy Control (Sec-GPC):
  *   signalisiert der Client ein Opt-out, wird nichts verarbeitet.
  *

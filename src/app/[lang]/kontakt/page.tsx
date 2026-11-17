@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { getPageSeo } from "@/content/page-seo";
 import { Suspense } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -23,7 +24,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return pageMetadata({ lang, path: "/kontakt", title: dict.nav.kontakt, description: dict.kontakt.text });
+  return pageMetadata({ lang, path: "/kontakt", title: getPageSeo(lang, "kontakt").title, description: getPageSeo(lang, "kontakt").description });
 }
 
 const SOCIAL_LABEL: Record<string, string> = {

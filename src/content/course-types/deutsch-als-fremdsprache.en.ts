@@ -6,7 +6,7 @@ export const deutschAlsFremdsprache: CourseType = {
   shortName: "German",
   status: "aktiv",
   tagline: "Settling into the language of business",
-  heroTitle: "German as a Foreign Language for international teams",
+  heroTitle: "German for companies: courses for international staff",
   heroSubtitle:
     "Helping international professionals settle quickly into German-speaking workplaces — professionally confident, culturally fluent, ready from day one.",
   intro:
@@ -93,8 +93,8 @@ export const deutschAlsFremdsprache: CourseType = {
   // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
-    title: "German as a Foreign Language for Companies | Interlexico",
+    title: "German Courses for Companies and International Staff | Interlexico",
     description:
-      "German as a Foreign Language training for international specialists and executives across the DACH region. Practice-oriented, integration-focused, with measurable progress.",
+      "Job-focused German courses for international staff from A1 to C2 – one-to-one, group or class training, on-site in the Munich area or online.",
   },
 };

@@ -117,7 +117,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const t = PAGE[lang];
-  return pageMetadata({ lang, path: "/konfigurator", title: t.metaTitle, description: t.metaDescription });
+  return pageMetadata({ lang, path: "/konfigurator", title: t.metaTitle, absoluteTitle: true, description: t.metaDescription });
 }
 
 export default async function KonfiguratorPage({ params }: { params: Promise<{ lang: string }> }) {

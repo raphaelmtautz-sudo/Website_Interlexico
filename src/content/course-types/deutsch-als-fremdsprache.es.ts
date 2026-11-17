@@ -6,7 +6,7 @@ export const deutschAlsFremdsprache: CourseType = {
   shortName: "Alemán",
   status: "aktiv",
   tagline: "Integrarse en el idioma de la empresa",
-  heroTitle: "Alemán como lengua extranjera para equipos internacionales",
+  heroTitle: "Alemán para empresas: cursos para la plantilla internacional",
   heroSubtitle:
     "Para que los profesionales internacionales se integren rápidamente en el entorno laboral de habla alemana — con seguridad profesional, soltura cultural y listos desde el primer día.",
   intro:
@@ -93,8 +93,8 @@ export const deutschAlsFremdsprache: CourseType = {
   // Keine erfundenen Kundenstimmen — echte kommen über das CMS (course-types).
   testimonials: [],
   seo: {
-    title: "Alemán como Lengua Extranjera para Empresas | Interlexico",
+    title: "Alemán para empresas: cursos para su plantilla | Interlexico",
     description:
-      "Formación en alemán como lengua extranjera para especialistas y directivos internacionales de la región DACH. Orientada a la práctica, con progreso medible.",
+      "Cursos de alemán orientados al trabajo para la plantilla internacional, de A1 a C2 – individual, en grupo o en clase, en el área de Múnich u online.",
   },
 };
