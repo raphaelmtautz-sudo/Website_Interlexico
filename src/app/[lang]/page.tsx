@@ -55,6 +55,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     { id: "konfigurator", label: dict.home.lanes.konfigurator },
     { id: "angebot", label: dict.home.lanes.angebot },
     { id: "ablauf", label: dict.home.lanes.ablauf },
+    { id: "portal", label: dict.home.lanes.one },
     ...(testimonials.length ? [{ id: "stimmen", label: dict.home.lanes.stimmen }] : []),
     { id: "nachhaltigkeit", label: dict.home.lanes.nachhaltigkeit },
     { id: "faq", label: dict.home.lanes.faq },
@@ -99,10 +100,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
           {/* Kompakte Vertrauens-Zeile: ehrliche, bereits belegte Signale statt Kundenlogos. */}
           <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-6 font-sans text-xs uppercase tracking-[0.1em] text-paper-dim">
-            {dict.home.benefits.slice(0, 3).map((b) => (
-              <li key={b.title} className="flex items-center gap-2">
+            {dict.home.heroTrust.map((label) => (
+              <li key={label} className="flex items-center gap-2">
                 <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 bg-gold" />
-                {b.title}
+                {label}
               </li>
             ))}
             <li className="flex items-center gap-2">
@@ -116,10 +117,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <Reveal as="section" id="warum" className="border-t border-line">
         <Section>
           <Eyebrow>{dict.home.warumEyebrow}</Eyebrow>
+          <h2 className="mb-12 max-w-2xl font-display text-4xl text-paper text-balance">
+            {dict.home.warumTitle}
+          </h2>
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             {dict.home.benefits.map((b) => (
               <div key={b.title} className="border-t border-gold-dim pt-6">
-                <h2 className="font-display text-2xl text-paper mb-3">{b.title}</h2>
+                <h3 className="font-display text-2xl text-paper mb-3">{b.title}</h3>
                 <p className="font-sans text-sm leading-relaxed text-paper-dim">
                   {b.description}
                 </p>
@@ -215,6 +219,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <Reveal as="section" id="ablauf" variant="left" className="border-t border-line">
         <Section>
           <Eyebrow>{dict.home.ablaufEyebrow}</Eyebrow>
+          {/* Überschrift für Screenreader/Gliederung — sichtbar ist die Eyebrow-Zeile. */}
+          <h2 className="sr-only">{dict.home.ablaufEyebrow}</h2>
           <div className="grid gap-10 md:grid-cols-4">
             {dict.home.process.map((p) => (
               <div key={p.step}>
@@ -227,6 +233,32 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 </p>
               </div>
             ))}
+          </div>
+        </Section>
+      </Reveal>
+
+      <Reveal as="section" id="portal" className="border-t border-line bg-brand/5">
+        <Section>
+          <Eyebrow>{dict.home.oneEyebrow}</Eyebrow>
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div className="max-w-xl">
+              <h2 className="font-display text-4xl text-paper mb-4 text-balance">{dict.home.oneTitle}</h2>
+              <p className="font-sans leading-relaxed text-paper-dim mb-6">{dict.home.oneText}</p>
+              <Link
+                href={lh(lang, "/interlexico-one")}
+                className="link-underline font-sans text-sm uppercase tracking-[0.08em] text-brand-text"
+              >
+                {dict.home.oneLink}
+              </Link>
+            </div>
+            <ul className="grid gap-px bg-line sm:grid-cols-2">
+              {dict.home.onePoints.map((pt) => (
+                <li key={pt.title} className="bg-ink-raised p-6">
+                  <h3 className="font-sans text-base uppercase tracking-[0.06em] text-paper mb-2">{pt.title}</h3>
+                  <p className="font-sans text-sm leading-relaxed text-paper-dim">{pt.description}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </Section>
       </Reveal>
