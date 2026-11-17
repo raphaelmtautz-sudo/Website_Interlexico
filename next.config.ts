@@ -40,6 +40,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Kein "X-Powered-By: Next.js" — verrät unnötig den Software-Stack.
+  poweredByHeader: false,
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cms.interlexico.one" }],
   },

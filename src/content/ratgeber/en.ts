@@ -12,7 +12,7 @@ export const labels: GuideLabels = {
   faq: "Frequently asked questions",
   related: "Read more",
   cta: "Request a non-binding quote",
-  ctaText: "Briefly describe your team, goals and timeline — you usually receive a concrete proposal within one business day.",
+  ctaText: "Briefly describe your team, goals and timeline — you usually receive a concrete proposal within two business days.",
   read: "Read article",
   author: "Interlexico editorial team",
 };
@@ -84,7 +84,7 @@ export const guides: Guide[] = [
       {
         question: "Why do many providers not publish fixed prices?",
         answer:
-          "Because format, group size, scope, tailoring and delivery change the price considerably. Reliable quotes follow a short needs check; at Interlexico you usually receive a non-binding quote within one business day.",
+          "Because format, group size, scope, tailoring and delivery change the price considerably. Reliable quotes follow a short needs check; at Interlexico you usually receive a non-binding quote within two business days.",
       },
       {
         question: "Is group training always cheaper than one-to-one?",
@@ -394,7 +394,7 @@ export const guides: Guide[] = [
         heading: "How to compare",
         paragraphs: [
           "Request two or three quotes based on the same brief: team size, starting level (if known), goals, preferred formats and timeline. Convert prices to participant and learning hour and check what is included. A short consultation also quickly shows whether a provider really understands your needs.",
-          "Interlexico usually answers enquiries within one business day with a concrete proposal; placement, scheduling, trainer matching and reporting run via the Interlexico ONE platform.",
+          "Interlexico usually answers enquiries within two business days with a concrete proposal; placement, scheduling, trainer matching and reporting run via the Interlexico ONE platform.",
         ],
       },
     ],

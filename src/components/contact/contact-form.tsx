@@ -10,6 +10,8 @@ import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 import { getContactFormText } from "@/lib/dynamic-strings";
 import { track } from "@/lib/track";
+import { buildPlan, fromContactParams } from "@/lib/configurator-plan";
+import { configuratorSummaryText, getConfiguratorContent } from "@/content/configurator";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024; // 5 MB
@@ -77,8 +79,35 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     // Link "Jetzt anfragen" aus der Gutschein-Mail: Code landet in der Nachricht und so beim Vertrieb
     const gutschein = (params.get("gutschein") ?? "").toUpperCase();
     if (/^IX-2UE-[A-Z0-9]{6}$/.test(gutschein)) parts.unshift(dict.voucher.contactPrefill.replace("{code}", gutschein));
+    // Übergabe aus dem Trainings-Konfigurator: komplette Auswahl als Nachricht
+    // vorausfüllen (Vertrieb sieht alles), Niveau/Format in die Felder übernehmen.
+    const cfg = fromContactParams((k) => params.get(k));
+    if (cfg) {
+      const plan = buildPlan({
+        courseSlug: cfg.courseSlug ?? "",
+        audience: cfg.audience ?? "",
+        industry: cfg.industry ?? "",
+        participants: cfg.participants ?? 1,
+        level: cfg.level ?? "",
+        goals: cfg.goals ?? [],
+        delivery: cfg.delivery ?? "",
+        scope: cfg.scope ?? "empfehlung",
+      });
+      const summary = configuratorSummaryText(lang, cfg, plan, getConfiguratorContent(lang).format.name(plan));
+      const niveau = cfg.level && /^[ABC][12]$/.test(cfg.level) ? cfg.level : "";
+      const format = params.get("format") === "einzel" ? "einzel" : "gruppe";
+      return {
+        ...initial,
+        topic,
+        participants: teilnehmer,
+        niveau,
+        format,
+        message: [parts.join(" "), summary].filter(Boolean).join("\n\n"),
+      };
+    }
     return { ...initial, topic, participants: teilnehmer, message: parts.join(" ") };
   });
+  const fromConfigurator = params.get("quelle") === "konfigurator";
   const [status, setStatus] = useState<Status>("idle");
   const [leadRef, setLeadRef] = useState<string | null>(null);
   const [idempotencyKey] = useState(makeIdempotencyKey);
@@ -169,7 +198,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
     setStatus("sending");
     try {
       const body = new FormData();
-      body.set("kind", "kontakt");
+      body.set("kind", fromConfigurator ? "konfigurator" : "kontakt");
       body.set("topic", form.topic);
       body.set("branches", form.branches.join(", "));
       body.set("name", `${form.firstName} ${form.lastName}`.trim());
@@ -198,7 +227,7 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
       const data = await res.json().catch(() => ({ ok: false }));
       const ok = res.ok && data.ok;
       if (ok) {
-        track("form_submit", { form: "kontakt", topic: form.topic, transferredToOne: String(Boolean(data.transferredToOne)) });
+        track("form_submit", { form: "kontakt", source: fromConfigurator ? "konfigurator" : "direkt", topic: form.topic, transferredToOne: String(Boolean(data.transferredToOne)) });
         setLeadRef(typeof data.leadId === "string" ? data.leadId : null);
         // Marketing-Opt-In läuft unabhängig von der Anfrage selbst (eigener
         // Double-Opt-In) — ein Fehlschlag hier darf die erfolgreiche Anfrage

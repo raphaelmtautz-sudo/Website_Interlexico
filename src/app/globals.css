@@ -428,3 +428,16 @@ html[data-voucher-sheet] [data-sticky-cta],
 html[data-voucher-sheet] [data-distraction="chat"] {
   display: none;
 }
+
+/* PDF-/Druckfassung der Konfigurator-Empfehlung (siehe configurator.tsx: printResult).
+   Das Ergebnis wird in ein eigenes Fenster kopiert und dort gedruckt. */
+.il-print-only { display: none; }
+body.il-print-doc { background: #fff; padding: 0 4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body.il-print-doc .il-print-only { display: block; }
+body.il-print-doc .il-no-print { display: none !important; }
+body.il-print-doc .il-print-area { border: 0; }
+body.il-print-doc .il-print-full { grid-column: 1 / -1; }
+@media print {
+  @page { margin: 14mm; }
+  body.il-print-doc .il-print-area section, body.il-print-doc .il-print-area li { break-inside: avoid; }
+}

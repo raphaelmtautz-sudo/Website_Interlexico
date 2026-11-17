@@ -96,22 +96,6 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
       </div>
 
       <div className="space-y-3">
-        <LegalH2>{t.odrHeading}</LegalH2>
-        <LegalP>
-          {t.odrText}{" "}
-          <a
-            href="https://ec.europa.eu/consumers/odr/"
-            className="link-underline text-gold"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            https://ec.europa.eu/consumers/odr/
-          </a>
-          . {t.odrSuffix}
-        </LegalP>
-      </div>
-
-      <div className="space-y-3">
         <LegalH2>{t.streitbeilegungHeading}</LegalH2>
         <LegalP>
           {t.streitbeilegungPre}{" "}

@@ -30,9 +30,12 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   // Nur echte, freigegebene Kundenstimmen aus dem CMS. Ohne sie entfällt der
   // Abschnitt: erfundene Beispielzitate wirken auf Besucher echt (UWG-Risiko,
   // schwächt Vertrauenssignale für Google). Die Beispiele bleiben im Dictionary.
+  // Redaktionell eingetippte Trennzeichen am Rand ("— Geschäftsführung") entfernen,
+  // sonst entsteht beim Zusammensetzen ein doppelter Gedankenstrich.
+  const tidy = (v?: string | null) => (v ?? "").replace(/^[\s—–\-,]+|[\s—–\-,]+$/g, "");
   const testimonials = cmsTestimonials.map((t) => ({
     quote: t.quote,
-    role: [t.personName, [t.personRole, t.companyName].filter(Boolean).join(", ")]
+    role: [tidy(t.personName), [tidy(t.personRole), tidy(t.companyName)].filter(Boolean).join(", ")]
       .filter(Boolean)
       .join(" — "),
   }));

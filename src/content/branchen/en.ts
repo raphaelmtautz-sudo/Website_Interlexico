@@ -11,7 +11,7 @@ export const labels: IndustryLabels = {
   formats: "Suitable formats",
   faq: "Frequently asked questions",
   cta: "Request training for your team",
-  ctaText: "Briefly describe your team, goals and timeline — you usually receive a non-binding quote within one business day.",
+  ctaText: "Briefly describe your team, goals and timeline — you usually receive a non-binding quote within two business days.",
   more: "Other industries",
   course: "Go to the Business English course",
   daf: "German as a Foreign Language is offered across all industries and roles.",

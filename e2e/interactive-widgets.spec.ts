@@ -8,8 +8,9 @@ test.describe("Testimonial-Karussell", () => {
     const count = await tabs.count();
     expect(count).toBeGreaterThan(1);
 
-    await tabs.nth(2).click();
-    await expect(tabs.nth(2)).toHaveAttribute("aria-selected", "true");
+    // Letzten Dot wählen — die Anzahl hängt von den veröffentlichten CMS-Stimmen ab.
+    await tabs.nth(count - 1).click();
+    await expect(tabs.nth(count - 1)).toHaveAttribute("aria-selected", "true");
     await expect(tabs.nth(0)).toHaveAttribute("aria-selected", "false");
   });
 });

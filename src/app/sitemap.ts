@@ -31,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/ratgeber", priority: 0.7, changeFrequency: "weekly" as const },
     { path: "/interlexico-one", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/einstufung", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/konfigurator", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/ueber-uns", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/nachhaltigkeit", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/karriere", priority: 0.5, changeFrequency: "monthly" as const },

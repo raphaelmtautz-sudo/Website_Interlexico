@@ -17,13 +17,18 @@ const redis = REDIS_URL
   ? new Redis(REDIS_URL, {
       lazyConnect: true,
       maxRetriesPerRequest: 1,
-      retryStrategy: () => null, // kein endloses Reconnect-Spamming, Fallback übernimmt
+      // Wiederverbinden mit wachsendem Abstand (max. 30 s) — vorher blieb der
+      // Limiter nach dem ersten Redis-Fehler bis zum Neustart im In-Memory-Modus.
+      retryStrategy: (times) => Math.min(times * 1000, 30_000),
     })
   : null;
 
 let redisAvailable = Boolean(redis);
 redis?.on("error", () => {
   redisAvailable = false;
+});
+redis?.on("ready", () => {
+  redisAvailable = true;
 });
 redis?.connect().catch(() => {
   redisAvailable = false;

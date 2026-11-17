@@ -15,7 +15,12 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!hasLocale(lang)) return {};
   const dict = getDictionary(lang);
-  return pageMetadata({ lang, path: "/testen", title: dict.testen.metaTitle, description: dict.testen.text });
+  // Test des Kundenportals (Software), kein Angebot der Akademie: nicht in den
+  // Suchindex, damit die Positionierung als Sprachakademie nicht verwässert.
+  return {
+    ...pageMetadata({ lang, path: "/testen", title: dict.testen.metaTitle, description: dict.testen.text }),
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function TestenPage({ params }: { params: Promise<{ lang: string }> }) {

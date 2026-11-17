@@ -14,7 +14,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "Was kostet ein Business-English-Training für Unternehmen?",
         answer:
-          "Interlexico kalkuliert jedes Business-English-Training individuell nach Format, Umfang und Teamgröße. Nach einer kurzen Anfrage erhalten Sie in der Regel innerhalb eines Werktages ein unverbindliches Angebot.",
+          "Interlexico kalkuliert jedes Business-English-Training individuell nach Format, Umfang und Teamgröße. Nach einer kurzen Anfrage erhalten Sie in der Regel innerhalb von zwei Werktagen ein unverbindliches Angebot.",
       },
       {
         question: "Welche Formate gibt es für Business English?",
@@ -51,7 +51,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "Was kostet ein Deutschkurs für Mitarbeitende?",
         answer:
-          "Interlexico kalkuliert jedes Deutsch-als-Fremdsprache-Training individuell nach Format, Umfang und Teamgröße. Nach einer kurzen Anfrage erhalten Sie in der Regel innerhalb eines Werktages ein unverbindliches Angebot.",
+          "Interlexico kalkuliert jedes Deutsch-als-Fremdsprache-Training individuell nach Format, Umfang und Teamgröße. Nach einer kurzen Anfrage erhalten Sie in der Regel innerhalb von zwei Werktagen ein unverbindliches Angebot.",
       },
       {
         question: "Welche Deutsch-Niveaus werden unterrichtet?",
@@ -90,7 +90,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "How much does Business English training for companies cost?",
         answer:
-          "Interlexico prices every Business English programme individually, based on format, scope and team size. After a short enquiry you usually receive a non-binding quote within one business day.",
+          "Interlexico prices every Business English programme individually, based on format, scope and team size. After a short enquiry you usually receive a non-binding quote within two business days.",
       },
       {
         question: "Which Business English formats are available?",
@@ -127,7 +127,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "How much does a German course for employees cost?",
         answer:
-          "Interlexico prices every German as a Foreign Language programme individually, based on format, scope and team size. After a short enquiry you usually receive a non-binding quote within one business day.",
+          "Interlexico prices every German as a Foreign Language programme individually, based on format, scope and team size. After a short enquiry you usually receive a non-binding quote within two business days.",
       },
       {
         question: "Which German levels are taught?",
@@ -166,7 +166,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "¿Cuánto cuesta una formación de inglés de negocios para empresas?",
         answer:
-          "Interlexico calcula cada formación de Business English de forma individual según formato, alcance y tamaño del equipo. Tras una breve solicitud, normalmente recibe una oferta sin compromiso en un día laborable.",
+          "Interlexico calcula cada formación de Business English de forma individual según formato, alcance y tamaño del equipo. Tras una breve solicitud, normalmente recibe una oferta sin compromiso en dos días laborables.",
       },
       {
         question: "¿Qué formatos de Business English hay?",
@@ -203,7 +203,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "¿Cuánto cuesta un curso de alemán para empleados?",
         answer:
-          "Interlexico calcula cada formación de alemán como lengua extranjera de forma individual según formato, alcance y tamaño del equipo. Tras una breve solicitud, normalmente recibe una oferta sin compromiso en un día laborable.",
+          "Interlexico calcula cada formación de alemán como lengua extranjera de forma individual según formato, alcance y tamaño del equipo. Tras una breve solicitud, normalmente recibe una oferta sin compromiso en dos días laborables.",
       },
       {
         question: "¿Qué niveles de alemán se enseñan?",

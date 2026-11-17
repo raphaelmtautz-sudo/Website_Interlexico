@@ -11,7 +11,7 @@ export const labels: IndustryLabels = {
   formats: "Passende Formate",
   faq: "Häufige Fragen",
   cta: "Training für Ihr Team anfragen",
-  ctaText: "Schildern Sie kurz Team, Ziele und Zeitrahmen — Sie erhalten in der Regel innerhalb eines Werktages ein unverbindliches Angebot.",
+  ctaText: "Schildern Sie kurz Team, Ziele und Zeitrahmen — Sie erhalten in der Regel innerhalb von zwei Werktagen ein unverbindliches Angebot.",
   more: "Weitere Branchen",
   course: "Zum Business-English-Kurs",
   daf: "Deutsch als Fremdsprache bieten wir branchenübergreifend für jede Rolle an.",

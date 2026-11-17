@@ -11,7 +11,7 @@ export const labels: IndustryLabels = {
   formats: "Formatos adecuados",
   faq: "Preguntas frecuentes",
   cta: "Solicitar formación para su equipo",
-  ctaText: "Describa brevemente su equipo, objetivos y plazos: normalmente recibe una oferta sin compromiso en un día laborable.",
+  ctaText: "Describa brevemente su equipo, objetivos y plazos: normalmente recibe una oferta sin compromiso en dos días laborables.",
   more: "Otros sectores",
   course: "Ir al curso de Business English",
   daf: "El alemán como lengua extranjera se ofrece para todos los sectores y funciones.",

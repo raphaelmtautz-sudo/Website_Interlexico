@@ -12,7 +12,7 @@ export const labels: GuideLabels = {
   faq: "Preguntas frecuentes",
   related: "Seguir leyendo",
   cta: "Solicitar oferta sin compromiso",
-  ctaText: "Describa brevemente su equipo, objetivos y plazos: normalmente recibe una propuesta concreta en un día laborable.",
+  ctaText: "Describa brevemente su equipo, objetivos y plazos: normalmente recibe una propuesta concreta en dos días laborables.",
   read: "Leer artículo",
   author: "Redacción de Interlexico",
 };
@@ -84,7 +84,7 @@ export const guides: Guide[] = [
       {
         question: "¿Por qué muchos proveedores no publican precios fijos?",
         answer:
-          "Porque el formato, el tamaño del grupo, el alcance, la adaptación y la modalidad cambian mucho el precio. Las ofertas fiables surgen tras una breve consulta; en Interlexico normalmente recibe una oferta sin compromiso en un día laborable.",
+          "Porque el formato, el tamaño del grupo, el alcance, la adaptación y la modalidad cambian mucho el precio. Las ofertas fiables surgen tras una breve consulta; en Interlexico normalmente recibe una oferta sin compromiso en dos días laborables.",
       },
       {
         question: "¿La formación en grupo siempre es más barata que la individual?",
@@ -394,7 +394,7 @@ export const guides: Guide[] = [
         heading: "Cómo comparar",
         paragraphs: [
           "Pida dos o tres ofertas con la misma descripción: tamaño del equipo, nivel inicial (si se conoce), objetivos, formatos deseados y plazos. Convierta los precios a participante y hora de aprendizaje y compruebe qué incluyen. Una breve consulta muestra además rápidamente si un proveedor entiende de verdad sus necesidades.",
-          "Interlexico responde normalmente en un día laborable con una propuesta concreta; la evaluación, los horarios, la asignación de formadores y los informes se gestionan en la plataforma Interlexico ONE.",
+          "Interlexico responde normalmente en dos días laborables con una propuesta concreta; la evaluación, los horarios, la asignación de formadores y los informes se gestionan en la plataforma Interlexico ONE.",
         ],
       },
     ],

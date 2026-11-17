@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 
 test("Kontaktformular: zweistufiges Ausfüllen und erfolgreiches Absenden", async ({ page }) => {
+  // Nie echte Leads in ONE erzeugen: Anfrage-API im Test abfangen.
+  await page.route("**/api/inquiry", (route) =>
+    route.fulfill({ json: { ok: true, status: "stored", leadId: "e2e-test", transferredToOne: true } }),
+  );
   await page.goto("/de/kontakt");
 
   await page.getByLabel("Vorname").fill("Max");
@@ -8,6 +12,7 @@ test("Kontaktformular: zweistufiges Ausfüllen und erfolgreiches Absenden", asyn
   await page.getByLabel("E-Mail").fill("max.mustermann@example.com");
 
   await page.getByRole("button", { name: "Weiter" }).click();
+  await page.getByLabel("Ihre Nachricht").fill("Testanfrage aus dem E2E-Test.");
   await page.getByRole("button", { name: "Unverbindlich anfragen" }).click();
 
   await expect(page.getByText("Anfrage eingegangen.")).toBeVisible({ timeout: 15_000 });

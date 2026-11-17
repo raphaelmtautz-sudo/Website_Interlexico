@@ -12,7 +12,7 @@ export const labels: GuideLabels = {
   faq: "Häufige Fragen",
   related: "Weiterlesen",
   cta: "Unverbindliches Angebot anfragen",
-  ctaText: "Schildern Sie kurz Team, Ziele und Zeitrahmen — Sie erhalten in der Regel innerhalb eines Werktages einen konkreten Vorschlag.",
+  ctaText: "Schildern Sie kurz Team, Ziele und Zeitrahmen — Sie erhalten in der Regel innerhalb von zwei Werktagen einen konkreten Vorschlag.",
   read: "Artikel lesen",
   author: "Redaktion Interlexico",
 };
@@ -84,7 +84,7 @@ export const guides: Guide[] = [
       {
         question: "Warum nennen viele Anbieter keine festen Preise?",
         answer:
-          "Weil Format, Gruppengröße, Umfang, Anpassung und Durchführung den Preis stark verändern. Seriöse Angebote entstehen nach einer kurzen Bedarfsklärung; bei Interlexico erhalten Sie in der Regel innerhalb eines Werktages ein unverbindliches Angebot.",
+          "Weil Format, Gruppengröße, Umfang, Anpassung und Durchführung den Preis stark verändern. Seriöse Angebote entstehen nach einer kurzen Bedarfsklärung; bei Interlexico erhalten Sie in der Regel innerhalb von zwei Werktagen ein unverbindliches Angebot.",
       },
       {
         question: "Ist Gruppentraining immer günstiger als Einzelunterricht?",
@@ -395,7 +395,7 @@ export const guides: Guide[] = [
         heading: "So läuft der Vergleich ab",
         paragraphs: [
           "Holen Sie zwei bis drei Angebote auf Basis derselben Beschreibung ein: Teamgröße, Ausgangsniveau (falls bekannt), Ziele, gewünschte Formate und Zeitrahmen. Rechnen Sie die Preise auf Teilnehmer:in und Lernstunde um und prüfen Sie, welche Leistungen enthalten sind. Ein kurzes Beratungsgespräch zeigt außerdem schnell, ob ein Anbieter Ihren Bedarf wirklich versteht.",
-          "Interlexico beantwortet Anfragen in der Regel innerhalb eines Werktages mit einem konkreten Vorschlag; Einstufung, Termine, Trainerzuordnung und Reporting laufen über die Plattform Interlexico ONE.",
+          "Interlexico beantwortet Anfragen in der Regel innerhalb von zwei Werktagen mit einem konkreten Vorschlag; Einstufung, Termine, Trainerzuordnung und Reporting laufen über die Plattform Interlexico ONE.",
         ],
       },
     ],

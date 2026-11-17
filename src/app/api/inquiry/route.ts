@@ -3,6 +3,8 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site";
 import { sendMail } from "@/lib/mailer";
 import { submitInquiry, newIdempotencyKey } from "@/lib/one-client";
+import { enqueueInquiry } from "@/lib/inquiry-outbox";
+import { reportIssue } from "@/lib/monitoring";
 
 /**
  * Serverseitige Entgegennahme von Anfragen (Kontaktformular, Buchungsanfrage,
@@ -74,7 +76,7 @@ export async function POST(req: NextRequest) {
     niveau: clean(data.niveau, 10),
     participants: clean(data.participants, 10),
     preferredDate: clean(data.preferredDate, 60),
-    contactPreference: clean(data.contactPreference, 10) === "mail" ? "mail" : "phone",
+    contactPreference: ((v) => (v === "mail" || v === "email" ? v : "phone"))(clean(data.contactPreference, 10)),
     street: clean(data.street, 200),
     zipCity: clean(data.zipCity, 100),
     consent: data.consent === "true" || data.consent === true,
@@ -113,7 +115,7 @@ export async function POST(req: NextRequest) {
     inquiry.niveau && `Sprachniveau: ${inquiry.niveau}`,
     inquiry.participants && `Teilnehmer: ${inquiry.participants}`,
     inquiry.preferredDate && `Wunschtermin: ${inquiry.preferredDate}`,
-    `Bevorzugter Kontaktweg: ${inquiry.contactPreference === "mail" ? "Schriftlich (Post)" : "Telefonisch"}`,
+    `Bevorzugter Kontaktweg: ${inquiry.contactPreference === "mail" ? "Schriftlich (Post)" : inquiry.contactPreference === "email" ? "Per E-Mail" : "Telefonisch"}`,
     inquiry.contactPreference === "mail" && inquiry.street && `Straße: ${inquiry.street}`,
     inquiry.contactPreference === "mail" && inquiry.zipCity && `PLZ/Ort: ${inquiry.zipCity}`,
     "",
@@ -130,15 +132,9 @@ export async function POST(req: NextRequest) {
       ]
     : undefined;
 
-  const mailResult = await sendMail({
-    to: SITE.inquiryEmail,
-    replyTo: inquiry.email,
-    subject: `Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
-    text: lines.join("\n"),
-    attachments,
-  });
-
-  const transfer = await submitInquiry({
+  // 1) Übergabe an ONE (führendes System). Zuerst, damit die Benachrichtigungs-
+  //    Mail anzeigen kann, ob der Lead in ONE angekommen ist.
+  const payload = {
     // companyName ist bei /api/public/inquiries Pflichtfeld — Privatpersonen
     // (kein Firmenname angegeben) laufen trotzdem durch, statt die Anfrage
     // abzulehnen.
@@ -149,7 +145,7 @@ export async function POST(req: NextRequest) {
     // "digital": das Formular liefert bereits strukturierte Bedarfsdaten,
     // löst damit die automatische Deal-/Angebots-Vorbereitung auf ONE-Seite
     // aus (siehe apps/sales/backend/src/routes/inquiries.ts).
-    contactMethod: "digital",
+    contactMethod: "digital" as const,
     privacyConsent: inquiry.consent,
     otherInfo: lines.join("\n"),
     trainingType: inquiry.course || inquiry.topic || undefined,
@@ -161,21 +157,65 @@ export async function POST(req: NextRequest) {
     attachment: attachments?.[0]
       ? { filename: attachments[0].filename, content: attachments[0].content, contentType: attachments[0].contentType ?? "application/octet-stream" }
       : null,
-  });
+  };
+  const transfer = await submitInquiry(payload);
+  const ctx = { area: "inquiry", idempotencyKey: inquiry.idempotencyKey, kind: inquiry.kind };
 
-  // Die Anfrage gilt als erfolgreich, sobald die Mail-Benachrichtigung ODER
-  // die ONE-Übergabe geklappt hat — ein einzelner Ausfall darf die Anfrage
-  // nicht verlieren (§17). Ist ONE nicht erreichbar, wird das geloggt statt
-  // die Anfrage stillschweigend als reine Mail zu behandeln.
+  // 2) ONE nicht erreichbar → zum Nachversand ablegen (src/lib/inquiry-outbox.ts).
+  //    Eine Ablehnung (4xx) wird nicht wiederholt, sondern nur gemeldet.
+  let queued = false;
   if (!transfer.ok) {
-    console.error("[inquiry] ONE-Übergabe fehlgeschlagen, Anfrage lief nur per Mail:", transfer.error, {
-      idempotencyKey: inquiry.idempotencyKey,
+    queued = transfer.error.startsWith("one_rejected_")
+      ? false
+      : await enqueueInquiry(payload, inquiry.kind, transfer.error);
+    reportIssue(
+      queued
+        ? "[inquiry] ONE-Übergabe fehlgeschlagen — Anfrage liegt im Nachversand"
+        : "[inquiry] ONE-Übergabe fehlgeschlagen — KEIN Nachversand möglich",
+      { ...ctx, error: transfer.error, queued },
+    );
+  }
+
+  // 3) Benachrichtigung an das Anfragen-Postfach. Ist der Lead (noch) nicht in
+  //    ONE, steht das im Betreff — die Mail enthält alle Angaben zum manuellen Anlegen.
+  let mailSent = false;
+  try {
+    const flag = transfer.ok ? "" : "[NICHT IN ONE] ";
+    const status = transfer.ok
+      ? `In ONE angelegt (Lead ${transfer.leadId}).`
+      : queued
+        ? `NICHT in ONE (${transfer.error}). Automatischer Nachversand läuft 48 Stunden; danach kommt ein Hinweis.`
+        : `NICHT in ONE (${transfer.error}). Bitte manuell in ONE anlegen.`;
+    mailSent = (
+      await sendMail({
+        to: SITE.inquiryEmail,
+        replyTo: inquiry.email,
+        subject: `${flag}Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
+        text: [`Status: ${status}`, `Referenz: ${inquiry.idempotencyKey}`, "", ...lines].join("\n"),
+        attachments,
+      })
+    ).sent;
+  } catch (err) {
+    reportIssue("[inquiry] Benachrichtigungs-Mail fehlgeschlagen", {
+      ...ctx,
+      error: err instanceof Error ? err.message : String(err),
+      inOne: transfer.ok,
     });
   }
 
-  void mailResult;
+  // 4) Ergebnis für den Besucher. Sobald die Anfrage irgendwo sicher liegt (in ONE,
+  //    in der Nachversand-Warteschlange oder als Mail), gilt sie als eingegangen —
+  //    der Besucher darf nicht zu einer doppelten Anfrage verleitet werden.
+  //    status: "stored" = in ONE · "queued" = wird nachgereicht · "notified" = nur per Mail.
+  const status = transfer.ok ? "stored" : queued ? "queued" : mailSent ? "notified" : "failed";
+  if (status === "failed") {
+    reportIssue("[inquiry] Anfrage weder in ONE noch im Nachversand noch per Mail — verloren", ctx);
+    return Response.json({ ok: false, error: "delivery_failed" }, { status: 502 });
+  }
+
   return Response.json({
     ok: true,
+    status,
     leadId: transfer.ok ? transfer.leadId : undefined,
     transferredToOne: transfer.ok,
   });
