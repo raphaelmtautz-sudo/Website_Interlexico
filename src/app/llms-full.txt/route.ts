@@ -3,6 +3,7 @@ import { getCourseTypes, getFaq, getLegal } from "@/lib/cms";
 import { getIndustries } from "@/content/industries";
 import { getCourseFaq } from "@/content/course-faq";
 import { getIndustryLabels, getIndustryPages } from "@/content/branchen";
+import { getLocalPage, LOCAL_PATH } from "@/content/local";
 import { getGuideLabels, getGuides } from "@/content/ratgeber";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
@@ -170,6 +171,10 @@ export async function buildLlmsFullTxt(lang: Locale): Promise<string> {
   lines.push(`## ${t.impact}`, `URL: ${url("/nachhaltigkeit")}`, "", dict.nachhaltigkeit.text, "", dict.nachhaltigkeit.calculator.text, "");
 
   lines.push(`## ${t.branchen}`, ...getIndustries(lang).map((i) => `- ${i}`), "", t.branchenDaf, "");
+
+  const lp = getLocalPage(lang);
+  lines.push(`## ${lp.title}`, `URL: ${url(LOCAL_PATH)}`, "", lp.intro, "", lp.onsiteText, "", `${lp.places.join(", ")}. ${lp.placesNote}`, "");
+  for (const f of lp.faq) lines.push(`### ${f.question}`, f.answer, "");
 
   const il = getIndustryLabels(lang);
   lines.push(`## ${il.hubTitle}`, "", il.hubText, "");

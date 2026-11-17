@@ -28,6 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "", priority: 1, changeFrequency: "weekly" as const },
     { path: "/kurse", priority: 0.9, changeFrequency: "weekly" as const },
     { path: "/branchen", priority: 0.8, changeFrequency: "monthly" as const },
+    { path: "/sprachtraining-muenchen", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/ratgeber", priority: 0.7, changeFrequency: "weekly" as const },
     { path: "/interlexico-one", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/einstufung", priority: 0.7, changeFrequency: "monthly" as const },

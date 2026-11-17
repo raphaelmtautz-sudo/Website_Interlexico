@@ -14,6 +14,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { getFaq, getTestimonials, getIndustries } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { industrySlugByName } from "@/content/branchen";
+import { getLocalPage, LOCAL_PATH } from "@/content/local";
 import { hasLocale, lh } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 
@@ -164,6 +165,12 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="font-sans text-paper-dim leading-relaxed">
               {dict.home.angebotText}
             </p>
+            <Link
+              href={lh(lang, LOCAL_PATH)}
+              className="link-underline mt-4 inline-block font-sans text-sm uppercase tracking-[0.08em] text-brand-text"
+            >
+              {getLocalPage(lang).eyebrow} →
+            </Link>
           </div>
           <div className="grid gap-px bg-line md:grid-cols-2">
             {offering.map((group) => (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getLocalPage, LOCAL_PATH } from "@/content/local";
 import { Container } from "@/components/ui/container";
 import { SocialIcon } from "@/components/contact/social-icon";
 import { lh, type Locale } from "@/lib/i18n";
@@ -62,6 +63,7 @@ export async function SiteFooter({
             <li><Link className="link-underline" href={lh(lang, "/kurse/deutsch-als-fremdsprache")}>{dict.commandPalette.items.daf}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/einstufung")}>{dict.footer.einstufungLink}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/branchen")}>{dict.nav.branchen}</Link></li>
+            <li><Link className="link-underline" href={lh(lang, LOCAL_PATH)}>{getLocalPage(lang).name}</Link></li>
             <li><Link className="link-underline" href={lh(lang, "/ratgeber")}>{dict.nav.ratgeber}</Link></li>
           </ul>
         </div>

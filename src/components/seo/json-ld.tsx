@@ -256,12 +256,15 @@ export function ServiceJsonLd({
   name,
   description,
   serviceType,
+  areaServed,
 }: {
   lang: Locale;
   path: string;
   name: string;
   description: string;
   serviceType: string;
+  /** Zusätzliche Einsatzgebiete (z. B. Stadt/Region) vor den Ländern. */
+  areaServed?: Record<string, unknown>[];
 }) {
   const url = `${SITE.url}${lh(lang, path)}`;
   return (
@@ -276,7 +279,10 @@ export function ServiceJsonLd({
         serviceType,
         inLanguage: bcp47[lang],
         provider: { "@id": `${SITE.url}#organization` },
-        areaServed: SITE.areaServed.map((c) => ({ "@type": "Country", identifier: c, name: COUNTRY_NAMES[c] ?? c })),
+        areaServed: [
+          ...(areaServed ?? []),
+          ...SITE.areaServed.map((c) => ({ "@type": "Country", identifier: c, name: COUNTRY_NAMES[c] ?? c })),
+        ],
       }}
     />
   );
