@@ -72,7 +72,11 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
           <LegalH2>{t.registerHeading}</LegalH2>
           <LegalP>
             {t.eintragungPrefix}{" "}
-            {legal.registerType ? t.registerTypeLabel : <PH>{t.registerTypeLabel}</PH>}
+            {legal.registerType === "vereinsregister"
+              ? t.vereinsregisterLabel
+              : legal.registerType
+                ? t.registerTypeLabel
+                : <PH>{t.registerTypeLabel}</PH>}
             <br />
             {t.registergerichtLabel}: <Val value={legal.registerCourt} placeholder={t.registergerichtPlaceholder} />
             <br />
@@ -81,12 +85,15 @@ export default async function ImpressumPage({ params }: { params: Promise<{ lang
         </div>
       )}
 
-      <div className="space-y-3">
-        <LegalH2>{t.ustHeading}</LegalH2>
-        <LegalP>
-          {t.ustText} <Val value={legal.vatId} placeholder={t.ustPlaceholder} />
-        </LegalP>
-      </div>
+      {/* Nur anzeigen, wenn im CMS eine USt-IdNr. eingetragen ist — kein sichtbarer Platzhalter. */}
+      {legal.vatId && (
+        <div className="space-y-3">
+          <LegalH2>{t.ustHeading}</LegalH2>
+          <LegalP>
+            {t.ustText} {legal.vatId}
+          </LegalP>
+        </div>
+      )}
 
       <div className="space-y-3">
         <LegalH2>{t.verantwortlichHeading}</LegalH2>
