@@ -146,19 +146,22 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
         </LegalP>
         <LegalP>
-          Beim Englisch-Einstufungstest verarbeiten wir zusätzlich Ihre
-          Testantworten (Multiple-Choice, Freitext) sowie optional eine von
-          Ihnen aufgenommene Sprachaufnahme (Speaking-Aufgabe), sofern Sie
-          den Mikrofonzugriff im Browser erlauben. Diese Daten werden zusammen
-          mit den von Ihnen angegebenen Kontaktdaten per E-Mail an unser Team
-          gesendet, um Ihre schriftliche und mündliche Antwort individuell
-          auszuwerten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO
-          (vorvertragliche Maßnahmen zur Ermittlung eines passenden
-          Trainingsangebots). Die Sprachaufnahme wird nicht dauerhaft auf
-          unserer Website gespeichert, sondern ausschließlich per E-Mail
-          übermittelt; sie wird gelöscht, sobald sie für die Auswertung nicht
-          mehr erforderlich ist. Ohne Ihre Zustimmung zum Mikrofonzugriff
-          können Sie den Test ohne die Sprachaufgabe abschließen.
+          Für den Einstufungstest (Englisch bzw. Deutsch) auf interlexico.com/einstufung
+          nutzen wir unsere Plattform Interlexico ONE (interlexico.one, eigener Server in
+          Deutschland). Wir verarbeiten Ihre Testantworten und, nur im Volltest, Ihre
+          Schreibaufgabe sowie Ihre Sprachaufnahmen (nur wenn Sie den Mikrofonzugriff im
+          Browser erlauben). Beim Kurztest geben Sie Ihre Kontaktdaten (Name, E-Mail,
+          Firma, optional Telefon) vor dem Ergebnis an, beim Volltest vor dem Start. Wir
+          verwenden sie, um Ihnen das Ergebnis per E-Mail zu schicken, Schreib- und
+          Sprechaufgaben durch unser Trainerteam auswerten zu lassen und Sie zu einem
+          passenden Training zu kontaktieren; dazu legen wir in Interlexico ONE eine
+          Anfrage an. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche
+          Maßnahmen) sowie Ihre Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO, die Sie
+          jederzeit widerrufen können. Abgebrochene, nicht abgeschickte Tests löschen wir
+          nach 14 Tagen automatisch; abgeschickte Tests und Aufnahmen löschen wir, sobald
+          sie für die Einstufung und eine mögliche Zusammenarbeit nicht mehr erforderlich
+          sind. Eine automatisierte Entscheidung im Sinne von Art. 22 DSGVO findet nicht
+          statt; Schreiben und Sprechen bewertet ein Mensch.
         </LegalP>
       </div>
 
@@ -425,18 +428,20 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           longer required and no statutory retention obligations apply.
         </LegalP>
         <LegalP>
-          For the English placement test, we additionally process your test
-          answers (multiple choice, free text) and, optionally, a voice
-          recording you make for the speaking task, provided you allow
-          microphone access in your browser. This data is sent by email to
-          our team together with the contact details you provide, so we can
-          give you individual feedback on your written and spoken answers.
-          Legal basis: Art. 6(1)(b) GDPR (pre-contractual measures to
-          determine a suitable training offer). The voice recording is not
-          permanently stored on our website — it is only transmitted by
-          email — and is deleted once it is no longer needed for the
-          assessment. You can complete the test without the speaking task if
-          you do not consent to microphone access.
+          For the placement test (English or German) on interlexico.com/einstufung we use
+          our platform Interlexico ONE (interlexico.one, our own server in Germany). We
+          process your test answers and, in the full test only, your writing task and your
+          voice recordings (only if you allow microphone access in your browser). In the
+          quick test you enter your contact details (name, email, company, optionally
+          phone) before seeing the result; in the full test before you start. We use them
+          to email you the result, to have our trainers assess your writing and speaking,
+          and to contact you about suitable training; for this we create a request in
+          Interlexico ONE. Legal basis: Art. 6(1)(b) GDPR (pre-contractual measures) and
+          your consent under Art. 6(1)(a) GDPR, which you can withdraw at any time. Tests
+          that are started but never submitted are deleted automatically after 14 days;
+          submitted tests and recordings are deleted once they are no longer needed for the
+          assessment and a possible collaboration. No automated decision-making within the
+          meaning of Art. 22 GDPR takes place; writing and speaking are assessed by a person.
         </LegalP>
       </div>
 
@@ -701,19 +706,22 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           conservación.
         </LegalP>
         <LegalP>
-          En el test de nivel de inglés procesamos además sus respuestas
-          (opción múltiple, texto libre) y, opcionalmente, una grabación de voz
-          que usted realiza para la tarea de expresión oral, siempre que
-          permita el acceso al micrófono en su navegador. Estos datos se
-          envían por correo electrónico a nuestro equipo junto con los datos
-          de contacto facilitados, para poder valorar de forma individual su
-          respuesta escrita y oral. Base jurídica: artículo 6.1.b del RGPD
-          (medidas precontractuales para determinar una oferta formativa
-          adecuada). La grabación de voz no se almacena de forma permanente en
-          nuestra web — solo se transmite por correo electrónico — y se
-          elimina en cuanto ya no es necesaria para la valoración. Puede
-          completar el test sin la tarea de expresión oral si no consiente el
-          acceso al micrófono.
+          Para la prueba de nivel (inglés o alemán) en interlexico.com/einstufung utilizamos
+          nuestra plataforma Interlexico ONE (interlexico.one, servidor propio en Alemania).
+          Tratamos sus respuestas y, solo en la prueba completa, su tarea escrita y sus
+          grabaciones de voz (solo si permite el acceso al micrófono en el navegador). En la
+          prueba rápida indica sus datos de contacto (nombre, correo electrónico, empresa y,
+          opcionalmente, teléfono) antes de ver el resultado; en la prueba completa, antes de
+          empezar. Los utilizamos para enviarle el resultado por correo electrónico, para que
+          nuestros formadores evalúen la expresión escrita y oral y para contactarle sobre una
+          formación adecuada; para ello registramos una solicitud en Interlexico ONE. Base
+          jurídica: art. 6, apdo. 1, letra b del RGPD (medidas precontractuales) y su
+          consentimiento según el art. 6, apdo. 1, letra a del RGPD, que puede revocar en
+          cualquier momento. Las pruebas iniciadas pero no enviadas se eliminan
+          automáticamente a los 14 días; las pruebas enviadas y las grabaciones se eliminan
+          cuando ya no son necesarias para la evaluación y una posible colaboración. No se
+          toman decisiones automatizadas en el sentido del art. 22 del RGPD; la expresión
+          escrita y oral la evalúa una persona.
         </LegalP>
       </div>
 

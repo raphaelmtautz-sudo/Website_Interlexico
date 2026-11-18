@@ -79,7 +79,7 @@ export const es: Dictionary = {
       daf: "Alemán como lengua extranjera",
       dafHint: "ALE · todos los sectores",
       einstufung: "Test de nivel",
-      einstufungHint: "autoevaluación de idioma",
+      einstufungHint: "prueba de nivel gratuita",
       ueberUns: "Sobre nosotros",
       ueberUnsHint: "nuestro enfoque",
       interlexicoOne: "Interlexico ONE",
@@ -150,7 +150,7 @@ export const es: Dictionary = {
     konfiguratorTitle: "Siete pasos breves hasta su plan de formación",
     konfiguratorText:
       "Responda unas preguntas sobre su equipo, nivel y objetivos. Recibirá al momento una recomendación razonada: formato, división en grupos (máx. 7 por grupo), volumen y un plan de formación de ejemplo. Su selección pasa directamente a la solicitud sin compromiso.",
-    konfiguratorSelfTest: "¿No está seguro de su nivel? — Autoevaluación de idioma",
+    konfiguratorSelfTest: "¿No está seguro de su nivel? — Prueba de nivel gratuita",
     angebotEyebrow: "Programas y sectores",
     angebotTitle: "Por idioma y sector",
     angebotText:
@@ -457,8 +457,8 @@ export const es: Dictionary = {
   einstufung: {
     eyebrow: "Test de nivel",
     metaTitle: "Test de nivel gratuito: inglés y alemán",
-    title: "Oriéntese en un minuto",
-    text: "Cinco breves autoevaluaciones — obtendrá al instante una orientación de nivel sin compromiso (MCER A1–C1) y el siguiente paso adecuado. La evaluación precisa se realiza al inicio de la formación.",
+    title: "¿Cuál es su nivel de idioma?",
+    text: "Prueba de nivel gratuita de inglés o alemán (MCER A1–C2): prueba rápida de unos 10 minutos con resultado inmediato o prueba completa con expresión escrita y oral, revisada por un formador.",
   },
   selfAssessment: {
     intro: "Autoevaluación · sin compromiso",

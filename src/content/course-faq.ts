@@ -29,7 +29,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "Für welches Sprachniveau eignet sich das Training?",
         answer:
-          "Für jedes Niveau. Jedes Training beginnt mit einer Sprachstand- und Bedarfsanalyse; eine erste Orientierung nach GER (A1–C1) gibt der kostenlose Online-Einstufungstest auf interlexico.com.",
+          "Für jedes Niveau. Jedes Training beginnt mit einer Sprachstand- und Bedarfsanalyse; eine erste Einordnung nach GER (A1–C2) gibt der kostenlose Online-Einstufungstest auf interlexico.com.",
       },
       {
         question: "Für welche Branchen bietet Interlexico Business English an?",
@@ -105,7 +105,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "Which language level is the training for?",
         answer:
-          "Every level. Each programme starts with a level and needs assessment; the free online placement test on interlexico.com gives a first CEFR orientation (A1–C1).",
+          "Every level. Each programme starts with a level and needs assessment; the free online placement test on interlexico.com gives a first CEFR placement (A1–C2).",
       },
       {
         question: "Which industries does Interlexico offer Business English for?",
@@ -181,7 +181,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "¿Para qué nivel de idioma es la formación?",
         answer:
-          "Para cualquier nivel. Cada formación empieza con un análisis de nivel y necesidades; la prueba de nivel online gratuita en interlexico.com ofrece una primera orientación según el MCER (A1–C1).",
+          "Para cualquier nivel. Cada formación empieza con un análisis de nivel y necesidades; la prueba de nivel online gratuita en interlexico.com ofrece una primera orientación según el MCER (A1–C2).",
       },
       {
         question: "¿Para qué sectores ofrece Interlexico Business English?",

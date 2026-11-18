@@ -79,7 +79,7 @@ export const en: Dictionary = {
       daf: "German as a Foreign Language",
       dafHint: "GFL · all industries",
       einstufung: "Level check",
-      einstufungHint: "language-level self-test",
+      einstufungHint: "free placement test",
       ueberUns: "About",
       ueberUnsHint: "our approach",
       interlexicoOne: "Interlexico ONE",
@@ -150,7 +150,7 @@ export const en: Dictionary = {
     konfiguratorTitle: "Seven short steps to your training plan",
     konfiguratorText:
       "Answer a few questions about your team, level and goals. You immediately get a reasoned recommendation: format, group split (max. 7 per group), scope and a sample training plan. Your selection goes straight into the no-obligation enquiry.",
-    konfiguratorSelfTest: "Unsure about your level? — Language-level self-test",
+    konfiguratorSelfTest: "Unsure about your level? — Free placement test",
     angebotEyebrow: "Programs & industries",
     angebotTitle: "By language and industry",
     angebotText:
@@ -457,8 +457,8 @@ export const en: Dictionary = {
   einstufung: {
     eyebrow: "Level check",
     metaTitle: "Free Language Level Test: English & German",
-    title: "Get your bearings in one minute",
-    text: "Five short self-assessments — you'll instantly get a no-obligation level orientation (CEFR A1–C1) and the right next step. The precise assessment happens at the start of training.",
+    title: "What is your language level?",
+    text: "Free English or German placement test (CEFR A1–C2): quick test in about 10 minutes with instant result, or full test with writing and speaking, reviewed by a trainer.",
   },
   selfAssessment: {
     intro: "Self-test · no obligation",

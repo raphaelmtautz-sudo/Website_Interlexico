@@ -77,7 +77,7 @@ export const de = {
       daf: "Deutsch als Fremdsprache",
       dafHint: "DaF · alle Branchen",
       einstufung: "Einstufung",
-      einstufungHint: "Sprachlevel-Selbsttest",
+      einstufungHint: "kostenloser Einstufungstest",
       ueberUns: "Über uns",
       ueberUnsHint: "Haltung & Ansatz",
       interlexicoOne: "Interlexico ONE",
@@ -148,7 +148,7 @@ export const de = {
     konfiguratorTitle: "In sieben kurzen Schritten zu Ihrem Trainingsplan",
     konfiguratorText:
       "Beantworten Sie ein paar Fragen zu Team, Niveau und Zielen. Sie erhalten sofort eine begründete Empfehlung: Format, Gruppenaufteilung (max. 7 pro Gruppe), Umfang und einen Beispiel-Trainingsplan. Ihre Auswahl übernehmen wir direkt in die unverbindliche Anfrage.",
-    konfiguratorSelfTest: "Unsicher beim Niveau? — Sprachlevel-Selbsttest",
+    konfiguratorSelfTest: "Unsicher beim Niveau? — Kostenloser Einstufungstest",
     angebotEyebrow: "Trainingsangebot & Branchen",
     angebotTitle: "Nach Sprache und Branche",
     angebotText:
@@ -455,8 +455,8 @@ export const de = {
   einstufung: {
     eyebrow: "Einstufung",
     metaTitle: "Kostenloser Sprachtest: Englisch & Deutsch",
-    title: "In einer Minute zur Orientierung",
-    text: "Fünf kurze Selbsteinschätzungen — Sie erhalten sofort eine unverbindliche Niveau-Orientierung (GER A1–C1) und den passenden nächsten Schritt. Die genaue Einstufung erfolgt zu Trainingsbeginn.",
+    title: "Welches Sprachniveau haben Sie?",
+    text: "Kostenloser Einstufungstest Englisch oder Deutsch (GER A1–C2): Kurztest in ca. 10 Minuten mit sofortigem Ergebnis oder Volltest mit Schreiben und Sprechen, persönlich geprüft.",
   },
   selfAssessment: {
     intro: "Selbsttest · unverbindlich",
