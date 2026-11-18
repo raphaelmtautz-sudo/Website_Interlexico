@@ -28,7 +28,7 @@ const CONTENT_UPDATED: Record<string, string> = {
   "/ratgeber": "2026-11-17",
   "/ratgeber/deutschkurs-internationale-fachkraefte": "2026-11-18",
   "/interlexico-one": "2026-11-18",
-  "/einstufung": "2026-10-20",
+  "/einstufung": "2026-11-18",
   "/konfigurator": "2026-11-17",
   "/ueber-uns": "2026-11-18",
   "/nachhaltigkeit": "2026-10-20",
@@ -36,7 +36,7 @@ const CONTENT_UPDATED: Record<string, string> = {
   "/kontakt": "2026-11-18",
   "/demo": "2026-10-20",
   "/rechtliches/impressum": "2026-11-18",
-  "/rechtliches/datenschutz": "2026-10-20",
+  "/rechtliches/datenschutz": "2026-11-18",
   "/rechtliches/agb": "2026-11-18",
 };
 const FALLBACK_UPDATED = "2026-10-20";
