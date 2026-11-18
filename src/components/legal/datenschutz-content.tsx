@@ -243,6 +243,25 @@ function De({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
       </div>
 
       <div className="space-y-3">
+        <LegalH2>6c. KI-Assistentin Lexi</LegalH2>
+        <LegalP>
+          Auf unserer Website können Sie Fragen an unsere KI-Assistentin Lexi stellen. Ihre Frage wird an
+          unsere Plattform Interlexico ONE übermittelt und dort von einem KI-Sprachmodell beantwortet, das
+          ausschließlich auf unserem eigenen Server in Deutschland läuft; es werden keine Daten an externe
+          KI-Anbieter weitergegeben. Lexi antwortet nur auf Grundlage von uns geprüfter Informationen.
+          Bitte geben Sie im Chat keine personenbezogenen Daten ein. Vor jeder Verarbeitung entfernen wir
+          automatisch typische personenbezogene Angaben (z. B. E-Mail-Adressen, Telefonnummern) aus der
+          Frage. Fragen, die Lexi nicht beantworten kann, speichern wir in dieser bereinigten Form, um
+          unser Informationsangebot zu verbessern; ein Bezug zu Ihrer Person wird nicht hergestellt. Zum
+          Schutz vor Missbrauch verarbeiten wir kurzzeitig Ihre IP-Adresse für eine Begrenzung der
+          Anfragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der
+          Beantwortung von Anfragen). Wenn Sie über Lexi eine Anfrage an unser Team senden, gilt
+          Abschnitt 6. Lexi trifft keine Entscheidungen mit rechtlicher Wirkung; Antworten ersetzen
+          keine verbindliche Auskunft.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
         <LegalH2>7. Buchung und Zahlungsabwicklung</LegalH2>
         <LegalP>
           Für Buchungen verarbeiten wir die zur Vertragsdurchführung erforderlichen
@@ -513,6 +532,22 @@ function En({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           effect once you trigger it with a separate click after confirming your
           email address; as proof we store the time, IP address and wording of
           your consent. Otherwise section 6a applies.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6c. AI assistant Lexi</LegalH2>
+        <LegalP>
+          On our website you can ask questions to our AI assistant Lexi. Your question is sent to our
+          platform Interlexico ONE and answered there by an AI language model that runs exclusively on our
+          own server in Germany; no data is passed on to external AI providers. Lexi only answers on the
+          basis of information we have verified. Please do not enter personal data in the chat. Before any
+          processing we automatically remove typical personal details (e.g. email addresses, phone numbers)
+          from the question. Questions Lexi cannot answer are stored in this cleaned form to improve our
+          information; they are not linked to you. To prevent misuse we briefly process your IP address to
+          limit the number of requests. Legal basis: Art. 6(1)(f) GDPR (legitimate interest in answering
+          enquiries). If you send an enquiry to our team via Lexi, section 6 applies. Lexi does not make
+          decisions with legal effect; answers do not replace binding information.
         </LegalP>
       </div>
 
@@ -798,6 +833,24 @@ function Es({ legal, extras }: { legal: LegalData; extras: LegalExtrasData }) {
           dirección de correo; como prueba almacenamos la fecha y hora, la
           dirección IP y el texto de su consentimiento. Por lo demás, se aplica
           el apartado 6a.
+        </LegalP>
+      </div>
+
+      <div className="space-y-3">
+        <LegalH2>6c. Asistente de IA Lexi</LegalH2>
+        <LegalP>
+          En nuestra web puede hacer preguntas a nuestra asistente de IA Lexi. Su pregunta se envía a
+          nuestra plataforma Interlexico ONE y allí la responde un modelo de lenguaje de IA que funciona
+          exclusivamente en nuestro propio servidor en Alemania; no se transmiten datos a proveedores
+          externos de IA. Lexi solo responde a partir de información verificada por nosotros. Por favor,
+          no introduzca datos personales en el chat. Antes de cualquier tratamiento eliminamos
+          automáticamente datos personales habituales (p. ej. direcciones de correo, números de teléfono)
+          de la pregunta. Las preguntas que Lexi no puede responder se guardan de esta forma depurada para
+          mejorar nuestra información, sin vincularlas a usted. Para evitar abusos tratamos brevemente su
+          dirección IP para limitar el número de consultas. Base jurídica: art. 6, apdo. 1, letra f del
+          RGPD (interés legítimo en responder consultas). Si envía una consulta a nuestro equipo a través
+          de Lexi, se aplica el apartado 6. Lexi no toma decisiones con efectos jurídicos; sus respuestas
+          no sustituyen una información vinculante.
         </LegalP>
       </div>
 
