@@ -542,7 +542,7 @@ export const en: Dictionary = {
     marketingLabel: "Yes, I'd like to receive email updates about new course formats, e-learning modules, and dates. I can withdraw this consent at any time.",
     marketingWiderruf: "Information is sent in accordance with our privacy policy. You'll find an unsubscribe link at the bottom of every marketing email.",
     successTitle: "Enquiry received.",
-    successText: "Thank you — we'll get back to you within two business days.",
+    successText: "Thank you — we'll usually get back to you within two working days. A confirmation is on its way to your inbox.",
     neueAnfrage: "New enquiry",
   },
   legal: {

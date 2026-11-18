@@ -51,6 +51,8 @@ const nextConfig: NextConfig = {
   // eigenständige global-not-found.tsx (siehe node_modules/next/dist/docs).
   experimental: {
     globalNotFound: true,
+    // inlineCss am 2026-11-18 getestet (Lighthouse A/B): kein Gewinn, Startseite
+    // sogar langsamer — bewusst nicht aktiviert.
   },
   // Browser und Crawler fragen /favicon.ico fest an — auf das generierte Icon umleiten statt 404.
   async rewrites() {

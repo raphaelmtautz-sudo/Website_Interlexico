@@ -16,6 +16,25 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
  * eingebunden wird.
  */
 const UMAMI_URL = process.env.UMAMI_URL || "https://analytics.interlexico.one";
+
+/**
+ * Nur bekannte Ereignisse und Eigenschaften werden weitergegeben — so können
+ * auch künftige Code-Änderungen nie versehentlich personenbezogene Daten
+ * (Namen, E-Mail-Adressen, Telefonnummern, Freitext) an Umami schicken.
+ */
+const ALLOWED_EVENTS = new Set([
+  "pageview", "cta_click", "form_start", "form_submit", "form_error",
+  "configurator_start", "configurator_step", "configurator_back", "configurator_complete",
+  "configurator_lead", "configurator_error", "configurator_pdf",
+  "phone_click", "email_click", "whatsapp_click",
+  "voucher_shown", "voucher_dismissed", "voucher_submitted", "voucher_newsletter",
+]);
+const ALLOWED_PROPS = new Set([
+  "code", "course", "cta", "form", "format", "from", "groups", "level", "newsletter", "place",
+  "position", "source", "stage", "step", "to", "topic", "transferredToOne", "units", "variant",
+]);
+/** E-Mail-Adressen oder lange Ziffernfolgen (Telefonnummern) nie weitergeben. */
+const looksPersonal = (v: string) => v.includes("@") || /\d[\d\s/()+-]{5,}\d/.test(v);
 const UMAMI_WEBSITE_ID = process.env.UMAMI_WEBSITE_ID || "";
 export async function POST(request: NextRequest) {
   // Basis-Schutz gegen Missbrauch: max. 60 Beacons/Minute je Client.
@@ -40,9 +59,13 @@ export async function POST(request: NextRequest) {
     if (typeof body?.event === "string" && body.event.trim()) {
       event = body.event.slice(0, 80);
     }
+    if (!ALLOWED_EVENTS.has(event)) {
+      return new Response(null, { status: 204 });
+    }
     if (body?.props && typeof body.props === "object") {
       for (const [k, v] of Object.entries(body.props as Record<string, unknown>)) {
-        if (typeof v === "string") props[String(k).slice(0, 40)] = v.slice(0, 200);
+        if (typeof v !== "string" || !ALLOWED_PROPS.has(k) || looksPersonal(v)) continue;
+        props[k] = v.slice(0, 80);
         if (Object.keys(props).length >= 10) break;
       }
     }

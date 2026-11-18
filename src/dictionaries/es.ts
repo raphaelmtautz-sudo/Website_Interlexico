@@ -542,7 +542,7 @@ export const es: Dictionary = {
     marketingLabel: "Sí, deseo recibir información por correo electrónico sobre nuevos formatos de curso, módulos de e-learning y fechas. Puedo revocar este consentimiento en cualquier momento.",
     marketingWiderruf: "El envío de información se realiza conforme a nuestra política de privacidad. Encontrará un enlace de baja al final de cada correo publicitario.",
     successTitle: "Consulta recibida.",
-    successText: "Gracias — nos pondremos en contacto con usted en dos días laborables.",
+    successText: "Gracias — normalmente le contactaremos en dos días laborables. Le hemos enviado una confirmación por correo.",
     neueAnfrage: "Nueva consulta",
   },
   legal: {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { getPosts, getSiteSettings } from "@/lib/cms";
 import { hasLocale, lh, type Locale } from "@/lib/i18n";
@@ -45,7 +45,8 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const { blogEnabled } = await getSiteSettings();
-  if (!blogEnabled) notFound();
+  // Blog abgeschaltet: alte /blog-Links landen auf dem Ratgeber statt auf einer 404.
+  if (!blogEnabled) permanentRedirect(lh(lang, "/ratgeber"));
   const posts = await getPosts(lang);
 
   return (

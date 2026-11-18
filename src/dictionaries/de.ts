@@ -540,7 +540,7 @@ export const de = {
     marketingLabel: "Ja, ich möchte per E-Mail über neue Kursformate, E-Learning-Module und Termine informiert werden. Diese Einwilligung kann ich jederzeit widerrufen.",
     marketingWiderruf: "Der Versand von Informationen erfolgt entsprechend unserer Datenschutzerklärung. Einen Abmeldelink finden Sie am Ende jeder Werbe-E-Mail.",
     successTitle: "Anfrage eingegangen.",
-    successText: "Vielen Dank — wir melden uns innerhalb von zwei Werktagen bei Ihnen.",
+    successText: "Vielen Dank — wir melden uns in der Regel innerhalb von zwei Werktagen. Eine Eingangsbestätigung ist per E-Mail unterwegs.",
     neueAnfrage: "Neue Anfrage",
   },
   legal: {

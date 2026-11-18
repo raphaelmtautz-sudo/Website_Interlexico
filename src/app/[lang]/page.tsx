@@ -12,7 +12,7 @@ import { ImpactCalculator } from "@/components/interactive/impact-calculator";
 import { FaqJsonLd } from "@/components/seo/json-ld";
 import { Accordion } from "@/components/ui/accordion";
 import { getFaq, getTestimonials, getIndustries } from "@/lib/cms";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { industrySlugByName } from "@/content/branchen";
 import { getLocalPage, LOCAL_PATH } from "@/content/local";
 import { hasLocale, lh } from "@/lib/i18n";
@@ -151,7 +151,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               {dict.home.konfiguratorSelfTest}
             </Link>
           </div>
-          <Configurator lang={lang} dict={dict} />
+          <Configurator lang={lang} dict={pickDict(dict, "contactForm")} />
         </Section>
       </Reveal>
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getService, SERVICE_SLUGS } from "@/content/services";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/interactive/reveal";
@@ -65,6 +66,20 @@ export default async function KursePage({ params }: { params: Promise<{ lang: st
           </Reveal>
         ))}
       </div>
+      <ul className="mt-px grid gap-px bg-line md:grid-cols-2">
+        {SERVICE_SLUGS.map((slug) => {
+          const sv = getService(lang, slug);
+          return (
+            <li key={slug} className="bg-ink p-10">
+              <h2 className="font-display text-3xl text-paper mb-3">{sv.name}</h2>
+              <p className="font-sans text-sm leading-relaxed text-paper-dim mb-8">{sv.description}</p>
+              <Link href={lh(lang, `/${slug}`)} className="link-underline font-sans text-sm uppercase tracking-[0.08em] text-gold">
+                {dict.kurse.detailsAnsehen}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </Section>
   );
 }

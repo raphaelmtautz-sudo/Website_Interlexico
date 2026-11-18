@@ -10,7 +10,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type Status = "idle" | "sending" | "error";
 
-export function TrialSignupForm({ dict }: { dict: Dictionary }) {
+export function TrialSignupForm({ dict }: { dict: Pick<Dictionary, "testen"> }) {
   const t = dict.testen;
   const [form, setForm] = useState({ companyName: "", contactName: "", email: "", password: "" });
   const [status, setStatus] = useState<Status>("idle");

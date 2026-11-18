@@ -1,5 +1,6 @@
 import { SITE } from "@/lib/site";
 import { getLocalPage, LOCAL_PATH } from "@/content/local";
+import { getService, SERVICE_SLUGS } from "@/content/services";
 import { getCourseTypes } from "@/lib/cms";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
@@ -41,6 +42,7 @@ export async function buildLlmsTxt(lang: Locale): Promise<string> {
     ...courses.map(
       (c) => `- [${c.name}](${SITE.url}${lh(lang, `/kurse/${c.slug}`)}): ${c.seo.description}`,
     ),
+    ...SERVICE_SLUGS.map((s) => `- [${getService(lang, s).title}](${SITE.url}${lh(lang, `/${s}`)}): ${getService(lang, s).description}`),
     "",
     `## ${getLocalPage(lang).name}`,
     `- [${getLocalPage(lang).title}](${SITE.url}${lh(lang, LOCAL_PATH)}): ${getLocalPage(lang).description}`,

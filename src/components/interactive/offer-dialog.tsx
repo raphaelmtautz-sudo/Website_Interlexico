@@ -34,7 +34,7 @@ export function OfferDialog({
   open: boolean;
   onClose: () => void;
   lang: Locale;
-  dict: Dictionary;
+  dict: Pick<Dictionary, "contactForm">;
   c: ConfiguratorContent;
   state: ConfiguratorState;
   plan: Plan;
@@ -120,9 +120,11 @@ export function OfferDialog({
         track("form_submit", { form: "konfigurator-angebot", source: "konfigurator", transferredToOne: String(Boolean(data.transferredToOne)) });
       } else {
         setStatus("error");
+        track("configurator_error", { stage: "anfrage", code: String(data?.error ?? res.status) });
       }
     } catch {
       setStatus("error");
+      track("configurator_error", { stage: "anfrage", code: "network" });
     }
   }
 

@@ -230,7 +230,7 @@ export const configurator: ConfiguratorContent = {
     submit: "Solicitar presupuesto",
     close: "Cerrar",
     successTitle: "¡Muchas gracias por su solicitud!",
-    successText: "Revisamos sus necesidades de formación y normalmente le respondemos personalmente en dos días laborables con un presupuesto concreto.",
+    successText: "Revisamos sus necesidades de formación y normalmente le respondemos personalmente en dos días laborables con un presupuesto concreto. Le hemos enviado una confirmación por correo.",
     reference: "Su número de referencia",
     fallback: "Usar el formulario de contacto",
   },

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { track } from "@/lib/track";
 
 /**
  * Cookielose Seitenaufruf-Erfassung (Privacy-First, kein Consent-Banner nötig).
@@ -48,6 +49,28 @@ export function Analytics() {
       /* Analytics dürfen die Seite niemals beeinträchtigen. */
     }
   }, [pathname]);
+
+  // Klicks auf Telefon, E-Mail und WhatsApp zentral erfassen (ohne Nummer/Adresse).
+  useEffect(() => {
+    if (optedOut()) return;
+    function onClick(e: MouseEvent) {
+      const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!a) return;
+      const href = a.getAttribute("href") || "";
+      const event = href.startsWith("tel:")
+        ? "phone_click"
+        : href.startsWith("mailto:")
+          ? "email_click"
+          : /^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href)
+            ? "whatsapp_click"
+            : null;
+      if (!event) return;
+      const place = a.closest("footer") ? "footer" : a.closest("header") ? "header" : "seite";
+      track(event, { place });
+    }
+    document.addEventListener("click", onClick, { capture: true });
+    return () => document.removeEventListener("click", onClick, { capture: true });
+  }, []);
 
   return null;
 }

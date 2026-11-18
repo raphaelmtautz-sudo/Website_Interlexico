@@ -18,7 +18,7 @@ const ALLOWED_FILE_TYPES = [
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-export function CareerForm({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+export function CareerForm({ lang, dict }: { lang: Locale; dict: Pick<Dictionary, "contactForm" | "karriere"> }) {
   const t = dict.karriere;
   const params = useSearchParams();
 

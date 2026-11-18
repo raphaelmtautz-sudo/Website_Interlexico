@@ -230,7 +230,7 @@ export const configurator: ConfiguratorContent = {
     submit: "Request quote",
     close: "Close",
     successTitle: "Thank you for your enquiry!",
-    successText: "We will review your training needs and usually get back to you personally within two business days with a concrete quote.",
+    successText: "We will review your training needs and usually get back to you personally within two business days with a concrete quote. A confirmation is on its way to your inbox.",
     reference: "Your reference number",
     fallback: "Use the contact form instead",
   },

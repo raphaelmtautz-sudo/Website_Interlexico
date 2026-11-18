@@ -14,7 +14,7 @@ export function FullEnglishTest({
   onCancel,
 }: {
   lang: Locale;
-  dict: Dictionary;
+  dict: Pick<Dictionary, "selfAssessment">;
   onCancel: () => void;
 }) {
   const t = dict.selfAssessment;

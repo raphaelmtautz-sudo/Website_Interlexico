@@ -9,7 +9,7 @@ import type { Dictionary } from "@/dictionaries";
 
 type Lang = "englisch" | "deutsch";
 
-export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+export function SelfAssessment({ lang, dict }: { lang: Locale; dict: Pick<Dictionary, "selfAssessment"> }) {
   const { assessmentQuestions, answerOptions, levelForScore } = getAssessment(lang);
   const t = dict.selfAssessment;
   const [assessLang, setAssessLang] = useState<Lang | null>(null);

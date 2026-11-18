@@ -5,6 +5,8 @@ import { sendMail } from "@/lib/mailer";
 import { submitInquiry, newIdempotencyKey } from "@/lib/one-client";
 import { enqueueInquiry } from "@/lib/inquiry-outbox";
 import { reportIssue } from "@/lib/monitoring";
+import { sendInquiryConfirmation } from "@/lib/inquiry-confirmation";
+import { getLegal } from "@/lib/cms";
 
 /**
  * Serverseitige Entgegennahme von Anfragen (Kontaktformular, Buchungsanfrage,
@@ -191,7 +193,7 @@ export async function POST(req: NextRequest) {
         to: SITE.inquiryEmail,
         replyTo: inquiry.email,
         subject: `${flag}Neue Anfrage (${inquiry.kind}) — ${inquiry.name || inquiry.email}`,
-        text: [`Status: ${status}`, `Referenz: ${inquiry.idempotencyKey}`, "", ...lines].join("\n"),
+        text: [`Status: ${status}`, `Referenz: ${inquiry.idempotencyKey.slice(0, 8).toUpperCase()} (${inquiry.idempotencyKey})`, "", ...lines].join("\n"),
         attachments,
       })
     ).sent;
@@ -213,9 +215,19 @@ export async function POST(req: NextRequest) {
     return Response.json({ ok: false, error: "delivery_failed" }, { status: 502 });
   }
 
+  // 5) Eingangsbestätigung an die anfragende Person (feste Texte, siehe lib/inquiry-confirmation.ts).
+  const legal = await getLegal().catch(() => null);
+  const confirmationSent = await sendInquiryConfirmation({
+    to: inquiry.email,
+    language: inquiry.language,
+    reference: inquiry.idempotencyKey,
+    phone: legal?.phone || SITE.phone,
+  });
+
   return Response.json({
     ok: true,
     status,
+    confirmationSent,
     leadId: transfer.ok ? transfer.leadId : undefined,
     transferredToOne: transfer.ok,
   });

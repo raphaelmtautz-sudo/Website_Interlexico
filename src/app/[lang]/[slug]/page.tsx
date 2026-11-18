@@ -4,7 +4,7 @@ import { notFound, redirect, permanentRedirect } from "next/navigation";
 import { Section } from "@/components/ui/section";
 import { getPage, getRedirect } from "@/lib/cms";
 import { renderLexical } from "@/lib/lexical-render";
-import { hasLocale } from "@/lib/i18n";
+import { lh, hasLocale } from "@/lib/i18n";
 
 // Freie CMS-Landingpages (siehe "pages"-Collection in interlexico-cms).
 // Liegt bewusst auf dieser Ebene: Next.js gibt fest programmierten Routen
@@ -34,7 +34,15 @@ export default async function CmsPage({
   const page = await getPage(slug, lang);
   if (!page) {
     const found = await getRedirect(`/${slug}`);
-    if (found) (found.permanent ? permanentRedirect : redirect)(found.to);
+    if (found) {
+      // Relative Ziele ohne Sprachpräfix in der aktuellen Sprache auflösen
+      // ("/kurse" -> "/de/kurse"), sonst entstünde ein zweiter Redirect über den Proxy.
+      const to =
+        found.to.startsWith("/") && !/^\/(de|en|es)(\/|$)/.test(found.to)
+          ? lh(lang, found.to === "/" ? "" : found.to)
+          : found.to;
+      (found.permanent ? permanentRedirect : redirect)(to);
+    }
     notFound();
   }
 

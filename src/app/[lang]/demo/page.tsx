@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { ContactForm } from "@/components/contact/contact-form";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { hasLocale } from "@/lib/i18n";
 
 export async function generateMetadata({
@@ -75,7 +75,7 @@ export default async function DemoPage({ params }: { params: Promise<{ lang: str
 
         <div className="animate-rise" style={{ animationDelay: "120ms" }}>
           <Suspense>
-            <ContactForm lang={lang} dict={dict} />
+            <ContactForm lang={lang} dict={pickDict(dict, "contactForm", "voucher")} />
           </Suspense>
         </div>
       </Container>

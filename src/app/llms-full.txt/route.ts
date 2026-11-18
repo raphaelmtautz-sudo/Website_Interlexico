@@ -4,6 +4,7 @@ import { getIndustries } from "@/content/industries";
 import { getCourseFaq } from "@/content/course-faq";
 import { getIndustryLabels, getIndustryPages } from "@/content/branchen";
 import { getLocalPage, LOCAL_PATH } from "@/content/local";
+import { getService, SERVICE_SLUGS } from "@/content/services";
 import { getGuideLabels, getGuides } from "@/content/ratgeber";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
@@ -171,6 +172,13 @@ export async function buildLlmsFullTxt(lang: Locale): Promise<string> {
   lines.push(`## ${t.impact}`, `URL: ${url("/nachhaltigkeit")}`, "", dict.nachhaltigkeit.text, "", dict.nachhaltigkeit.calculator.text, "");
 
   lines.push(`## ${t.branchen}`, ...getIndustries(lang).map((i) => `- ${i}`), "", t.branchenDaf, "");
+
+  for (const slug of SERVICE_SLUGS) {
+    const sv = getService(lang, slug);
+    lines.push(`## ${sv.title}`, `URL: ${url(`/${slug}`)}`, "", sv.answer, "");
+    lines.push(...sv.facts.map((f) => `- ${f.label}: ${f.value}`), "");
+    for (const f of sv.faq) lines.push(`### ${f.question}`, f.answer, "");
+  }
 
   const lp = getLocalPage(lang);
   lines.push(`## ${lp.title}`, `URL: ${url(LOCAL_PATH)}`, "", lp.intro, "", lp.onsiteText, "", `${lp.places.join(", ")}. ${lp.placesNote}`, "");

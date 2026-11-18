@@ -11,7 +11,7 @@ interface Item {
   hint?: string;
 }
 
-export function CommandPalette({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+export function CommandPalette({ lang, dict }: { lang: Locale; dict: Pick<Dictionary, "commandPalette"> }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");

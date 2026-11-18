@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { SelfAssessment } from "@/components/interactive/self-assessment";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { hasLocale } from "@/lib/i18n";
 
 export async function generateMetadata({
@@ -36,7 +36,7 @@ export default async function EinstufungPage({ params }: { params: Promise<{ lan
             {t.text}
           </p>
         </div>
-        <SelfAssessment lang={lang} dict={dict} />
+        <SelfAssessment lang={lang} dict={pickDict(dict, "selfAssessment")} />
       </Container>
     </Section>
   );

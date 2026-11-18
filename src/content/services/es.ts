@@ -1,0 +1,117 @@
+import type { ServicePage, ServiceSlug } from "./index";
+
+const PLACE = "Presencial en el área de Múnich y Alta Baviera, online en toda la región DACH o híbrido";
+
+export const services: Record<ServiceSlug, ServicePage> = {
+  "executive-language-coaching": {
+    slug: "executive-language-coaching",
+    name: "Executive Language Coaching",
+    seoTitle: "Coaching de inglés para directivos | Interlexico",
+    description: "Executive Language Coaching: coaching de inglés 1:1 para directivos y gerencia, centrado en presentaciones, negociaciones y reuniones clave.",
+    eyebrow: "Executive Language Coaching",
+    title: "Coaching de inglés para directivos – individual y orientado a ocasiones",
+    answer:
+      "El Executive Language Coaching de Interlexico es un coaching individual para directivos y gerencia. Se adapta a su agenda y a sus ocasiones concretas: le preparamos específicamente para presentaciones, negociaciones, reuniones de consejo o congresos – de forma confidencial, con un coach fijo, presencial en el área de Múnich u online.",
+    facts: [
+      { label: "Para quién", value: "Directivos, gerencia y consejo de administración" },
+      { label: "Formato", value: "Coaching 1:1 con un coach fijo" },
+      { label: "Enfoque", value: "Preparación para ocasiones concretas y una presencia segura en inglés" },
+      { label: "Lugar", value: PLACE },
+      { label: "Fechas", value: "Individuales según su agenda, también poco antes de una ocasión" },
+      { label: "Oferta", value: "Individual; normalmente respondemos en dos días laborables" },
+    ],
+    forWhomTitle: "Para quién es el coaching",
+    forWhom: [
+      "Gerencia y consejo con interlocutores internacionales",
+      "Directivos ante una presentación o negociación importante",
+      "Nuevos directivos con responsabilidad internacional",
+      "Quien quiera trabajar su inglés de forma confidencial, sin grupo",
+    ],
+    topicsTitle: "Ocasiones y temas habituales",
+    topics: [
+      "Presentaciones y keynotes",
+      "Negociaciones y conversaciones difíciles",
+      "Reuniones de consejo y con inversores",
+      "Congresos, paneles y networking",
+      "Entrevistas y apariciones en medios",
+      "Correos estratégicos y documentos de posición",
+    ],
+    processTitle: "Cómo funciona el coaching",
+    process: [
+      { title: "Conversación previa", text: "Aclaramos objetivo, ocasión y plazos – de forma confidencial." },
+      { title: "Diagnóstico", text: "Una breve evaluación de su nivel y de lo que falta." },
+      { title: "Coaching focalizado", text: "Sesiones según su agenda, con sus documentos y situaciones reales." },
+      { title: "Ensayo general", text: "Antes de la ocasión practicamos desarrollo, preguntas y formulaciones." },
+    ],
+    faqTitle: "Preguntas frecuentes sobre el Executive Language Coaching",
+    faq: [
+      { question: "¿En qué se diferencia del entrenamiento individual normal?", answer: "El coaching se centra en ocasiones concretas y en la presencia de los directivos. Trabajamos con sus presentaciones, documentos y conversaciones reales en lugar de un plan general." },
+      { question: "¿Puedo recibir coaching poco antes de una cita?", answer: "Sí, el coaching puede prepararle específicamente para una ocasión próxima. Contáctenos lo antes posible para planificar las sesiones." },
+      { question: "¿Los contenidos son confidenciales?", answer: "Sí. El coaching es 1:1 y los documentos que comparta para la preparación se tratan de forma confidencial." },
+      { question: "¿El coaching es online o presencial?", answer: "Ambas opciones: presencial en el área de Múnich y Alta Baviera, online en toda Alemania, Austria y Suiza, o alternando." },
+    ],
+    ctaTitle: "¿Su próxima cita importante en inglés?",
+    ctaText: "Cuéntenos brevemente de qué se trata y para cuándo; normalmente respondemos en dos días laborables.",
+    serviceType: "Executive language coaching",
+    related: [
+      { label: "Business English: formación individual", path: "/kurse/business-english/einzelunterricht" },
+      { label: "Guía: inglés al teléfono y en videollamadas", path: "/ratgeber/englisch-telefonate-videocalls" },
+      { label: "Formación de idiomas en Múnich y Alta Baviera", path: "/sprachtraining-muenchen" },
+    ],
+  },
+  "interkulturelle-kommunikation": {
+    slug: "interkulturelle-kommunikation",
+    name: "Comunicación intercultural",
+    seoTitle: "Formación intercultural para empresas y equipos | Interlexico",
+    description: "Formación intercultural para empresas: talleres para equipos internacionales, incorporación de profesionales internacionales y preparación por país.",
+    eyebrow: "Comunicación intercultural",
+    title: "Formación intercultural para empresas",
+    answer:
+      "La comunicación intercultural de Interlexico está pensada para empresas cuyos equipos trabajan a nivel internacional. Ofrecemos talleres para equipos, acompañamos la incorporación de profesionales internacionales a la cultura laboral en Alemania y preparamos específicamente para colaborar con determinados países y regiones – presencial en el área de Múnich u online.",
+    facts: [
+      { label: "Para quién", value: "Equipos internacionales, directivos y nuevas incorporaciones internacionales" },
+      { label: "Formatos", value: "Talleres para equipos, acompañamiento en la incorporación, preparación por país" },
+      { label: "Combinable", value: "Con Business English o alemán para el trabajo" },
+      { label: "Lugar", value: PLACE },
+      { label: "Oferta", value: "Individual; normalmente respondemos en dos días laborables" },
+    ],
+    forWhomTitle: "Para qué usan las empresas la formación",
+    forWhom: [
+      "Equipos que colaboran entre sedes o países",
+      "Incorporación de profesionales internacionales a la cultura laboral en Alemania",
+      "Preparación para proyectos, clientes o socios en un país concreto",
+      "Directivos que lideran equipos internacionales",
+    ],
+    topicsTitle: "Temas habituales",
+    topics: [
+      "Estilos de comunicación: directo e indirecto",
+      "Feedback, críticas y conflictos",
+      "Reuniones, decisiones y jerarquías",
+      "Tiempo, compromiso y acuerdos",
+      "Cultura laboral y reglas no escritas en Alemania",
+      "Colaboración con un país o región concretos",
+    ],
+    processTitle: "Cómo funciona",
+    process: [
+      { title: "Análisis de necesidades", text: "Aclaramos quién colabora con quién, dónde surgen problemas y cuál es el objetivo." },
+      { title: "Adaptación", text: "Contenidos y formato – taller, incorporación o enfoque por país – se ajustan a su equipo." },
+      { title: "Formación", text: "Práctica, con situaciones de su día a día – presencial, online o híbrida." },
+      { title: "Consolidación", text: "Si lo desea, combinada con Business English o alemán para que llegue al día a día." },
+    ],
+    faqTitle: "Preguntas frecuentes sobre la formación intercultural",
+    faq: [
+      { question: "¿Para qué países preparan?", answer: "La preparación por país se basa en los países y regiones con los que trabaja su equipo. Indíquenos en su solicitud cuáles son." },
+      { question: "¿Ayuda la formación en la incorporación de personal internacional?", answer: "Sí. Acompañamos a los nuevos profesionales internacionales en su llegada a la cultura laboral en Alemania, si lo desea combinado con un curso de alemán." },
+      { question: "¿Se puede combinar con formación de idiomas?", answer: "Sí, los temas interculturales se pueden combinar con Business English o alemán como lengua extranjera." },
+      { question: "¿La formación es online o presencial?", answer: "Ambas opciones: presencial en el área de Múnich y Alta Baviera, online en toda Alemania, Austria y Suiza, o híbrida." },
+    ],
+    ctaTitle: "Refuerce la colaboración internacional de su equipo",
+    ctaText: "Describa brevemente quién colabora con quién; normalmente respondemos en dos días laborables con una propuesta.",
+    serviceType: "Intercultural communication training",
+    related: [
+      { label: "Alemán para la plantilla internacional", path: "/kurse/deutsch-als-fremdsprache" },
+      { label: "Guía: curso de alemán para profesionales internacionales", path: "/ratgeber/deutschkurs-internationale-fachkraefte" },
+      { label: "Business English para empresas", path: "/kurse/business-english" },
+    ],
+  },
+};

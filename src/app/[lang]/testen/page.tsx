@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { TrialSignupForm } from "@/components/trial/trial-signup-form";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { hasLocale } from "@/lib/i18n";
 
 export async function generateMetadata({
@@ -37,7 +37,7 @@ export default async function TestenPage({ params }: { params: Promise<{ lang: s
           <h1 className="kinetic font-display text-4xl mb-4 text-balance sm:text-5xl">{t.title}</h1>
           <p className="mx-auto max-w-md font-sans text-base leading-relaxed text-paper-dim mb-10">{t.text}</p>
         </div>
-        <TrialSignupForm dict={dict} />
+        <TrialSignupForm dict={pickDict(dict, "testen")} />
       </Container>
     </Section>
   );

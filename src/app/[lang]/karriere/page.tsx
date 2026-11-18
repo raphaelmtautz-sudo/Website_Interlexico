@@ -8,7 +8,7 @@ import { Container } from "@/components/ui/container";
 import { CareerForm } from "@/components/career/career-form";
 import { SITE } from "@/lib/site";
 import { getLegal, getJobs } from "@/lib/cms";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { hasLocale } from "@/lib/i18n";
 
 export async function generateMetadata({
@@ -91,7 +91,7 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
 
         <div className="animate-rise min-w-0" style={{ animationDelay: "120ms" }}>
           <Suspense>
-            <CareerForm lang={lang} dict={dict} />
+            <CareerForm lang={lang} dict={pickDict(dict, "contactForm", "karriere")} />
           </Suspense>
         </div>
       </Container>

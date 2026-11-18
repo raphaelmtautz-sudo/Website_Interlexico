@@ -38,7 +38,7 @@ interface Saved {
  * ohne Preise; die Auswahl wird vollständig an das Kontaktformular übergeben.
  * Jeder Schritt ist optional, "Weiter" ist nie gesperrt.
  */
-export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+export function Configurator({ lang, dict }: { lang: Locale; dict: Pick<Dictionary, "contactForm"> }) {
   const c = getConfiguratorContent(lang);
   const activeCourses = useMemo(() => getCourseTypes(lang).filter((x) => x.status === "aktiv"), [lang]);
   const industries = useMemo(() => getIndustries(lang), [lang]);
@@ -140,6 +140,8 @@ export function Configurator({ lang, dict }: { lang: Locale; dict: Dictionary })
   }
 
   function go(to: number) {
+    // Rückschritte messen (wo zögern Besucher?) — nur die Schrittnummer.
+    if (to < stepIndex) track("configurator_back", { from: String(stepIndex + 1), to: String(Math.max(0, to) + 1) });
     markStarted();
     moved.current = true;
     setResume(null);

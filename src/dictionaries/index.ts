@@ -12,3 +12,13 @@ export type { Dictionary };
 export function getDictionary(locale: Locale): Dictionary {
   return dictionaries[locale];
 }
+
+/**
+ * Nur die benötigten Teile des Wörterbuchs an Client-Komponenten geben — sonst
+ * landet das komplette Wörterbuch (~37 KB) im HTML jeder Seite.
+ */
+export function pickDict<K extends keyof Dictionary>(dict: Dictionary, ...keys: K[]): Pick<Dictionary, K> {
+  const out = {} as Pick<Dictionary, K>;
+  for (const k of keys) out[k] = dict[k];
+  return out;
+}

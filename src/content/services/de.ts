@@ -1,0 +1,117 @@
+import type { ServicePage, ServiceSlug } from "./index";
+
+const PLACE = "Vor Ort im Großraum München und Oberbayern, online in ganz DACH oder hybrid";
+
+export const services: Record<ServiceSlug, ServicePage> = {
+  "executive-language-coaching": {
+    slug: "executive-language-coaching",
+    name: "Executive Language Coaching",
+    seoTitle: "Executive Language Coaching für Führungskräfte | Interlexico",
+    description: "Executive Language Coaching: 1:1-Englischcoaching für Führungskräfte und Geschäftsführung, gezielt für Präsentationen, Verhandlungen und wichtige Termine.",
+    eyebrow: "Executive Language Coaching",
+    title: "Englisch-Coaching für Führungskräfte – 1:1 und anlassbezogen",
+    answer:
+      "Executive Language Coaching bei Interlexico ist ein Einzelcoaching für Führungskräfte und Geschäftsführung. Es richtet sich nach Ihrem Kalender und Ihren konkreten Anlässen: Wir bereiten Sie gezielt auf Präsentationen, Verhandlungen, Board-Meetings oder Konferenzen vor – vertraulich, mit einem festen Coach, vor Ort im Großraum München oder online.",
+    facts: [
+      { label: "Für wen", value: "Führungskräfte, Geschäftsführung und Vorstand" },
+      { label: "Format", value: "1:1-Coaching mit festem Coach" },
+      { label: "Schwerpunkt", value: "Vorbereitung auf konkrete Anlässe und souveräner Auftritt auf Englisch" },
+      { label: "Ort", value: PLACE },
+      { label: "Termine", value: "Individuell nach Kalender, auch kurz vor einem Anlass" },
+      { label: "Angebot", value: "Individuell; Rückmeldung in der Regel innerhalb von zwei Werktagen" },
+    ],
+    forWhomTitle: "Für wen das Coaching gedacht ist",
+    forWhom: [
+      "Geschäftsführung und Vorstand mit internationalen Gesprächspartnern",
+      "Führungskräfte vor einer wichtigen Präsentation oder Verhandlung",
+      "Neu ernannte Führungskräfte mit internationaler Verantwortung",
+      "Alle, die vertraulich und ohne Gruppe an ihrem Englisch arbeiten möchten",
+    ],
+    topicsTitle: "Typische Anlässe und Themen",
+    topics: [
+      "Präsentationen und Keynotes",
+      "Verhandlungen und schwierige Gespräche",
+      "Board-Meetings und Investorengespräche",
+      "Konferenzen, Panels und Networking",
+      "Interviews und Auftritte vor Medien",
+      "Strategische E-Mails und Positionspapiere",
+    ],
+    processTitle: "So läuft das Coaching ab",
+    process: [
+      { title: "Vorgespräch", text: "Wir klären Ziel, Anlass und Zeitrahmen – vertraulich." },
+      { title: "Standortbestimmung", text: "Kurze Einstufung, wo Sie sprachlich stehen und was fehlt." },
+      { title: "Gezieltes Coaching", text: "Einheiten zu Ihren Terminen, mit Ihren echten Unterlagen und Situationen." },
+      { title: "Generalprobe", text: "Vor dem Anlass üben wir Ablauf, Fragen und Formulierungen." },
+    ],
+    faqTitle: "Häufige Fragen zum Executive Language Coaching",
+    faq: [
+      { question: "Was unterscheidet Executive Coaching vom normalen Einzeltraining?", answer: "Das Coaching ist auf konkrete Anlässe und den Auftritt von Führungskräften ausgerichtet. Wir arbeiten mit Ihren echten Präsentationen, Unterlagen und Gesprächssituationen statt mit einem allgemeinen Lehrplan." },
+      { question: "Kann ich kurzfristig vor einem Termin coachen lassen?", answer: "Ja, das Coaching kann gezielt auf einen bevorstehenden Anlass vorbereiten. Sprechen Sie uns möglichst früh an, damit wir die Termine passend planen können." },
+      { question: "Bleiben Inhalte vertraulich?", answer: "Ja. Das Coaching findet 1:1 statt, und Unterlagen, die Sie zur Vorbereitung teilen, werden vertraulich behandelt." },
+      { question: "Findet das Coaching online oder vor Ort statt?", answer: "Beides ist möglich: vor Ort im Großraum München und Oberbayern, online in ganz Deutschland, Österreich und der Schweiz oder im Wechsel." },
+    ],
+    ctaTitle: "Ihr nächster wichtiger Termin auf Englisch?",
+    ctaText: "Schreiben Sie uns kurz, worum es geht und bis wann – wir melden uns in der Regel innerhalb von zwei Werktagen.",
+    serviceType: "Executive language coaching",
+    related: [
+      { label: "Business English Einzeltraining", path: "/kurse/business-english/einzelunterricht" },
+      { label: "Ratgeber: Englisch in Telefonaten und Videocalls", path: "/ratgeber/englisch-telefonate-videocalls" },
+      { label: "Sprachtraining in München & Oberbayern", path: "/sprachtraining-muenchen" },
+    ],
+  },
+  "interkulturelle-kommunikation": {
+    slug: "interkulturelle-kommunikation",
+    name: "Interkulturelle Kommunikation",
+    seoTitle: "Interkulturelles Training für Unternehmen & Teams | Interlexico",
+    description: "Interkulturelles Training für Unternehmen: Workshops für internationale Teams, Onboarding internationaler Fachkräfte und länderspezifische Vorbereitung.",
+    eyebrow: "Interkulturelle Kommunikation",
+    title: "Interkulturelles Training für Unternehmen",
+    answer:
+      "Interkulturelle Kommunikation bei Interlexico richtet sich an Unternehmen, deren Teams international zusammenarbeiten. Wir bieten Workshops für Teams, begleiten das Onboarding internationaler Fachkräfte in die Arbeitskultur in Deutschland und bereiten gezielt auf die Zusammenarbeit mit bestimmten Ländern und Regionen vor – vor Ort im Großraum München oder online.",
+    facts: [
+      { label: "Für wen", value: "Internationale Teams, Führungskräfte und neue internationale Mitarbeitende" },
+      { label: "Formate", value: "Workshops für Teams, Onboarding-Begleitung, länderspezifische Vorbereitung" },
+      { label: "Kombinierbar", value: "Mit Business English oder Deutsch für den Beruf" },
+      { label: "Ort", value: PLACE },
+      { label: "Angebot", value: "Individuell; Rückmeldung in der Regel innerhalb von zwei Werktagen" },
+    ],
+    forWhomTitle: "Wofür Unternehmen das Training nutzen",
+    forWhom: [
+      "Teams, die standort- oder länderübergreifend zusammenarbeiten",
+      "Onboarding internationaler Fachkräfte in die Arbeitskultur in Deutschland",
+      "Vorbereitung auf Projekte, Kunden oder Partner in einem bestimmten Land",
+      "Führungskräfte, die internationale Teams leiten",
+    ],
+    topicsTitle: "Typische Themen",
+    topics: [
+      "Kommunikationsstile: direkt und indirekt",
+      "Feedback, Kritik und Konflikte",
+      "Meetings, Entscheidungen und Hierarchien",
+      "Zeit, Verbindlichkeit und Absprachen",
+      "Arbeitskultur und ungeschriebene Regeln in Deutschland",
+      "Zusammenarbeit mit einem bestimmten Land oder einer Region",
+    ],
+    processTitle: "So läuft es ab",
+    process: [
+      { title: "Bedarfsgespräch", text: "Wir klären, wer zusammenarbeitet, wo es hakt und was das Ziel ist." },
+      { title: "Zuschnitt", text: "Inhalte und Format – Workshop, Onboarding oder Länderfokus – werden auf Ihr Team abgestimmt." },
+      { title: "Training", text: "Praxisnah mit Situationen aus Ihrem Arbeitsalltag – vor Ort, online oder hybrid." },
+      { title: "Verankerung", text: "Auf Wunsch kombiniert mit Business English oder Deutsch, damit das Gelernte im Alltag ankommt." },
+    ],
+    faqTitle: "Häufige Fragen zum interkulturellen Training",
+    faq: [
+      { question: "Für welche Länder bereiten Sie vor?", answer: "Die länderspezifische Vorbereitung richtet sich nach den Ländern und Regionen, mit denen Ihr Team zusammenarbeitet. Nennen Sie uns in der Anfrage, um welche es geht." },
+      { question: "Hilft das Training beim Onboarding internationaler Mitarbeitender?", answer: "Ja. Wir begleiten neue internationale Fachkräfte beim Ankommen in der Arbeitskultur in Deutschland – auf Wunsch kombiniert mit einem Deutschkurs." },
+      { question: "Lässt sich das mit Sprachtraining kombinieren?", answer: "Ja, interkulturelle Themen lassen sich mit Business English oder Deutsch als Fremdsprache verbinden." },
+      { question: "Findet das Training online oder vor Ort statt?", answer: "Beides ist möglich: vor Ort im Großraum München und Oberbayern, online in ganz Deutschland, Österreich und der Schweiz oder hybrid." },
+    ],
+    ctaTitle: "Internationale Zusammenarbeit in Ihrem Team stärken",
+    ctaText: "Beschreiben Sie kurz, wer mit wem zusammenarbeitet – wir melden uns in der Regel innerhalb von zwei Werktagen mit einem Vorschlag.",
+    serviceType: "Intercultural communication training",
+    related: [
+      { label: "Deutsch für internationale Mitarbeitende", path: "/kurse/deutsch-als-fremdsprache" },
+      { label: "Ratgeber: Deutschkurs für internationale Fachkräfte", path: "/ratgeber/deutschkurs-internationale-fachkraefte" },
+      { label: "Business English für Unternehmen", path: "/kurse/business-english" },
+    ],
+  },
+};

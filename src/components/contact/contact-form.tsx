@@ -36,7 +36,7 @@ function makeIdempotencyKey(): string {
   }
 }
 
-export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) {
+export function ContactForm({ lang, dict }: { lang: Locale; dict: Pick<Dictionary, "contactForm" | "voucher"> }) {
   const t = dict.contactForm;
   const industries = getIndustries(lang);
   const BRANCH_TOPIC = getCourseType(lang, "business-english")?.name ?? "Business English";
@@ -240,8 +240,10 @@ export function ContactForm({ lang, dict }: { lang: Locale; dict: Dictionary }) 
           }).catch(() => {});
         }
       }
+      if (!ok) track("form_error", { form: "kontakt", code: String(data?.error ?? res.status) });
       setStatus(ok ? "sent" : "error");
     } catch {
+      track("form_error", { form: "kontakt", code: "network" });
       setStatus("error");
     }
   }

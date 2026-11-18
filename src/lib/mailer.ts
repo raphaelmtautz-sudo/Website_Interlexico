@@ -24,6 +24,8 @@ const transport =
 export async function sendMail(opts: {
   to: string;
   replyTo?: string;
+  /** Anzeigename vor der Absenderadresse, z. B. "Interlexico". */
+  fromName?: string;
   subject: string;
   text: string;
   attachments?: { filename: string; content: Buffer; contentType?: string }[];
@@ -36,7 +38,7 @@ export async function sendMail(opts: {
     return { sent: false as const };
   }
   await transport.sendMail({
-    from: SMTP_FROM,
+    from: opts.fromName && SMTP_FROM ? { name: opts.fromName, address: SMTP_FROM } : SMTP_FROM,
     to: opts.to,
     replyTo: opts.replyTo,
     subject: opts.subject,

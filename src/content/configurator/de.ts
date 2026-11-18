@@ -236,7 +236,7 @@ export const configurator: ConfiguratorContent = {
     submit: "Angebot anfordern",
     close: "Schließen",
     successTitle: "Vielen Dank für Ihre Anfrage!",
-    successText: "Wir prüfen Ihren Trainingsbedarf und melden uns in der Regel innerhalb von zwei Werktagen persönlich mit einem konkreten Angebot.",
+    successText: "Wir prüfen Ihren Trainingsbedarf und melden uns in der Regel innerhalb von zwei Werktagen persönlich mit einem konkreten Angebot. Eine Eingangsbestätigung ist per E-Mail unterwegs.",
     reference: "Ihre Vorgangsnummer",
     fallback: "Stattdessen das Kontaktformular nutzen",
   },

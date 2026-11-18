@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { pickDict } from "@/dictionaries";
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -64,11 +65,11 @@ export async function SiteHeader({ lang, dict }: { lang: Locale; dict: Dictionar
         <div className="flex items-center gap-3">
           <CommandTrigger className="hidden lg:flex" label={dict.nav.search} ariaLabel={dict.nav.searchOpen} />
           <LanguageSwitcher lang={lang} className="hidden lg:flex" ariaLabel={dict.nav.sprache} />
-          <ThemeControl className="hidden lg:block" dict={dict} />
+          <ThemeControl className="hidden lg:block" dict={pickDict(dict, "theme")} />
           <Button href={lh(lang, "/kontakt")} variant="secondary" className="hidden lg:inline-flex">
             {dict.nav.anfragen}
           </Button>
-          <MobileNav items={mobileItems} lang={lang} dict={dict} logoUrl={logoUrl} logoAlt={logoAlt} />
+          <MobileNav items={mobileItems} lang={lang} dict={pickDict(dict, "nav", "theme")} logoUrl={logoUrl} logoAlt={logoAlt} />
         </div>
       </Container>
     </header>

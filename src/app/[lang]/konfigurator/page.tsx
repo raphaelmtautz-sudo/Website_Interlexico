@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/container";
 import { Accordion } from "@/components/ui/accordion";
 import { Configurator } from "@/components/interactive/configurator";
 import { FaqJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { hasLocale, lh, type Locale } from "@/lib/i18n";
 
 /**
@@ -140,7 +140,7 @@ export default async function KonfiguratorPage({ params }: { params: Promise<{ l
           <h1 className="font-display text-5xl leading-[1.05] text-balance sm:text-6xl">{t.title}</h1>
           <p className="mt-6 max-w-2xl font-sans text-lg leading-relaxed text-paper-dim">{t.text}</p>
         </div>
-        <Configurator lang={lang} dict={dict} />
+        <Configurator lang={lang} dict={pickDict(dict, "contactForm")} />
       </Section>
       <Section className="border-t border-line">
         <Container className="max-w-3xl">

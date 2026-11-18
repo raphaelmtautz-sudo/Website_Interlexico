@@ -12,7 +12,7 @@ import { CommandPalette } from "@/components/interactive/command-palette";
 import { AdaptiveUI } from "@/components/interactive/adaptive-ui";
 import { VoucherPopup } from "@/components/interactive/voucher-popup";
 import { locales, hasLocale, lh, type Locale } from "@/lib/i18n";
-import { getDictionary } from "@/dictionaries";
+import { getDictionary, pickDict } from "@/dictionaries";
 import { getLegal, getContact } from "@/lib/cms";
 import { SITE } from "@/lib/site";
 
@@ -133,8 +133,8 @@ export default async function RootLayout({
             {children}
           </main>
           <SiteFooter lang={lang} dict={dict} socialLinks={contact.socialLinks} whatsapp={whatsapp} />
-          <LexiWidget lang={lang} dict={dict} />
-          <CommandPalette lang={lang} dict={dict} />
+          <LexiWidget lang={lang} dict={pickDict(dict, "lexi")} />
+          <CommandPalette lang={lang} dict={pickDict(dict, "commandPalette")} />
           <AdaptiveUI />
           <VoucherPopup lang={lang} t={dict.voucher} />
           <Analytics />

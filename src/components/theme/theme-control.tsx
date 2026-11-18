@@ -19,7 +19,7 @@ function readFocus(): boolean {
   return typeof window !== "undefined" && localStorage.getItem(FOCUS_KEY) === "on";
 }
 
-export function ThemeControl({ className = "", dict }: { className?: string; dict: Dictionary }) {
+export function ThemeControl({ className = "", dict }: { className?: string; dict: Pick<Dictionary, "theme"> }) {
   const { pref, setPref } = useTheme();
   const [open, setOpen] = useState(false);
   const OPTIONS: { value: ThemePref; label: string; hint: string }[] = [

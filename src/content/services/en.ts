@@ -1,0 +1,117 @@
+import type { ServicePage, ServiceSlug } from "./index";
+
+const PLACE = "On-site in the Munich area and Upper Bavaria, online across DACH, or hybrid";
+
+export const services: Record<ServiceSlug, ServicePage> = {
+  "executive-language-coaching": {
+    slug: "executive-language-coaching",
+    name: "Executive Language Coaching",
+    seoTitle: "Executive Language Coaching for Leaders | Interlexico",
+    description: "Executive language coaching: one-to-one English coaching for managers and executives, focused on presentations, negotiations and key meetings.",
+    eyebrow: "Executive Language Coaching",
+    title: "English coaching for executives – one-to-one and occasion-focused",
+    answer:
+      "Executive Language Coaching at Interlexico is one-to-one coaching for managers and executives. It fits your calendar and your concrete occasions: we prepare you specifically for presentations, negotiations, board meetings or conferences – confidentially, with a dedicated coach, on-site in the Munich area or online.",
+    facts: [
+      { label: "Who it's for", value: "Managers, managing directors and board members" },
+      { label: "Format", value: "One-to-one coaching with a dedicated coach" },
+      { label: "Focus", value: "Preparing for specific occasions and a confident appearance in English" },
+      { label: "Location", value: PLACE },
+      { label: "Scheduling", value: "Individually around your calendar, also shortly before an occasion" },
+      { label: "Proposal", value: "Individual; we usually reply within two working days" },
+    ],
+    forWhomTitle: "Who the coaching is for",
+    forWhom: [
+      "Managing directors and board members with international counterparts",
+      "Managers ahead of an important presentation or negotiation",
+      "Newly appointed leaders with international responsibility",
+      "Anyone who wants to work on their English confidentially, without a group",
+    ],
+    topicsTitle: "Typical occasions and topics",
+    topics: [
+      "Presentations and keynotes",
+      "Negotiations and difficult conversations",
+      "Board meetings and investor talks",
+      "Conferences, panels and networking",
+      "Interviews and media appearances",
+      "Strategic emails and position papers",
+    ],
+    processTitle: "How the coaching works",
+    process: [
+      { title: "Initial conversation", text: "We clarify goal, occasion and timeframe – confidentially." },
+      { title: "Assessment", text: "A short check of where you stand and what is missing." },
+      { title: "Focused coaching", text: "Sessions around your schedule, using your real documents and situations." },
+      { title: "Dress rehearsal", text: "Before the occasion we practise flow, questions and wording." },
+    ],
+    faqTitle: "Frequently asked questions about executive language coaching",
+    faq: [
+      { question: "How does executive coaching differ from regular one-to-one training?", answer: "The coaching focuses on concrete occasions and how leaders come across. We work with your real presentations, documents and conversations instead of a general syllabus." },
+      { question: "Can I get coaching shortly before an appointment?", answer: "Yes, the coaching can prepare you specifically for an upcoming occasion. Contact us as early as possible so we can plan sessions accordingly." },
+      { question: "Is the content kept confidential?", answer: "Yes. Coaching takes place one-to-one, and any documents you share for preparation are treated confidentially." },
+      { question: "Is the coaching online or on-site?", answer: "Both are possible: on-site in the Munich area and Upper Bavaria, online across Germany, Austria and Switzerland, or alternating." },
+    ],
+    ctaTitle: "Your next important meeting in English?",
+    ctaText: "Tell us briefly what it is about and by when – we usually reply within two working days.",
+    serviceType: "Executive language coaching",
+    related: [
+      { label: "Business English one-to-one training", path: "/kurse/business-english/einzelunterricht" },
+      { label: "Guide: English on the phone and in video calls", path: "/ratgeber/englisch-telefonate-videocalls" },
+      { label: "Language training in Munich & Upper Bavaria", path: "/sprachtraining-muenchen" },
+    ],
+  },
+  "interkulturelle-kommunikation": {
+    slug: "interkulturelle-kommunikation",
+    name: "Intercultural Communication",
+    seoTitle: "Intercultural Training for Companies & Teams | Interlexico",
+    description: "Intercultural training for companies: workshops for international teams, onboarding of international staff and country-specific preparation.",
+    eyebrow: "Intercultural Communication",
+    title: "Intercultural training for companies",
+    answer:
+      "Intercultural communication at Interlexico is for companies whose teams work internationally. We run workshops for teams, support the onboarding of international professionals into the working culture in Germany and prepare people specifically for working with certain countries and regions – on-site in the Munich area or online.",
+    facts: [
+      { label: "Who it's for", value: "International teams, managers and new international staff" },
+      { label: "Formats", value: "Team workshops, onboarding support, country-specific preparation" },
+      { label: "Combinable", value: "With Business English or job-focused German" },
+      { label: "Location", value: PLACE },
+      { label: "Proposal", value: "Individual; we usually reply within two working days" },
+    ],
+    forWhomTitle: "What companies use the training for",
+    forWhom: [
+      "Teams working across locations or countries",
+      "Onboarding international professionals into the working culture in Germany",
+      "Preparing for projects, clients or partners in a specific country",
+      "Managers leading international teams",
+    ],
+    topicsTitle: "Typical topics",
+    topics: [
+      "Communication styles: direct and indirect",
+      "Feedback, criticism and conflict",
+      "Meetings, decisions and hierarchies",
+      "Time, commitment and agreements",
+      "Working culture and unwritten rules in Germany",
+      "Working with a specific country or region",
+    ],
+    processTitle: "How it works",
+    process: [
+      { title: "Needs analysis", text: "We clarify who works together, where things get stuck and what the goal is." },
+      { title: "Tailoring", text: "Content and format – workshop, onboarding or country focus – are adapted to your team." },
+      { title: "Training", text: "Practical, with situations from your working day – on-site, online or hybrid." },
+      { title: "Embedding", text: "Optionally combined with Business English or German so it carries into everyday work." },
+    ],
+    faqTitle: "Frequently asked questions about intercultural training",
+    faq: [
+      { question: "Which countries do you prepare for?", answer: "Country-specific preparation is based on the countries and regions your team works with. Let us know in your enquiry which ones are relevant." },
+      { question: "Does the training help with onboarding international staff?", answer: "Yes. We support new international professionals as they settle into the working culture in Germany – optionally combined with a German course." },
+      { question: "Can it be combined with language training?", answer: "Yes, intercultural topics can be combined with Business English or German as a Foreign Language." },
+      { question: "Is the training online or on-site?", answer: "Both are possible: on-site in the Munich area and Upper Bavaria, online across Germany, Austria and Switzerland, or hybrid." },
+    ],
+    ctaTitle: "Strengthen international collaboration in your team",
+    ctaText: "Briefly describe who works with whom – we usually reply within two working days with a proposal.",
+    serviceType: "Intercultural communication training",
+    related: [
+      { label: "German for international staff", path: "/kurse/deutsch-als-fremdsprache" },
+      { label: "Guide: German courses for international professionals", path: "/ratgeber/deutschkurs-internationale-fachkraefte" },
+      { label: "Business English for companies", path: "/kurse/business-english" },
+    ],
+  },
+};

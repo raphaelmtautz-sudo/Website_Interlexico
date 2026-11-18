@@ -26,7 +26,7 @@ export function MobileNav({
 }: {
   items: NavItem[];
   lang: Locale;
-  dict: Dictionary;
+  dict: Pick<Dictionary, "nav" | "theme">;
   logoUrl?: string;
   logoAlt?: string;
 }) {
