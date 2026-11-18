@@ -2,14 +2,14 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { getCourseTypes } from "@/content/course-types";
 import { getIndustryPages } from "@/content/branchen";
-import { getGuides } from "@/content/ratgeber";
+import { getAllGuides, guideLocales } from "@/lib/guides";
 import { getPosts, getSiteSettings } from "@/lib/cms";
 import { locales, lh, defaultLocale, type Locale } from "@/lib/i18n";
 
-function alternates(path: string): Record<string, string> {
+function alternates(path: string, only: readonly Locale[] = locales): Record<string, string> {
   const langs: Record<string, string> = {};
-  for (const l of locales) langs[l] = `${SITE.url}${lh(l, path)}`;
-  langs["x-default"] = `${SITE.url}${lh(defaultLocale, path)}`;
+  for (const l of only) langs[l] = `${SITE.url}${lh(l, path)}`;
+  langs["x-default"] = `${SITE.url}${lh(only.includes(defaultLocale) ? defaultLocale : only[0], path)}`;
   return langs;
 }
 
@@ -116,13 +116,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
 
-    for (const guide of getGuides(l as Locale)) {
+    for (const guide of await getAllGuides(l as Locale)) {
+      const guideLangs = await guideLocales(guide.slug);
       entries.push({
         url: `${SITE.url}${lh(l, `/ratgeber/${guide.slug}`)}`,
         lastModified: new Date(`${guide.updated}T12:00:00Z`),
         changeFrequency: "monthly",
         priority: 0.7,
-        alternates: { languages: alternates(`/ratgeber/${guide.slug}`) },
+        alternates: { languages: alternates(`/ratgeber/${guide.slug}`, guideLangs) },
       });
     }
 

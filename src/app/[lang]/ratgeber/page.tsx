@@ -6,7 +6,8 @@ import { Section, Eyebrow } from "@/components/ui/section";
 import { Reveal } from "@/components/interactive/reveal";
 import { PageCta } from "@/components/content/page-cta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { getGuideLabels, getGuides } from "@/content/ratgeber";
+import { getGuideLabels } from "@/content/ratgeber";
+import { getAllGuides } from "@/lib/guides";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh } from "@/lib/i18n";
 
@@ -22,7 +23,7 @@ export default async function RatgeberPage({ params }: { params: Promise<{ lang:
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
   const t = getGuideLabels(lang);
-  const guides = getGuides(lang);
+  const guides = await getAllGuides(lang);
 
   return (
     <>

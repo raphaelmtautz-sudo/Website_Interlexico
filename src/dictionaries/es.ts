@@ -265,10 +265,9 @@ export const es: Dictionary = {
     positionenEyebrow: "Buscamos",
     direktKontaktLabel: "¿Prefiere contactarnos directamente?",
     emailLabel: "Correo electrónico",
-    positions: [
-      "Formador/a de idiomas (inglés de negocios)",
-      "Formador/a de idiomas (alemán como lengua extranjera)",
-    ],
+    initiativ: "Candidatura espontánea (bolsa de formadores)",
+    eyebrowOhneStellen: "Empleo en Interlexico",
+    titleOhneStellen: "Candidatura espontánea: únase a nuestra bolsa de formadores",
     formTitle: "Unirse a la bolsa de formadores",
     positionLabel: "Posición",
     vorname: "Nombre",

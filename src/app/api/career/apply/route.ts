@@ -1,4 +1,7 @@
 import { type NextRequest } from "next/server";
+import { getJobs } from "@/lib/cms";
+import { getDictionary } from "@/dictionaries";
+import { locales } from "@/lib/i18n";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { SITE } from "@/lib/site";
 import { sendMail } from "@/lib/mailer";
@@ -112,6 +115,17 @@ export async function POST(req: NextRequest) {
     consent: form.get("consent") === "true",
   };
 
+  // Nur echte Positionen zulassen (aktive CMS-Stellen in allen Sprachen oder
+  // Initiativbewerbung) — freier Text würde sonst in die Bestätigungsmail an
+  // eine beliebige Adresse wandern.
+  const allowed = new Set<string>([
+    ...((await getJobs("de")) ?? []),
+    ...((await getJobs("en")) ?? []),
+    ...((await getJobs("es")) ?? []),
+    ...locales.map((l) => getDictionary(l).karriere.initiativ),
+  ]);
+  if (!allowed.has(application.position)) application.position = getDictionary("de").karriere.initiativ;
+
   if (!application.name || !application.position) {
     return Response.json({ ok: false, error: "missing_fields" }, { status: 422 });
   }
@@ -169,7 +183,7 @@ export async function POST(req: NextRequest) {
     await sendMail({
       to: application.email,
       subject: `Ihre Bewerbung bei Interlexico — ${application.position}`,
-      text: `Hallo ${application.name},\n\nvielen Dank für Ihre Bewerbung als „${application.position}" bei Interlexico. Wir haben Ihre Unterlagen erhalten und melden uns in Kürze bei Ihnen.\n\nViele Grüße\nInterlexico`,
+      text: `Guten Tag,\n\nvielen Dank für Ihre Bewerbung („${application.position}") bei Interlexico. Wir haben Ihre Unterlagen erhalten und melden uns in Kürze bei Ihnen.\n\nViele Grüße\nInterlexico`,
     });
   }
 

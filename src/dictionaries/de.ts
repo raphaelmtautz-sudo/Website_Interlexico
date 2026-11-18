@@ -263,10 +263,9 @@ export const de = {
     positionenEyebrow: "Wir suchen",
     direktKontaktLabel: "Lieber direkt?",
     emailLabel: "E-Mail",
-    positions: [
-      "Sprachtrainer:in (Business English)",
-      "Sprachtrainer:in (Deutsch als Fremdsprache)",
-    ],
+    initiativ: "Initiativbewerbung (Trainer-Pool)",
+    eyebrowOhneStellen: "Karriere bei Interlexico",
+    titleOhneStellen: "Initiativbewerbung: Werden Sie Teil unseres Trainer-Pools",
     formTitle: "In den Trainer-Pool aufnehmen lassen",
     positionLabel: "Position",
     vorname: "Name",

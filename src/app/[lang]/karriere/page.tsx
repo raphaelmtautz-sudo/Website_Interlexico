@@ -29,7 +29,9 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
   const t = dict.karriere;
   const legal = await getLegal();
   const cmsJobs = await getJobs(lang);
-  const positions = cmsJobs.length ? cmsJobs : t.positions;
+  // Nur aktive Stellen aus dem CMS — keine fest eingebauten Ersatzstellen mehr.
+  const positions = cmsJobs ?? [];
+  const hasJobs = positions.length > 0;
   const phone = legal.phone ?? SITE.phone;
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
@@ -37,10 +39,10 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
     <Section className="pt-24 lg:pt-32">
       <Container className="grid gap-16 lg:grid-cols-2">
         <div className="animate-rise min-w-0">
-          <Eyebrow>{t.eyebrow}</Eyebrow>
+          <Eyebrow>{hasJobs ? t.eyebrow : t.eyebrowOhneStellen}</Eyebrow>
           {/* text-4xl auf dem Handy: "Sprachtrainer:innen" ist in text-5xl breiter als der Bildschirm */}
           <h1 className="kinetic font-display text-4xl mb-6 text-balance break-words sm:text-6xl lg:text-7xl">
-            {t.title}
+            {hasJobs ? t.title : t.titleOhneStellen}
           </h1>
           <p className="font-sans text-lg leading-relaxed text-paper-dim mb-8">{t.text}</p>
 
@@ -54,7 +56,8 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
             ))}
           </div>
 
-          {/* Offene Positionen */}
+          {/* Offene Positionen — nur wenn im CMS aktive Stellen existieren */}
+          {hasJobs && (
           <div className="border-t border-line pt-8">
             <p className="mb-4 font-sans text-[10px] uppercase tracking-[0.16em] text-gold">
               {t.positionenEyebrow}
@@ -68,6 +71,7 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
               ))}
             </ul>
           </div>
+          )}
 
           {/* Direktkontakt als Alternative zum Formular */}
           <dl className="mt-8 space-y-4 border-t border-line pt-8 font-sans text-sm">
@@ -91,7 +95,7 @@ export default async function KarrierePage({ params }: { params: Promise<{ lang:
 
         <div className="animate-rise min-w-0" style={{ animationDelay: "120ms" }}>
           <Suspense>
-            <CareerForm lang={lang} dict={pickDict(dict, "contactForm", "karriere")} />
+            <CareerForm lang={lang} dict={pickDict(dict, "contactForm", "karriere")} positions={positions} />
           </Suspense>
         </div>
       </Container>

@@ -265,10 +265,9 @@ export const en: Dictionary = {
     positionenEyebrow: "We're looking for",
     direktKontaktLabel: "Prefer to reach out directly?",
     emailLabel: "Email",
-    positions: [
-      "Language trainer (Business English)",
-      "Language trainer (German as a Foreign Language)",
-    ],
+    initiativ: "Speculative application (trainer pool)",
+    eyebrowOhneStellen: "Careers at Interlexico",
+    titleOhneStellen: "Speculative application: join our trainer pool",
     formTitle: "Join the trainer pool",
     positionLabel: "Position",
     vorname: "Name",

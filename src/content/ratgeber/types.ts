@@ -24,6 +24,8 @@ export interface Guide {
   faq: FaqItem[];
   /** Weiterführende interne Links (sprachneutrale Pfade). */
   related: { label: string; path: string }[];
+  /** Nur bei Artikeln aus dem CMS: Lexical-Rich-Text statt `sections`. */
+  content?: unknown;
 }
 
 export interface GuideLabels {

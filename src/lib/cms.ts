@@ -185,12 +185,13 @@ export async function getTestimonials(): Promise<TestimonialData[]> {
  * Karriereseite fällt dann auf die statischen Positionen aus dem
  * jeweiligen Sprachwörterbuch zurück.
  */
-export async function getJobs(locale: Locale): Promise<string[]> {
+/** Aktive Stellen; `null`, wenn das CMS nicht erreichbar ist (dann lieber nichts zeigen als abgeschaltete Stellen). */
+export async function getJobs(locale: Locale): Promise<string[] | null> {
   try {
     const res = await fetch(`${CMS_URL}/api/jobs?where[active][equals]=true&sort=order&limit=100&depth=0`, {
       next: { revalidate: REVALIDATE, tags: ["jobs"] },
     });
-    if (!res.ok) return [];
+    if (!res.ok) return null;
     const data = (await res.json()) as PayloadListResponse<{
       titleDe?: string;
       titleEn?: string;
@@ -201,7 +202,7 @@ export async function getJobs(locale: Locale): Promise<string[]> {
       .map((d) => d[field])
       .filter((t): t is string => Boolean(t));
   } catch {
-    return [];
+    return null;
   }
 }
 

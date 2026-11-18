@@ -18,13 +18,23 @@ const ALLOWED_FILE_TYPES = [
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-export function CareerForm({ lang, dict }: { lang: Locale; dict: Pick<Dictionary, "contactForm" | "karriere"> }) {
+export function CareerForm({
+  lang,
+  dict,
+  positions,
+}: {
+  lang: Locale;
+  dict: Pick<Dictionary, "contactForm" | "karriere">;
+  /** Aktive Stellen aus dem CMS (leer = nur Initiativbewerbung). */
+  positions: string[];
+}) {
   const t = dict.karriere;
+  const options = [...positions, t.initiativ];
   const params = useSearchParams();
 
   const [form, setForm] = useState(() => {
     const wanted = params.get("position");
-    const position = wanted && t.positions.includes(wanted) ? wanted : t.positions[0];
+    const position = wanted && options.includes(wanted) ? wanted : options[0];
     return {
       position,
       name: "",
@@ -148,7 +158,7 @@ export function CareerForm({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
           onChange={(e) => setForm((f) => ({ ...f, position: e.target.value }))}
           className={inputClasses}
         >
-          {t.positions.map((p) => (
+          {options.map((p) => (
             <option key={p} value={p}>
               {p}
             </option>

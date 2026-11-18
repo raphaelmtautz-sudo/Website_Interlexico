@@ -5,7 +5,8 @@ import { getCourseFaq } from "@/content/course-faq";
 import { getIndustryLabels, getIndustryPages } from "@/content/branchen";
 import { getLocalPage, LOCAL_PATH } from "@/content/local";
 import { getService, SERVICE_SLUGS } from "@/content/services";
-import { getGuideLabels, getGuides } from "@/content/ratgeber";
+import { getGuideLabels } from "@/content/ratgeber";
+import { getAllGuides } from "@/lib/guides";
 import { getDictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
 
@@ -194,7 +195,7 @@ export async function buildLlmsFullTxt(lang: Locale): Promise<string> {
 
   const gl = getGuideLabels(lang);
   lines.push(`## ${gl.hubTitle}`, "");
-  for (const g of getGuides(lang)) {
+  for (const g of await getAllGuides(lang)) {
     lines.push(`### ${g.title}`, `URL: ${url(`/ratgeber/${g.slug}`)}`, "", g.summary, "");
   }
 

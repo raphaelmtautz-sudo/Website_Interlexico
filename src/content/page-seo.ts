@@ -14,19 +14,19 @@ const seo: Record<Locale, Record<PageKey, Seo>> = {
     ueberUns: { title: "Über Interlexico: Sprachakademie für Unternehmen bei München", description: "Interlexico aus Olching bei München trainiert Business English und Deutsch für Unternehmen – fachbezogen, mit Einstufung, festen Trainer:innen und Reporting." },
     interlexicoOne: { title: "Interlexico ONE: Kundenportal für Sprachtraining | Interlexico", description: "Interlexico ONE organisiert jedes Training: Einstufung, Terminplanung, Trainerzuordnung und Fortschrittsberichte für HR an einem Ort – ohne Zusatzkosten." },
     kontakt: { title: "Kontakt: Sprachtraining für Ihr Team anfragen", description: "Unverbindlich anfragen: Business English oder Deutsch für Ihr Unternehmen. Wir melden uns in der Regel innerhalb von zwei Werktagen mit einem Vorschlag." },
-    karriere: { title: "Karriere: Sprachtrainer:innen für Business English & Deutsch", description: "Interlexico sucht Sprachtrainer:innen für Business English und Deutsch als Fremdsprache. Einmal bewerben – wir melden uns, sobald ein Kurs zu Ihrem Profil passt." },
+    karriere: { title: "Karriere: Trainer-Pool für Business English & Deutsch", description: "Bewerben Sie sich für den Interlexico-Trainer-Pool: Business English und Deutsch als Fremdsprache. Wir melden uns, sobald ein Kurs zu Ihrem Profil passt." },
   },
   en: {
     ueberUns: { title: "About Interlexico: Language Academy for Companies near Munich", description: "Interlexico, based in Olching near Munich, trains Business English and German for companies – job-focused, with assessment, dedicated trainers and reporting." },
     interlexicoOne: { title: "Interlexico ONE: Client Portal for Language Training | Interlexico", description: "Interlexico ONE organises every training: assessment, scheduling, trainer assignment and progress reports for HR in one place – at no extra cost." },
     kontakt: { title: "Contact: Request Language Training for Your Team", description: "Send a non-binding enquiry for Business English or German for your company. We usually reply within two working days with a proposal." },
-    karriere: { title: "Careers: Business English & German Trainers", description: "Interlexico is looking for Business English and German as a Foreign Language trainers. Apply once – we get in touch as soon as a course matches your profile." },
+    karriere: { title: "Careers: Trainer Pool for Business English & German", description: "Apply to the Interlexico trainer pool for Business English and German as a Foreign Language. We get in touch as soon as a course matches your profile." },
   },
   es: {
     ueberUns: { title: "Sobre Interlexico: academia de idiomas cerca de Múnich", description: "Interlexico, con sede en Olching cerca de Múnich, forma en Business English y alemán a empresas – con evaluación, formadores fijos e informes." },
     interlexicoOne: { title: "Interlexico ONE: portal de clientes para la formación | Interlexico", description: "Interlexico ONE organiza cada formación: evaluación, planificación, asignación de formadores e informes de progreso para RR. HH., sin coste adicional." },
     kontakt: { title: "Contacto: solicite formación de idiomas para su equipo", description: "Solicite sin compromiso Business English o alemán para su empresa. Normalmente respondemos en dos días laborables con una propuesta." },
-    karriere: { title: "Empleo: formadores de Business English y alemán", description: "Interlexico busca formadores de Business English y alemán como lengua extranjera. Envíe su candidatura una vez – le contactamos cuando un curso encaje con su perfil." },
+    karriere: { title: "Empleo: bolsa de formadores de Business English y alemán", description: "Únase a la bolsa de formadores de Interlexico para Business English y alemán como lengua extranjera. Le contactamos cuando un curso encaje con su perfil." },
   },
 };
 
