@@ -52,7 +52,7 @@ const L: Record<
     fakten: "Auf einen Blick",
     facts: [
       "Anbieter: Interlexico UG (haftungsbeschränkt), Sitz in Bayern (Adresse siehe oben)",
-      "Angebot: Firmen-Sprachtraining — Business English und Deutsch als Fremdsprache (GER A1–C1)",
+      "Angebot: Firmen-Sprachtraining — Business English und Deutsch als Fremdsprache (GER A1–C2)",
       "Zielgruppe: Unternehmen, Behörden und ihre Teams in Deutschland, Österreich und der Schweiz",
       "Formate: Einzelunterricht (1:1), Gruppentraining (max. 7 Personen), Klassentraining (7–16 Personen)",
       "Durchführung: online, vor Ort im Unternehmen oder hybrid",
@@ -79,7 +79,7 @@ const L: Record<
     fakten: "At a glance",
     facts: [
       "Provider: Interlexico UG (haftungsbeschränkt), based in Bavaria, Germany (address above)",
-      "Offering: corporate language training — Business English and German as a Foreign Language (CEFR A1–C1)",
+      "Offering: corporate language training — Business English and German as a Foreign Language (CEFR A1–C2)",
       "For: companies, public authorities and their teams in Germany, Austria and Switzerland",
       "Formats: one-to-one, group training (max. 7 people), class training (7–16 people)",
       "Delivery: online, on-site at the company, or hybrid",
@@ -106,7 +106,7 @@ const L: Record<
     fakten: "De un vistazo",
     facts: [
       "Proveedor: Interlexico UG (haftungsbeschränkt), con sede en Baviera, Alemania (dirección arriba)",
-      "Oferta: formación lingüística para empresas — Business English y alemán como lengua extranjera (MCER A1–C1)",
+      "Oferta: formación lingüística para empresas — Business English y alemán como lengua extranjera (MCER A1–C2)",
       "Para: empresas, administraciones y sus equipos en Alemania, Austria y Suiza",
       "Formatos: clases individuales, formación en grupo (máx. 7 personas), formación de clase (7–16 personas)",
       "Modalidad: online, presencial en la empresa o híbrida",

@@ -228,7 +228,7 @@ export const guides: Guide[] = [
         list: [
           "Einzelunterricht: für Führungskräfte und Spezialist:innen, die schnell für konkrete Aufgaben fit werden müssen — mit freier Terminwahl.",
           "Gruppentraining: für bis zu 7 Personen mit ähnlichem Niveau und gemeinsamen Arbeitsthemen — fördert zugleich eine gemeinsame Arbeitssprache im Team.",
-          "Klassentraining: für ganze Abteilungen oder Onboarding-Kohorten mit einheitlichem Curriculum je Niveau (A1–C1).",
+          "Klassentraining: für ganze Abteilungen oder Onboarding-Kohorten mit einheitlichem Curriculum je Niveau (A1–C2).",
         ],
       },
       {

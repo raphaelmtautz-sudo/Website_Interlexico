@@ -56,7 +56,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "Welche Deutsch-Niveaus werden unterrichtet?",
         answer:
-          "Die Niveaus A1 bis C1 nach dem Gemeinsamen Europäischen Referenzrahmen (GER). Im Klassentraining gibt es ein einheitliches Curriculum je Niveau; im Einzel- und Gruppentraining richtet sich der Lernplan nach Rolle und Zielen.",
+          "Die Niveaus A1 bis C2 nach dem Gemeinsamen Europäischen Referenzrahmen (GER). Im Klassentraining gibt es ein einheitliches Curriculum je Niveau; im Einzel- und Gruppentraining richtet sich der Lernplan nach Rolle und Zielen.",
       },
       {
         question: "Findet der Deutschkurs online oder vor Ort statt?",
@@ -132,7 +132,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "Which German levels are taught?",
         answer:
-          "Levels A1 to C1 of the Common European Framework of Reference (CEFR). Class training follows a shared curriculum per level; one-to-one and group training follow a learning plan based on role and goals.",
+          "Levels A1 to C2 of the Common European Framework of Reference (CEFR). Class training follows a shared curriculum per level; one-to-one and group training follow a learning plan based on role and goals.",
       },
       {
         question: "Is the German course online or on-site?",
@@ -208,7 +208,7 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
       {
         question: "¿Qué niveles de alemán se enseñan?",
         answer:
-          "Los niveles A1 a C1 del Marco Común Europeo de Referencia (MCER). La formación de clase sigue un currículo común por nivel; las clases individuales y en grupo siguen un plan según el puesto y los objetivos.",
+          "Los niveles A1 a C2 del Marco Común Europeo de Referencia (MCER). La formación de clase sigue un currículo común por nivel; las clases individuales y en grupo siguen un plan según el puesto y los objetivos.",
       },
       {
         question: "¿El curso de alemán es online o presencial?",

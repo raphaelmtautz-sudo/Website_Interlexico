@@ -37,7 +37,7 @@ const COUNTRY_NAMES: Record<string, string> = { DE: "Germany", AT: "Austria", CH
 // Unterrichtete Sprache je Kurstyp (Schema.org "inLanguage" eines Sprachkurses).
 const TAUGHT_LANGUAGE: Record<string, { code: string; teaches: string }> = {
   "business-english": { code: "en", teaches: "Business English" },
-  "deutsch-als-fremdsprache": { code: "de", teaches: "German as a foreign language (CEFR A1–C1)" },
+  "deutsch-als-fremdsprache": { code: "de", teaches: "German as a foreign language (CEFR A1–C2)" },
 };
 
 export function OrganizationJsonLd({

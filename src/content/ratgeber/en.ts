@@ -228,7 +228,7 @@ export const guides: Guide[] = [
         list: [
           "One-to-one training: for managers and specialists who need to be ready for specific tasks quickly — with flexible scheduling.",
           "Group training: for up to 7 people with a similar level and shared work topics — also builds a shared working language in the team.",
-          "Class training: for whole departments or onboarding cohorts with a shared curriculum per level (A1–C1).",
+          "Class training: for whole departments or onboarding cohorts with a shared curriculum per level (A1–C2).",
         ],
       },
       {

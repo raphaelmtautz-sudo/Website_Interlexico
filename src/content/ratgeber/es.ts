@@ -228,7 +228,7 @@ export const guides: Guide[] = [
         list: [
           "Clases individuales: para directivos y especialistas que deben prepararse rápido para tareas concretas, con horarios libres.",
           "Formación en grupo: hasta 7 personas con nivel similar y temas comunes; además crea una lengua de trabajo común en el equipo.",
-          "Formación de clase: para departamentos enteros o promociones de incorporación con un currículo común por nivel (A1–C1).",
+          "Formación de clase: para departamentos enteros o promociones de incorporación con un currículo común por nivel (A1–C2).",
         ],
       },
       {

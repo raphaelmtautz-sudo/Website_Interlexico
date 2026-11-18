@@ -26,6 +26,7 @@ const CONTENT_UPDATED: Record<string, string> = {
   "/executive-language-coaching": "2026-11-18",
   "/interkulturelle-kommunikation": "2026-11-18",
   "/ratgeber": "2026-11-17",
+  "/ratgeber/deutschkurs-internationale-fachkraefte": "2026-11-18",
   "/interlexico-one": "2026-11-18",
   "/einstufung": "2026-10-20",
   "/konfigurator": "2026-11-17",

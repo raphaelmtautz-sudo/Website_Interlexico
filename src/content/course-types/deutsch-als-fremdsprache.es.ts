@@ -84,7 +84,7 @@ export const deutschAlsFremdsprache: CourseType = {
       duration: "programa semestral",
       capacity: "7–16 participantes",
       highlights: [
-        "Temario unificado por nivel (A1–C1)",
+        "Temario unificado por nivel (A1–C2)",
         "Informes de progreso centralizados",
         "Escalable a varias sedes y turnos",
       ],

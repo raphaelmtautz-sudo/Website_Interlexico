@@ -84,7 +84,7 @@ export const deutschAlsFremdsprache: CourseType = {
       duration: "semester programme",
       capacity: "7–16 participants",
       highlights: [
-        "Unified curriculum per level (A1–C1)",
+        "Unified curriculum per level (A1–C2)",
         "Central progress reporting",
         "Scalable across multiple locations and shifts",
       ],
