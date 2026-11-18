@@ -228,6 +228,8 @@ export function ArticleJsonLd({
   published,
   updated,
   author,
+  authorPerson,
+  image,
 }: {
   lang: Locale;
   path: string;
@@ -236,6 +238,10 @@ export function ArticleJsonLd({
   published: string;
   updated: string;
   author: string;
+  /** Echte Person als Autor:in (aus dem CMS) statt der Organisation. */
+  authorPerson?: { name: string; jobTitle?: string; sameAs?: string; image?: string };
+  /** Eigenes Titelbild (absolute URL), sonst das generierte OG-Bild. */
+  image?: string;
 }) {
   const url = `${SITE.url}${lh(lang, path)}`;
   return (
@@ -250,8 +256,17 @@ export function ArticleJsonLd({
         inLanguage: bcp47[lang],
         datePublished: published,
         dateModified: updated,
-        image: `${SITE.url}${lh(lang, "/opengraph-image")}`,
-        author: { "@type": "Organization", name: author, url: SITE.url },
+        image: image ?? `${SITE.url}${lh(lang, "/opengraph-image")}`,
+        author: authorPerson
+          ? {
+              "@type": "Person",
+              name: authorPerson.name,
+              ...(authorPerson.jobTitle ? { jobTitle: authorPerson.jobTitle } : {}),
+              ...(authorPerson.sameAs ? { sameAs: authorPerson.sameAs } : {}),
+              ...(authorPerson.image ? { image: authorPerson.image } : {}),
+              worksFor: { "@id": `${SITE.url}#organization` },
+            }
+          : { "@type": "Organization", name: author, url: SITE.url },
         publisher: { "@id": `${SITE.url}#organization` },
       }}
     />

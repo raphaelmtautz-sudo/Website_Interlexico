@@ -1,6 +1,7 @@
 import type { Guide } from "@/content/ratgeber";
 import { getGuides as getStaticGuides } from "@/content/ratgeber";
 import { locales, type Locale } from "@/lib/i18n";
+import { mapTeam, mediaSrc } from "@/lib/cms";
 
 /**
  * Ratgeber = eingebaute Artikel (src/content/ratgeber) + Artikel aus dem CMS
@@ -23,7 +24,7 @@ type CmsGuide = Record<string, unknown> & {
 
 async function fetchCmsGuides(): Promise<CmsGuide[]> {
   try {
-    const res = await fetch(`${CMS_URL}/api/guides?where[published][equals]=true&limit=200&depth=0`, {
+    const res = await fetch(`${CMS_URL}/api/guides?where[_status][equals]=published&limit=200&depth=2`, {
       next: { revalidate: REVALIDATE, tags: ["guides"] },
     });
     if (!res.ok) return [];
@@ -67,7 +68,35 @@ function mapCmsGuide(doc: CmsGuide, locale: Locale, fallback?: Guide): Guide | n
     content,
     faq,
     related: fallback?.related ?? [],
+    author: doc.author && typeof doc.author === "object" ? toAuthor(doc.author as never, locale) : undefined,
+    image: doc.image && typeof doc.image === "object" ? mediaSrc(doc.image, "card") : undefined,
   };
+}
+
+function toAuthor(raw: Parameters<typeof mapTeam>[0], locale: Locale): Guide["author"] {
+  const m = mapTeam(raw, locale);
+  return { name: m.name, role: m.role, bio: m.bio, qualifications: m.qualifications, photo: m.photo, linkedin: m.linkedin };
+}
+
+/**
+ * Entwurf eines Ratgebers für die Vorschau (Draft-Mode). Holt die neueste,
+ * auch unveröffentlichte Fassung mit dem technischen API-Key der Website.
+ */
+export async function getDraftGuide(locale: Locale, slug: string): Promise<Guide | undefined> {
+  const key = process.env.CMS_PREVIEW_API_KEY;
+  if (!key) return undefined;
+  try {
+    const res = await fetch(`${CMS_URL}/api/guides?where[slug][equals]=${encodeURIComponent(slug)}&draft=true&limit=1&depth=2`, {
+      headers: { Authorization: `users API-Key ${key}` },
+      cache: "no-store",
+    });
+    if (!res.ok) return undefined;
+    const doc = ((await res.json()) as { docs?: CmsGuide[] }).docs?.[0];
+    const fallback = getStaticGuides(locale).find((g) => g.slug === slug);
+    return doc ? (mapCmsGuide(doc, locale, fallback) ?? undefined) : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /** Alle Ratgeber einer Sprache, neueste (zuletzt geprüft) zuerst. */

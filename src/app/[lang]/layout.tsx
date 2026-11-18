@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { AnnouncementBar } from "@/components/cms/announcement-bar";
 import { notFound } from "next/navigation";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "../globals.css";
@@ -13,7 +14,7 @@ import { AdaptiveUI } from "@/components/interactive/adaptive-ui";
 import { VoucherPopup } from "@/components/interactive/voucher-popup";
 import { locales, hasLocale, lh, type Locale } from "@/lib/i18n";
 import { getDictionary, pickDict } from "@/dictionaries";
-import { getLegal, getContact } from "@/lib/cms";
+import { getLegal, getContact, getAnnouncement } from "@/lib/cms";
 import { SITE } from "@/lib/site";
 
 const cormorant = Cormorant_Garamond({
@@ -111,7 +112,7 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const [legal, contact] = await Promise.all([getLegal(), getContact()]);
+  const [legal, contact, announcement] = await Promise.all([getLegal(), getContact(), getAnnouncement(lang)]);
   const phone = legal.phone ?? SITE.phone;
   const whatsapp = legal.whatsapp ?? SITE.whatsapp;
   const sameAs = [...new Set([...SITE.sameAs, ...contact.socialLinks.map((s) => s.url)])];
@@ -128,6 +129,7 @@ export default async function RootLayout({
           <a href="#main" className="skip-link">
             {dict.skipLink}
           </a>
+          <AnnouncementBar data={announcement} />
           <SiteHeader lang={lang} dict={dict} />
           <main id="main" className="flex-1">
             {children}

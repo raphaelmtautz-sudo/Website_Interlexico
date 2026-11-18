@@ -169,9 +169,7 @@ export async function getTestimonials(): Promise<TestimonialData[]> {
         personRole: d.personRole || undefined,
         companyName: d.companyName || undefined,
         photoUrl: d.photo?.url
-          ? d.photo.url.startsWith("http")
-            ? d.photo.url
-            : `${CMS_URL}${d.photo.url}`
+          ? mediaUrl(d.photo.url)
           : undefined,
       }));
   } catch {
@@ -300,9 +298,26 @@ interface RawPost {
   ogImage?: { url?: string } | null;
 }
 
-function mediaUrl(url: string | undefined): string | undefined {
+/**
+ * Öffentliche Bild-URL für CMS-Medien. Das CMS liegt hinter dem SSO-Login und
+ * ist für Besucher nicht erreichbar — Bilder laufen deshalb über die Website
+ * (/cms-media/<datei>, siehe app/cms-media/[...path]/route.ts), gleiche Domain,
+ * passt zur CSP.
+ */
+export function mediaUrl(url: string | undefined | null): string | undefined {
   if (!url) return undefined;
-  return url.startsWith("http") ? url : `${CMS_URL}${url}`;
+  const m = url.match(/\/api\/media\/file\/([^?#]+)/);
+  if (m) return `/cms-media/${m[1]}`;
+  return url.startsWith("http") ? url : undefined;
+}
+
+/** Beste verfügbare Größe eines Medien-Dokuments (card > Original). */
+export function mediaSrc(media: unknown, size: "card" | "thumb" = "card"): { src?: string; alt?: string; width?: number; height?: number } {
+  if (!media || typeof media !== "object") return {};
+  const m = media as { url?: string; alt?: string; width?: number; height?: number; sizes?: Record<string, { url?: string; width?: number; height?: number }> };
+  const sized = m.sizes?.[size];
+  if (sized?.url) return { src: mediaUrl(sized.url), alt: m.alt, width: sized.width, height: sized.height };
+  return { src: mediaUrl(m.url), alt: m.alt, width: m.width, height: m.height };
 }
 
 function localeSuffix(locale: Locale): "De" | "En" | "Es" {
@@ -421,7 +436,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     };
     const blogEnabled = data.blogEnabled !== false;
     if (!data.logo?.url) return { blogEnabled };
-    const url = data.logo.url.startsWith("http") ? data.logo.url : `${CMS_URL}${data.logo.url}`;
+    const url = mediaUrl(data.logo.url);
     return { logoUrl: url, logoAlt: data.logo.alt, blogEnabled };
   } catch {
     return { blogEnabled: true };
@@ -460,9 +475,7 @@ export async function getContact(): Promise<ContactData> {
     };
     const photo = data.contactPerson?.photo;
     const photoUrl = photo?.url
-      ? photo.url.startsWith("http")
-        ? photo.url
-        : `${CMS_URL}${photo.url}`
+      ? mediaUrl(photo.url)
       : undefined;
     return {
       contactPersonName: data.contactPerson?.name || undefined,
@@ -613,4 +626,113 @@ export async function getCourseTypes(locale: Locale): Promise<CourseType[]> {
 export async function getCourseType(locale: Locale, slug: string): Promise<CourseType | undefined> {
   const courseTypes = await getCourseTypes(locale);
   return courseTypes.find((c) => c.slug === slug) ?? getStaticCourseType(locale, slug);
+}
+
+
+/* ---------------- Team & Trainer, Referenzen, Hinweisleiste ---------------- */
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  kind: "management" | "trainer" | "team";
+  role?: string;
+  photo: { src?: string; alt?: string; width?: number; height?: number };
+  languages: string[];
+  courses: string[];
+  qualifications?: string;
+  bio?: string;
+  linkedin?: string;
+}
+
+type CmsTeam = Record<string, unknown> & { id: number; name: string; kind: TeamMember["kind"]; photo?: unknown; languages?: string[]; courses?: string[]; linkedin?: string };
+
+export function mapTeam(d: CmsTeam, locale: Locale): TeamMember {
+  const s = localeSuffix(locale);
+  const pick = (f: string) => (d[`${f}${s}`] as string | undefined) || (d[`${f}De`] as string | undefined) || undefined;
+  return {
+    id: d.id,
+    name: d.name,
+    kind: d.kind,
+    role: pick("role"),
+    photo: mediaSrc(d.photo, "thumb"),
+    languages: d.languages ?? [],
+    courses: d.courses ?? [],
+    qualifications: pick("qualifications"),
+    bio: pick("bio"),
+    linkedin: typeof d.linkedin === "string" && /^https:\/\//.test(d.linkedin) ? d.linkedin : undefined,
+  };
+}
+
+/** Veröffentlichte Personen (Geschäftsführung, Team, Trainer:innen). */
+export async function getTeam(locale: Locale): Promise<TeamMember[]> {
+  try {
+    const res = await fetch(`${CMS_URL}/api/team?where[published][equals]=true&sort=order&limit=100&depth=1`, {
+      next: { revalidate: REVALIDATE, tags: ["team"] },
+    });
+    if (!res.ok) return [];
+    const data = (await res.json()) as PayloadListResponse<CmsTeam>;
+    return (data.docs ?? []).map((d) => mapTeam(d, locale));
+  } catch {
+    return [];
+  }
+}
+
+export interface ReferenceItem {
+  company: string;
+  industry?: string;
+  logo: { src?: string; alt?: string; width?: number; height?: number };
+  caseStudy?: { title: string; situation?: string; solution?: string; result: string };
+}
+
+/** Freigegebene, veröffentlichte Referenzen (das CMS liefert öffentlich nur diese). */
+export async function getReferences(locale: Locale): Promise<ReferenceItem[]> {
+  try {
+    const res = await fetch(`${CMS_URL}/api/references?where[published][equals]=true&where[approved][equals]=true&sort=order&limit=100&depth=1`, {
+      next: { revalidate: REVALIDATE, tags: ["references"] },
+    });
+    if (!res.ok) return [];
+    const data = (await res.json()) as PayloadListResponse<Record<string, unknown> & { company: string; logo?: unknown }>;
+    const s = localeSuffix(locale);
+    return (data.docs ?? []).map((d) => {
+      const pick = (f: string) => (d[`${f}${s}`] as string | undefined) || (d[`${f}De`] as string | undefined) || undefined;
+      const title = pick("caseTitle");
+      const result = pick("caseResult");
+      return {
+        company: d.company,
+        industry: pick("industry"),
+        logo: mediaSrc(d.logo, "thumb"),
+        caseStudy: title && result ? { title, situation: pick("caseSituation"), solution: pick("caseSolution"), result } : undefined,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export interface AnnouncementData {
+  text: string;
+  link?: { href: string; label: string };
+  tone: "info" | "highlight";
+}
+
+/** Hinweisleiste — nur wenn eingeschaltet und im Zeitraum. */
+export async function getAnnouncement(locale: Locale): Promise<AnnouncementData | null> {
+  try {
+    const res = await fetch(`${CMS_URL}/api/globals/announcement?depth=0`, { next: { revalidate: REVALIDATE, tags: ["announcement"] } });
+    if (!res.ok) return null;
+    const d = (await res.json()) as Record<string, unknown> & { enabled?: boolean; startsAt?: string; endsAt?: string; linkUrl?: string; tone?: string };
+    if (!d.enabled) return null;
+    const now = Date.now();
+    if (d.startsAt && Date.parse(d.startsAt) > now) return null;
+    if (d.endsAt && Date.parse(d.endsAt) < now) return null;
+    const s = localeSuffix(locale);
+    const text = (d[`text${s}`] as string) || (d.textDe as string);
+    if (!text) return null;
+    const label = (d[`linkLabel${s}`] as string) || (d.linkLabelDe as string);
+    const url = typeof d.linkUrl === "string" ? d.linkUrl.trim() : "";
+    const href = !url ? "" : /^https:\/\//.test(url) ? url : url.startsWith("/") ? `/${locale}${url === "/" ? "" : url}` : "";
+    return { text, link: href && label ? { href, label } : undefined, tone: d.tone === "highlight" ? "highlight" : "info" };
+  } catch {
+    return null;
+  }
 }

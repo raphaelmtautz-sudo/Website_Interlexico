@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTeam } from "@/lib/cms";
 import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import { getCourseTypes, getCourseType } from "@/lib/cms";
@@ -46,10 +47,11 @@ export default async function KurstypPage({
   if (!course || course.status !== "aktiv") notFound();
   const dict = getDictionary(lang);
   const faq = getCourseFaq(lang, course.slug);
+  const trainers = (await getTeam(lang)).filter((m) => m.courses.includes(course.slug));
 
   return (
     <>
-      <CourseTypeLanding course={course} lang={lang} dict={dict} faq={faq} />
+      <CourseTypeLanding course={course} lang={lang} dict={dict} faq={faq} trainers={trainers} />
       <CourseJsonLd course={course} lang={lang} />
       {faq.length > 0 && <FaqJsonLd items={faq} />}
       <BreadcrumbJsonLd

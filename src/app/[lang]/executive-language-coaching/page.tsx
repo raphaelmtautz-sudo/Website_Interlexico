@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTeam } from "@/lib/cms";
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { ServiceLanding } from "@/components/content/service-landing";
@@ -18,5 +19,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default async function Page({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
-  return <ServiceLanding page={getService(lang, SLUG)} lang={lang} dict={getDictionary(lang)} />;
+  const trainers = (await getTeam(lang)).filter((m) => m.courses.includes(SLUG));
+  return <ServiceLanding page={getService(lang, SLUG)} lang={lang} dict={getDictionary(lang)} trainers={trainers} />;
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoStrip } from "@/components/cms/references";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ import { TestimonialCarousel } from "@/components/interactive/testimonial-carous
 import { ImpactCalculator } from "@/components/interactive/impact-calculator";
 import { FaqJsonLd } from "@/components/seo/json-ld";
 import { Accordion } from "@/components/ui/accordion";
-import { getFaq, getTestimonials, getIndustries } from "@/lib/cms";
+import { getFaq, getTestimonials, getIndustries, getReferences } from "@/lib/cms";
 import { getDictionary, pickDict } from "@/dictionaries";
 import { industrySlugByName } from "@/content/branchen";
 import { getLocalPage, LOCAL_PATH } from "@/content/local";
@@ -22,10 +23,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const [faq, cmsTestimonials, industries] = await Promise.all([
+  const [faq, cmsTestimonials, industries, references] = await Promise.all([
     getFaq(lang),
     getTestimonials(),
     getIndustries(lang),
+    getReferences(lang),
   ]);
 
   // Nur echte, freigegebene Kundenstimmen aus dem CMS. Ohne sie entfällt der
@@ -114,6 +116,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </ul>
         </div>
       </Section>
+
+      {references.some((r) => r.logo.src) && (
+        <section className="border-t border-line">
+          <Section>
+            <LogoStrip items={references} lang={lang} />
+          </Section>
+        </section>
+      )}
 
       <Reveal as="section" id="warum" className="border-t border-line">
         <Section>

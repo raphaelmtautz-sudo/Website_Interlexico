@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { SITE } from "@/lib/site";
+import { getCmsLabels } from "@/content/cms-labels";
+import { draftMode } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/seo";
@@ -8,7 +11,7 @@ import { Reveal } from "@/components/interactive/reveal";
 import { PageCta } from "@/components/content/page-cta";
 import { ArticleJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { getGuideLabels } from "@/content/ratgeber";
-import { getAllGuides, getAnyGuide, guideLocales } from "@/lib/guides";
+import { getAllGuides, getAnyGuide, getDraftGuide, guideLocales } from "@/lib/guides";
 import { renderLexical } from "@/lib/lexical-render";
 import { getDictionary } from "@/dictionaries";
 import { hasLocale, lh, locales } from "@/lib/i18n";
@@ -25,7 +28,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   if (!hasLocale(lang)) return {};
   const guide = await getAnyGuide(lang, slug);
   if (!guide) return {};
+  const ogImage = guide.image?.src ? `${SITE.url}${guide.image.src}` : undefined;
   return pageMetadata({
+    image: ogImage,
     lang,
     path: `/ratgeber/${slug}`,
     title: guide.seoTitle,
@@ -39,8 +44,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default async function GuidePage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
   const { lang, slug } = await params;
   if (!hasLocale(lang)) notFound();
-  const guide = await getAnyGuide(lang, slug);
+  // Vorschau aus dem CMS: neueste (auch unveröffentlichte) Fassung zeigen.
+  const preview = (await draftMode()).isEnabled;
+  const guide = (preview ? await getDraftGuide(lang, slug) : undefined) ?? (await getAnyGuide(lang, slug));
   if (!guide) notFound();
+  const cl = getCmsLabels(lang);
   const others = (await getAllGuides(lang)).filter((g) => g.slug !== slug).slice(0, 3);
   const related = guide.related.length
     ? guide.related
@@ -53,11 +61,30 @@ export default async function GuidePage({ params }: { params: Promise<{ lang: st
     <>
       <Section id="start" className="pt-24 lg:pt-32">
         <article className="mx-auto max-w-3xl">
+          {preview && (
+            <p role="status" className="mb-8 border border-gold bg-ink-raised p-4 font-sans text-sm text-paper">
+              {cl.preview}{" "}
+              <a href={`/api/preview/exit?path=${encodeURIComponent(lh(lang, `/ratgeber/${slug}`))}`} className="underline underline-offset-2">
+                {cl.previewExit}
+              </a>
+            </p>
+          )}
           <Eyebrow>{guide.eyebrow}</Eyebrow>
           <h1 className="kinetic font-display text-4xl leading-[1.08] text-balance sm:text-5xl lg:text-6xl">{guide.title}</h1>
           <p className="mt-6 font-sans text-sm text-paper-dim">
-            {t.author} · {t.updated} <time dateTime={guide.updated}>{updated}</time> · {guide.readingMinutes} {t.minutes}
+            {guide.author?.name ?? t.author} · {t.updated} <time dateTime={guide.updated}>{updated}</time> · {guide.readingMinutes} {t.minutes}
           </p>
+
+          {guide.image?.src ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={guide.image.src}
+              alt={guide.image.alt || ""}
+              width={guide.image.width}
+              height={guide.image.height}
+              className="mt-10 h-auto w-full object-cover"
+            />
+          ) : null}
 
           {/* Kurzantwort zuerst: die Passage, die Suchmaschinen und KI-Assistenten als Antwort übernehmen. */}
           <div className="mt-10 border-l-2 border-gold bg-ink-raised p-6">
@@ -89,6 +116,21 @@ export default async function GuidePage({ params }: { params: Promise<{ lang: st
               </section>
             ))}
           </div>
+          {guide.author ? (
+            <aside className="mt-16 flex gap-5 border-t border-line pt-8" aria-label={cl.aboutAuthor}>
+              {guide.author.photo?.src ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={guide.author.photo.src} alt={guide.author.photo.alt || guide.author.name} width={80} height={80} loading="lazy" className="h-20 w-20 shrink-0 object-cover" />
+              ) : null}
+              <div>
+                <p className="font-sans text-xs uppercase tracking-[0.16em] text-gold mb-1">{cl.aboutAuthor}</p>
+                <p className="font-display text-2xl text-paper">{guide.author.name}</p>
+                {guide.author.role ? <p className="font-sans text-sm text-paper-dim">{guide.author.role}</p> : null}
+                {guide.author.bio ? <p className="mt-3 font-sans text-sm leading-relaxed text-paper-dim">{guide.author.bio}</p> : null}
+                {guide.author.qualifications ? <p className="mt-2 font-sans text-xs text-paper">{guide.author.qualifications}</p> : null}
+              </div>
+            </aside>
+          ) : null}
         </article>
       </Section>
 
@@ -118,7 +160,9 @@ export default async function GuidePage({ params }: { params: Promise<{ lang: st
 
       <PageCta title={dict.home.kontaktCtaTitle} text={t.ctaText} href={lh(lang, "/kontakt")} label={t.cta} />
 
-      <ArticleJsonLd lang={lang} path={`/ratgeber/${slug}`} headline={guide.title} description={guide.description} published={guide.published} updated={guide.updated} author={t.author} />
+      <ArticleJsonLd lang={lang} path={`/ratgeber/${slug}`} headline={guide.title} description={guide.description} published={guide.published} updated={guide.updated} author={t.author}
+        authorPerson={guide.author ? { name: guide.author.name, jobTitle: guide.author.role, sameAs: guide.author.linkedin, image: guide.author.photo?.src ? `${SITE.url}${guide.author.photo.src}` : undefined } : undefined}
+        image={guide.image?.src ? `${SITE.url}${guide.image.src}` : undefined} />
       {guide.faq.length > 0 && <FaqJsonLd items={guide.faq} />}
       <BreadcrumbJsonLd
         items={[

@@ -26,6 +26,10 @@ export interface Guide {
   related: { label: string; path: string }[];
   /** Nur bei Artikeln aus dem CMS: Lexical-Rich-Text statt `sections`. */
   content?: unknown;
+  /** Autor:in aus „Team & Trainer“ (nur CMS). */
+  author?: { name: string; role?: string; bio?: string; qualifications?: string; photo?: { src?: string; alt?: string }; linkedin?: string };
+  /** Titelbild (nur CMS), öffentliche URL über /cms-media. */
+  image?: { src?: string; alt?: string; width?: number; height?: number };
 }
 
 export interface GuideLabels {

@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getCmsLabels } from "@/content/cms-labels";
+import { TeamGrid } from "@/components/cms/team-grid";
+import type { TeamMember } from "@/lib/cms";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Accordion } from "@/components/ui/accordion";
@@ -12,7 +15,7 @@ import type { Dictionary } from "@/dictionaries";
 import { lh, type Locale } from "@/lib/i18n";
 
 /** Leistungsseite (Executive Language Coaching, Interkulturelle Kommunikation). */
-export function ServiceLanding({ page, lang, dict }: { page: ServicePage; lang: Locale; dict: Dictionary }) {
+export function ServiceLanding({ page, lang, dict, trainers = [] }: { page: ServicePage; lang: Locale; dict: Dictionary; trainers?: TeamMember[] }) {
   const contact = lh(lang, "/kontakt");
   const path = `/${page.slug}`;
   const dl = getDetailLabels(lang);
@@ -85,6 +88,15 @@ export function ServiceLanding({ page, lang, dict }: { page: ServicePage; lang: 
           </ol>
         </Section>
       </Reveal>
+
+      {trainers.length > 0 && (
+        <Reveal as="section" id="trainer" className="border-t border-line">
+          <Section>
+            <h2 className="mb-10 font-display text-3xl text-paper">{getCmsLabels(lang).trainersTitle}</h2>
+            <TeamGrid members={trainers} lang={lang} />
+          </Section>
+        </Reveal>
+      )}
 
       <Reveal as="section" id="faq" className="border-t border-line">
         <Section>

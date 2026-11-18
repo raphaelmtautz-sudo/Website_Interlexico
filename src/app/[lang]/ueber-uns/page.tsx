@@ -1,4 +1,10 @@
 import type { Metadata } from "next";
+import { SITE } from "@/lib/site";
+import { JsonLd } from "@/components/seo/json-ld";
+import { getCmsLabels } from "@/content/cms-labels";
+import { CaseStudies } from "@/components/cms/references";
+import { TeamGrid, teamJsonLd } from "@/components/cms/team-grid";
+import { getTeam, getReferences } from "@/lib/cms";
 import { pageMetadata } from "@/lib/seo";
 import { getPageSeo, getCompanyFacts } from "@/content/page-seo";
 import { notFound } from "next/navigation";
@@ -27,6 +33,11 @@ export default async function UeberUnsPage({ params }: { params: Promise<{ lang:
   if (!hasLocale(lang)) notFound();
   const dict = getDictionary(lang);
   const t = dict.ueberUns;
+  const [team, references] = await Promise.all([getTeam(lang), getReferences(lang)]);
+  // Geschäftsführung zuerst, dann Team, dann Trainer:innen (innerhalb: CMS-Reihenfolge).
+  const rank = { management: 0, team: 1, trainer: 2 } as const;
+  const people = [...team].sort((a, b) => rank[a.kind] - rank[b.kind]);
+  const cl = getCmsLabels(lang);
 
   return (
     <>
@@ -118,6 +129,27 @@ export default async function UeberUnsPage({ params }: { params: Promise<{ lang:
           </Container>
         </Section>
       </Reveal>
+
+      {people.length > 0 && (
+        <Reveal as="section" id="team" className="border-t border-line">
+          <Section>
+            <Eyebrow>{cl.teamEyebrow}</Eyebrow>
+            <h2 className="mb-10 font-display text-4xl text-paper text-balance">{cl.teamTitle}</h2>
+            <TeamGrid members={people} lang={lang} />
+          </Section>
+          {teamJsonLd(people, SITE.url).map((d, i) => <JsonLd key={i} data={d} />)}
+        </Reveal>
+      )}
+
+      {references.some((r) => r.caseStudy) && (
+        <Reveal as="section" id="fallbeispiele" className="border-t border-line">
+          <Section>
+            <Eyebrow>{cl.casesEyebrow}</Eyebrow>
+            <h2 className="mb-10 font-display text-4xl text-paper text-balance">{cl.casesTitle}</h2>
+            <CaseStudies items={references} lang={lang} />
+          </Section>
+        </Reveal>
+      )}
 
       <Reveal as="section" id="ueber-uns-cta" variant="scale" className="border-t border-line bg-brand/5">
         <Section>

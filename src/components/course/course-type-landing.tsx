@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getCmsLabels } from "@/content/cms-labels";
+import { TeamGrid } from "@/components/cms/team-grid";
+import type { TeamMember } from "@/lib/cms";
 import { CourseType } from "@/types/course";
 import { Section, Eyebrow } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
@@ -23,11 +26,13 @@ export function CourseTypeLanding({
   lang,
   dict,
   faq = [],
+  trainers = [],
 }: {
   course: CourseType;
   lang: Locale;
   dict: Dictionary;
   faq?: FaqItem[];
+  trainers?: TeamMember[];
 }) {
   const t = dict.courseType;
   const detail = getCourseDetail(lang, course.slug);
@@ -220,6 +225,15 @@ export function CourseTypeLanding({
             <TestimonialCarousel
               testimonials={course.testimonials.map((t) => ({ quote: t.quote, role: `${t.role}, ${t.company}` }))}
             />
+          </Section>
+        </Reveal>
+      )}
+
+      {trainers.length > 0 && (
+        <Reveal as="section" id="trainer" className="border-t border-line">
+          <Section>
+            <h2 className="mb-10 font-display text-3xl text-paper">{getCmsLabels(lang).trainersTitle}</h2>
+            <TeamGrid members={trainers} lang={lang} />
           </Section>
         </Reveal>
       )}
