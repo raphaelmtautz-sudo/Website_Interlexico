@@ -267,7 +267,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
 
   // Farben bewusst fest (wie im Mockup), unabhängig vom Seiten-Theme.
   return (
-    <div data-distraction="chat" data-lexi="" className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans text-[#262b31]">
+    <div data-distraction="chat" data-lexi="" className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6 flex flex-col items-end font-sans text-[#262b31]">
       {teaser && !open && !offline && (
         <button onClick={() => openChat("teaser")}
           className="mb-2.5 max-w-[180px] rounded-[12px_12px_4px_12px] bg-white px-3 py-[9px] text-left text-xs leading-[1.4] text-[#262b31] shadow-[0_4px_14px_rgba(15,23,34,0.12)] animate-fade-up">
@@ -276,8 +276,8 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
       )}
 
       {open && (
-        <section role="dialog" aria-label="Lexi" className="mb-4 flex h-[592px] max-h-[calc(100dvh-7.5rem)] w-[372px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl bg-white shadow-[0_16px_48px_rgba(15,23,34,0.18),0_2px_8px_rgba(15,23,34,0.08)] animate-fade-up">
-          <header className="flex items-center gap-3 bg-[#1d3b6b] py-4 pl-[18px] pr-4 text-white">
+        <section role="dialog" aria-label="Lexi" className="mb-3 flex h-[min(460px,calc(100dvh-6.5rem))] w-[min(340px,calc(100vw-2rem))] flex-col touch-pan-y overscroll-contain sm:mb-4 sm:h-[min(592px,calc(100dvh-7.5rem))] sm:w-[372px] overflow-hidden rounded-2xl bg-white shadow-[0_16px_48px_rgba(15,23,34,0.18),0_2px_8px_rgba(15,23,34,0.08)] animate-fade-up">
+          <header className="flex items-center gap-3 bg-[#1d3b6b] py-3 pl-4 pr-3 text-white sm:py-4 sm:pl-[18px] sm:pr-4">
             <div className="relative h-[42px] w-[42px] shrink-0">
               <Avatar size={42} className="border-2 border-white" />
               {dot && <span aria-hidden="true" className={`absolute -bottom-px -right-px h-[13px] w-[13px] rounded-full border-[2.5px] border-[#1d3b6b] ${dot}`} />}
@@ -291,7 +291,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
             </button>
           </header>
 
-          <div ref={scrollRef} className="flex flex-1 flex-col gap-3 overflow-y-auto bg-[#f7f9fb] px-4 pb-3 pt-[18px]" aria-live="polite">
+          <div ref={scrollRef} className="flex flex-1 flex-col gap-3 overflow-x-hidden overflow-y-auto overscroll-contain break-words bg-[#f7f9fb] px-4 pb-3 pt-[18px]" aria-live="polite">
             {openedAt && <p className="m-0 self-center text-[11px] text-[#58616c]">{t.today}, {openedAt}</p>}
             {messages.map((m, i) =>
               m.role === "user" ? (
@@ -340,7 +340,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                 placeholder={t.placeholder}
                 disabled={step === "done"}
                 aria-label={t.placeholder}
-                className="min-w-0 flex-1 border-none bg-transparent py-2 text-sm text-[#262b31] outline-none! placeholder:text-[#58616c]"
+                className="min-w-0 flex-1 border-none bg-transparent py-2 text-base text-[#262b31] outline-none! sm:text-sm placeholder:text-[#58616c]"
               />
               {voiceSupported && (
                 <button onClick={toggleVoice} aria-label={listening ? t.voiceStop : t.voiceStart} aria-pressed={listening} title={t.voiceStart}
@@ -369,14 +369,14 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
         )}
         {open ? (
           <button onClick={() => setOpen(false)} aria-label={t.close} title={t.close}
-            className={`flex h-16 w-16 items-center justify-center rounded-full bg-[#1d3b6b] text-white ${shadowBtn}`}>
+            className={`flex h-14 w-14 items-center justify-center rounded-full bg-[#1d3b6b] sm:h-16 sm:w-16 text-white ${shadowBtn}`}>
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
         ) : (
           <button onClick={() => openChat(teaser ? "badge" : "button")}
             aria-label={`${t.openChat}${statusLabel ? ` (${statusLabel})` : ""}${teaser && !offline ? ` – ${t.newMessage}` : ""}`}
-            className={`relative flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-white bg-white p-0 ${shadowBtn}`}>
-            <Avatar size={58} />
+            className={`relative flex h-14 w-14 items-center justify-center rounded-full border-[3px] sm:h-16 sm:w-16 border-white bg-white p-0 ${shadowBtn}`}>
+            <Avatar size={58} className="max-sm:h-[50px]! max-sm:w-[50px]!" />
             {dot && <span aria-hidden="true" className={`absolute -bottom-px -right-px h-[18px] w-[18px] rounded-full border-[3px] border-white ${dot}`} />}
             {teaser && !offline && (
               <span aria-hidden="true" className="absolute -right-0.5 -top-0.5 flex h-[22px] min-w-[22px] items-center justify-center rounded-full border-2 border-white bg-[#b23b3b] text-[11px] font-semibold text-white">1</span>

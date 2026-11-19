@@ -277,6 +277,11 @@ html.js .reveal-right {
 #main {
   overflow-x: clip;
 }
+/* Auf dem Handy nie seitlich verschiebbar (auch nicht über Header, Footer oder Lexi-Chat) */
+html,
+body {
+  overflow-x: clip;
+}
 html.js .reveal.is-visible {
   opacity: 1;
   transform: none;
