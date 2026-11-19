@@ -90,7 +90,8 @@
   --font-sans: var(--font-dm-sans);
 }
 
-* {
+/* Eckiges Design überall – außer im Lexi-Chat (runde Formen wie im Mockup) */
+*:not([data-lexi], [data-lexi] *) {
   border-radius: 0 !important;
 }
 
