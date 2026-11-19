@@ -94,6 +94,17 @@ export const de = {
     },
   },
   lexi: {
+    online: "online",
+    offline: "gerade nicht erreichbar",
+    offlineHint: "Lexi ist gerade nicht erreichbar. Unser Team hilft Ihnen gern weiter.",
+    openChat: "Chat mit Lexi öffnen",
+    minimize: "Chat minimieren",
+    newMessage: "1 neue Nachricht",
+    quickReplies: [
+      { label: "Formate", question: "Welche Trainingsformate bieten Sie an?" },
+      { label: "Einstufungstest", question: "Wie funktioniert der Einstufungstest?" },
+      { label: "Training vor Ort", question: "Bieten Sie Training vor Ort im Unternehmen an?" },
+    ],
     trigger: "Fragen? — Lexi",
     subtitle: "KI-Assistentin von Interlexico",
     greeting: "Hallo, ich bin Lexi! Fragen Sie mich gern alles zu unseren Sprachtrainings – Formate, Ablauf, Einstufung oder Training vor Ort. Für ein Angebot leite ich Sie an unser Team weiter.",

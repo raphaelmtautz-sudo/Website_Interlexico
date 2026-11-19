@@ -96,6 +96,17 @@ export const es: Dictionary = {
     },
   },
   lexi: {
+    online: "en línea",
+    offline: "no disponible en este momento",
+    offlineHint: "Lexi no está disponible en este momento. Nuestro equipo le ayudará con gusto.",
+    openChat: "Abrir chat con Lexi",
+    minimize: "Minimizar chat",
+    newMessage: "1 mensaje nuevo",
+    quickReplies: [
+      { label: "Formatos", question: "¿Qué formatos de formación ofrecen?" },
+      { label: "Prueba de nivel", question: "¿Cómo funciona la prueba de nivel?" },
+      { label: "Formación presencial", question: "¿Ofrecen formación presencial en nuestra empresa?" },
+    ],
     trigger: "¿Preguntas? — Lexi",
     subtitle: "Asistente de IA de Interlexico",
     greeting: "¡Hola, soy Lexi! Pregúnteme lo que quiera sobre nuestras formaciones de idiomas: formatos, proceso, prueba de nivel o formación presencial. Para un presupuesto, le pongo en contacto con nuestro equipo.",

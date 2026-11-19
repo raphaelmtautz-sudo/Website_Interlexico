@@ -96,6 +96,17 @@ export const en: Dictionary = {
     },
   },
   lexi: {
+    online: "online",
+    offline: "currently unavailable",
+    offlineHint: "Lexi is currently unavailable. Our team is happy to help.",
+    openChat: "Open chat with Lexi",
+    minimize: "Minimise chat",
+    newMessage: "1 new message",
+    quickReplies: [
+      { label: "Formats", question: "Which training formats do you offer?" },
+      { label: "Placement test", question: "How does the placement test work?" },
+      { label: "On-site training", question: "Do you offer on-site training at our company?" },
+    ],
     trigger: "Questions? — Lexi",
     subtitle: "Interlexico's AI assistant",
     greeting: "Hi, I'm Lexi! Ask me anything about our language training – formats, process, placement or on-site training. For a quote, I'll pass you on to our team.",
