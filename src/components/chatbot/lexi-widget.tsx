@@ -42,6 +42,8 @@ interface Message {
   privacyLink?: boolean;
   promoNote?: string; // Aktionshinweis (einmal pro Gespräch, nur bei Verkaufsthemen)
   more?: { path: string; title: string }; // „Mehr dazu“: passende Seite auf interlexico.com
+  form?: "offer"; // Angebotsformular im Chat
+  label?: string; // angeklickte Antwortmöglichkeit (für die Zusammenfassung)
 }
 
 // Bewerbungen gehören nicht in den Anfrage-Flow, sondern ins Bewerbungsformular (/karriere).
@@ -145,6 +147,28 @@ function shortenAnswer(text: string): string {
   return fixCaps(out.join(" "));
 }
 
+/** Aus dem Chat erkannte Angaben für das Team (einfache Muster, keine KI – sofort und nachvollziehbar). */
+function chatFacts(userTexts: string[]) {
+  const t = userTexts.join(" \n ").toLowerCase();
+  const f: Record<string, string> = {};
+  if (/business english|englisch|english|inglés|ingles/.test(t)) f.course = "Business English";
+  if (/deutsch|german|alemán|aleman|daf\b/.test(t)) f.course = f.course ? `${f.course} + Deutsch als Fremdsprache` : "Deutsch als Fremdsprache";
+  const n = /(\d+)\s*(?:–|-|bis)\s*(\d+)\s*(?:personen|teilnehm|mitarbeit|people|personas)?/.exec(t) || /(\d+)\s*(?:personen|teilnehm|mitarbeit|kolleg|people|persons|employees|personas|empleados)/.exec(t);
+  if (n) f.participants = n[2] ? `${n[1]}–${n[2]}` : n[1];
+  else if (/(eine person|one person|una persona|einzeln)/.test(t)) f.participants = "1";
+  else if (/mehr als 7|more than 7|más de 7/.test(t)) f.participants = "mehr als 7";
+  if (/einzel|1:1|one-to-one|individual/.test(t)) f.format = "Einzeltraining";
+  else if (/klasse|class\b|clase/.test(t)) f.format = "Klassentraining";
+  else if (/gruppe|group|grupo/.test(t)) f.format = "Gruppentraining";
+  const where = [/vor ort|präsenz|praesenz|on-site|onsite|presencial|im unternehmen|bei uns|at our company/.test(t) && "vor Ort", /online|virtuell|remote/.test(t) && "online", /hybrid|gemischt|mixed|mixta/.test(t) && "hybrid"].filter(Boolean);
+  if (where.length) f.location = where.join(" / ");
+  const when = /(januar|februar|märz|maerz|april|mai|juni|juli|august|september|oktober|november|dezember|january|february|march|may|june|july|october|december|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|sofort|asap|nächste[nr]? (?:woche|monat)|next (?:week|month)|q[1-4]\b)/.exec(t);
+  if (when) f.when = when[1];
+  const goal = /(meeting|präsentation|presentation|verhandl|negotiat|vertrieb|sales|e-?mail|telefon|onboarding|führungskr|manager|executive|interkulturell|intercultural)/.exec(t);
+  if (goal) f.goal = goal[1];
+  return f;
+}
+
 function AnswerText({ text, ai }: { text: string; ai?: boolean }) {
   const blocks: ({ type: "p"; text: string } | { type: "ul"; items: string[] })[] = [];
   const shown = ai ? shortenAnswer(cleanAnswer(text)) : cleanAnswer(text);
@@ -193,6 +217,8 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   const answersRef = useRef({ topic: "", company: "", name: "", email: "", details: "" });
   const voucherRef = useRef({ name: "", email: "" });
   const promoShown = useRef(false);
+  const answeredTurns = useRef(0);
+  const offerAsked = useRef(false);
   const lastQuestion = useRef("");
   const [voiceSupported, setVoiceSupported] = useState(false);
   const [listening, setListening] = useState(false);
@@ -322,6 +348,12 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
             // Aktion einmal pro Gespräch erwähnen – nur bei Verkaufsthemen (Kosten, Start, Buchung …), nicht aufdringlich
             const note = e.promoNote && !promoShown.current && SALES_RE.test(question.toLowerCase()) ? e.promoNote : undefined;
             if (note) promoShown.current = true;
+            // Verkaufsgespräch: nach der zweiten beantworteten Frage einmal ein Angebot anbieten
+            if (!noAnswer) answeredTurns.current += 1;
+            if (!noAnswer && answeredTurns.current >= 2 && !offerAsked.current) {
+              offerAsked.current = true;
+              window.setTimeout(() => setMessages((ms) => [...ms, { role: "assistant", content: t.offer.ask, actions: [{ label: t.offer.yes, value: "offer-yes" }, { label: t.offer.later, value: "offer-later" }] }]), 900);
+            }
             patchLast((m) => ({ ...m, content: e.text ?? m.content, pending: false, offerInquiry: noAnswer, ai: !noAnswer, ctas: ctas.length ? ctas : undefined, promoNote: note,
               // „Mehr dazu“ nur auf eigene Seiten und nicht auf die Seite, auf der der Besucher schon ist
               more: e.more && /^\/[a-z]{2}(\/|$)/.test(e.more.path) && e.more.path !== window.location.pathname.replace(/\/+$/, "") ? e.more : undefined }));
@@ -355,6 +387,8 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   async function onAction(value: string, label: string) {
     setMessages((m) => [...clearButtons(m), { role: "user", content: label }]);
     if (value === "privacy") { setMessages((m) => [...m, newsletterMsg()]); setStep("vNewsletter"); return; }
+    if (value === "offer-yes") { setMessages((m) => [...m, { role: "assistant", content: t.offer.intro, form: "offer" }]); track("cta_click", { cta: "lexi_offer_yes" }); return; }
+    if (value === "offer-later") { setMessages((m) => [...m, { role: "assistant", content: t.offer.laterReply }]); return; }
     if (value === "nl-yes" || value === "nl-no") {
       const newsletter = value === "nl-yes";
       setLoading(true);
@@ -379,6 +413,38 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   }
 
   function startInquiry() {
+    // Angebot über das kleine Formular im Chat (Name, E-Mail, optional Telefon/Unternehmen, Newsletter freiwillig)
+    offerAsked.current = true;
+    setMessages((m) => [...clearButtons(m), { role: "assistant", content: t.offer.intro, form: "offer" }]);
+    track("cta_click", { cta: "lexi_offer_form" });
+  }
+  async function submitOffer(d: { name: string; email: string; phone: string; company: string; newsletter: boolean }) {
+    const userTexts = messages.filter((m) => m.role === "user").map((m) => m.content);
+    const f = chatFacts([...userTexts, ...messages.map((m) => m.label ?? "")]);
+    const factLines = [
+      f.course && `Sprache/Kurs: ${f.course}`, f.participants && `Teilnehmende: ${f.participants}`, f.format && `Format: ${f.format}`,
+      f.location && `Ort: ${f.location}`, f.when && `Zeitraum: ${f.when}`, f.goal && `Schwerpunkt: ${f.goal}`,
+    ].filter(Boolean) as string[];
+    const transcript = messages
+      .filter((m) => !m.form && !m.pending && m.content && !m.actions)
+      .map((m) => `${m.role === "user" ? "Besucher" : "Lexi"}: ${m.ai ? shortenAnswer(cleanAnswer(m.content)) : m.content}`)
+      .join("\n").slice(-4000);
+    const message = [
+      "Angebotsanfrage über Lexi (Website-Chat).",
+      factLines.length ? `\nErkannte Angaben (automatisch aus dem Chat, bitte prüfen):\n- ${factLines.join("\n- ")}` : "",
+      `\nSeite: ${window.location.pathname}`,
+      `\nGesprächsverlauf:\n${transcript}`,
+    ].join("\n");
+    const res = await fetch("/api/inquiry", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind: "lexi-chat", topic: f.course ? `Angebot ${f.course}` : "Angebotsanfrage über Lexi", name: d.name, email: d.email, phone: d.phone, company: d.company, message, course: f.course ?? "", format: f.format ?? "", participants: (f.participants ?? "").replace(/\D.*$/, ""), language: lang, website: "" }),
+    });
+    if (!res.ok) throw new Error("inquiry_failed");
+    if (d.newsletter) fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: d.email, source: "lexi-chat" }) }).catch(() => {});
+    track("form_submit", { form: "lexi-offer", newsletter: d.newsletter ? "yes" : "no" });
+    setMessages((m) => [...m.map((x) => (x.form ? { ...x, form: undefined, content: `${d.name} · ${d.email}` } : x)), { role: "assistant", content: d.newsletter ? `${t.closing}\n\n${t.offer.nlDone}` : t.closing }]);
+  }
+  function startStepInquiry() {
     answersRef.current = { topic: lastQuestion.current, company: "", name: "", email: "", details: "" };
     setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "assistant", content: t.askCompany }]);
     setStep("company");
@@ -406,7 +472,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   async function sendMessage(preset?: string, display?: string) {
     const value = (preset ?? input).trim();
     if (!value || loading || step === "done") return;
-    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "user", content: display ?? value }]);
+    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "user", content: display ?? value, label: display ? value : undefined }]);
     if (preset === undefined) setInput("");
 
     if (step === "chat") {
@@ -562,6 +628,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                       <a href={m.more.path} onClick={() => track("cta_click", { cta: "lexi_more", target: m.more!.path })} className="self-start text-[13px] font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.moreLabel}: {m.more.title} →</a>
                     )}
                     {m.promoNote && <p className="m-0 rounded-lg border border-[#f1d48a] bg-[#fff8e8] px-2.5 py-1.5 text-[13px] leading-snug text-[#5c4300]">{m.promoNote}</p>}
+                    {m.form === "offer" && <OfferForm t={t.offer} privacyHref={lh(lang, "/rechtliches/datenschutz")} privacyLabel={t.privacyLink} newsletterConsent={t.voucherChat.newsletterConsent} errorText={t.error} onSubmit={submitOffer} />}
                     {m.privacyLink && <a href={lh(lang, "/rechtliches/datenschutz")} target="_blank" rel="noopener" className="font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.privacyLink} ↗</a>}
                     {m.actions && !loading && (
                       <div className="flex flex-wrap gap-1.5 pt-0.5">
@@ -647,5 +714,38 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
         )}
       </div>
     </div>
+  );
+}
+
+/** Kleines Angebotsformular im Chat. Pflicht: Name + E-Mail; Telefon/Unternehmen optional; Newsletter freiwillig (eigener Double-Opt-In). */
+function OfferForm({ t, privacyHref, privacyLabel, newsletterConsent, errorText, onSubmit }: {
+  t: Dictionary["lexi"]["offer"]; privacyHref: string; privacyLabel: string; newsletterConsent: string; errorText: string;
+  onSubmit: (d: { name: string; email: string; phone: string; company: string; newsletter: boolean }) => Promise<void>;
+}) {
+  const [d, setD] = useState({ name: "", email: "", phone: "", company: "", newsletter: false });
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const field = "w-full rounded-lg border border-[#cfd6de] bg-white px-2.5 py-2 text-base text-[#262b31] outline-none! focus:border-[#1d3b6b] sm:text-sm";
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!d.name.trim() || !isValidEmail(d.email)) { setErr(t.required); return; }
+    setBusy(true); setErr("");
+    try { await onSubmit({ ...d, name: d.name.trim(), email: d.email.trim(), phone: d.phone.trim(), company: d.company.trim() }); }
+    catch { setErr(errorText); setBusy(false); }
+  };
+  return (
+    <form onSubmit={submit} className="flex flex-col gap-2">
+      <input className={field} placeholder={`${t.name} *`} aria-label={t.name} autoComplete="name" value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} maxLength={120} />
+      <input className={field} placeholder={`${t.email} *`} aria-label={t.email} type="email" autoComplete="email" value={d.email} onChange={(e) => setD({ ...d, email: e.target.value })} maxLength={200} />
+      <input className={field} placeholder={t.phone} aria-label={t.phone} type="tel" autoComplete="tel" value={d.phone} onChange={(e) => setD({ ...d, phone: e.target.value })} maxLength={40} />
+      <input className={field} placeholder={t.company} aria-label={t.company} autoComplete="organization" value={d.company} onChange={(e) => setD({ ...d, company: e.target.value })} maxLength={200} />
+      <label className="flex items-start gap-2 text-[12px] leading-snug text-[#58616c]">
+        <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0" checked={d.newsletter} onChange={(e) => setD({ ...d, newsletter: e.target.checked })} />
+        <span><b className="font-semibold text-[#262b31]">{t.newsletterLabel}</b><br />{newsletterConsent}</span>
+      </label>
+      <p className="m-0 text-[11px] leading-snug text-[#58616c]">{t.privacy} <a href={privacyHref} target="_blank" rel="noopener" className="text-[#0a72bd]">{privacyLabel}</a></p>
+      {err && <p className="m-0 text-[12px] text-[#b23b3b]">{err}</p>}
+      <button type="submit" disabled={busy} className="rounded-lg bg-[#2db1fb] py-2 text-[13px] font-semibold text-[#06233a] hover:bg-[#1a93e0] disabled:opacity-60">{busy ? t.sending : t.submit}</button>
+    </form>
   );
 }
