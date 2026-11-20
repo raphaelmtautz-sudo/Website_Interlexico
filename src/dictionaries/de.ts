@@ -101,6 +101,9 @@ export const de = {
     openChat: "Chat mit Lexi öffnen",
     minimize: "Chat minimieren",
     newMessage: "1 neue Nachricht",
+    ctaInquiry: "Angebot anfragen",
+    ctaPlacement: "Einstufungstest starten",
+    ctaConfigurator: "Training zusammenstellen",
     quickReplies: [
       { label: "Formate", question: "Welche Trainingsformate bieten Sie an?" },
       { label: "Einstufungstest", question: "Wie funktioniert der Einstufungstest?" },

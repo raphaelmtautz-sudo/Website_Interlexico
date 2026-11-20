@@ -103,6 +103,9 @@ export const en: Dictionary = {
     openChat: "Open chat with Lexi",
     minimize: "Minimise chat",
     newMessage: "1 new message",
+    ctaInquiry: "Request a quote",
+    ctaPlacement: "Take the placement test",
+    ctaConfigurator: "Build your training",
     quickReplies: [
       { label: "Formats", question: "Which training formats do you offer?" },
       { label: "Placement test", question: "How does the placement test work?" },

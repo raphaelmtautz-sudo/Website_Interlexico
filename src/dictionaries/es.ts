@@ -103,6 +103,9 @@ export const es: Dictionary = {
     openChat: "Abrir chat con Lexi",
     minimize: "Minimizar chat",
     newMessage: "1 mensaje nuevo",
+    ctaInquiry: "Solicitar oferta",
+    ctaPlacement: "Hacer la prueba de nivel",
+    ctaConfigurator: "Configurar formación",
     quickReplies: [
       { label: "Formatos", question: "¿Qué formatos de formación ofrecen?" },
       { label: "Prueba de nivel", question: "¿Cómo funciona la prueba de nivel?" },
