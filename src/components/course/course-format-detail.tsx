@@ -1,3 +1,4 @@
+import { GroupSavings } from "@/components/content/group-savings";
 import Link from "next/link";
 import { CourseFormat, CourseType } from "@/types/course";
 import { Section, Eyebrow } from "@/components/ui/section";
@@ -65,6 +66,7 @@ export function CourseFormatDetail({
               </div>
             ))}
           </dl>
+          {format.slug === "gruppentraining" ? <GroupSavings lang={lang} showLink={false} /> : null}
         </Container>
       </Section>
 

@@ -10,6 +10,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/interactive/reveal";
 import { PageCta } from "@/components/content/page-cta";
 import { TrainingLinks } from "@/components/content/training-links";
+import { GroupSavings } from "@/components/content/group-savings";
 import { ArticleJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { getGuideLabels } from "@/content/ratgeber";
 import { getAllGuides, getAnyGuide, getDraftGuide, guideLocales } from "@/lib/guides";
@@ -92,6 +93,7 @@ export default async function GuidePage({ params }: { params: Promise<{ lang: st
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-gold mb-2">{t.summary}</p>
             <p className="font-sans leading-relaxed text-paper">{guide.summary}</p>
           </div>
+          {slug === "kosten-sprachtraining-unternehmen" ? <GroupSavings lang={lang} /> : null}
 
           {/* Artikel aus dem CMS: Rich Text in derselben Typografie wie die eingebauten Ratgeber. */}
           {guide.content ? (
