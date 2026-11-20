@@ -18,8 +18,22 @@ function detectLocale(request: NextRequest): string {
   return defaultLocale;
 }
 
+// Alte, mehrteilige Adressen der früheren Website (Search Console 20.11.2026) – dauerhaft umleiten.
+// Einteilige Altadressen pflegt das CMS unter „Weiterleitungen“.
+const LEGACY_PREFIX: [RegExp, string][] = [
+  [/^\/(?:(?:de|en|es)\/)?en-home\/.+/, "/en/demo"], // z. B. /en-home/trail-lesson-1 (Probestunde)
+];
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  for (const [re, to] of LEGACY_PREFIX) {
+    if (re.test(pathname)) {
+      const url = request.nextUrl.clone();
+      url.pathname = to;
+      url.search = "";
+      return NextResponse.redirect(url, 301);
+    }
+  }
   const pathnameHasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
