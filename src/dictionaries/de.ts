@@ -107,6 +107,12 @@ export const de = {
     ctaVoucher: "Gutschein sichern",
     moreLabel: "Mehr dazu",
     offer: {
+      title: "Unverbindliches Angebot anfordern",
+      subtitle: "Formular von Interlexico – Ihre Angaben gehen direkt an unser Team, nicht an die KI.",
+      summary: "Aus Ihrem Gespräch mit Lexi",
+      notes: "Ergänzungen (optional)",
+      notesPh: "z. B. Wunschtermin, Ziele, Rückfragen",
+      close: "Schließen",
       ask: "Darf ich Ihnen dazu ein unverbindliches Angebot zusammenstellen lassen? Unser Team meldet sich dann persönlich bei Ihnen.",
       yes: "Ja, Angebot erhalten",
       later: "Später",

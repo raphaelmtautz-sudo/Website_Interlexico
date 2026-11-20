@@ -109,6 +109,12 @@ export const en: Dictionary = {
     ctaVoucher: "Get your voucher",
     moreLabel: "Learn more",
     offer: {
+      title: "Request a non-binding quote",
+      subtitle: "Interlexico form – your details go directly to our team, not to the AI.",
+      summary: "From your chat with Lexi",
+      notes: "Additional notes (optional)",
+      notesPh: "e.g. preferred dates, goals, questions",
+      close: "Close",
       ask: "Shall I have a non-binding quote put together for you? Our team will then get in touch personally.",
       yes: "Yes, get a quote",
       later: "Later",

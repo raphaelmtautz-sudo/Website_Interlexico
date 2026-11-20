@@ -109,6 +109,12 @@ export const es: Dictionary = {
     ctaVoucher: "Obtener el cupón",
     moreLabel: "Más información",
     offer: {
+      title: "Solicitar una oferta sin compromiso",
+      subtitle: "Formulario de Interlexico: sus datos van directamente a nuestro equipo, no a la IA.",
+      summary: "De su conversación con Lexi",
+      notes: "Comentarios (opcional)",
+      notesPh: "p. ej. fechas deseadas, objetivos, preguntas",
+      close: "Cerrar",
       ask: "¿Le preparamos una oferta sin compromiso? Nuestro equipo se pondrá en contacto con usted personalmente.",
       yes: "Sí, recibir oferta",
       later: "Más tarde",

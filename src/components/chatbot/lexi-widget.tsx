@@ -218,6 +218,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   const voucherRef = useRef({ name: "", email: "" });
   const promoShown = useRef(false);
   const answeredTurns = useRef(0);
+  const [offerOpen, setOfferOpen] = useState(false); // Angebotsformular als eigenes Fenster (nicht im Chat – dort keine persönlichen Daten)
   const offerAsked = useRef(false);
   const lastQuestion = useRef("");
   const [voiceSupported, setVoiceSupported] = useState(false);
@@ -387,7 +388,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   async function onAction(value: string, label: string) {
     setMessages((m) => [...clearButtons(m), { role: "user", content: label }]);
     if (value === "privacy") { setMessages((m) => [...m, newsletterMsg()]); setStep("vNewsletter"); return; }
-    if (value === "offer-yes") { setMessages((m) => [...m, { role: "assistant", content: t.offer.intro, form: "offer" }]); track("cta_click", { cta: "lexi_offer_yes" }); return; }
+    if (value === "offer-yes") { setOfferOpen(true); track("cta_click", { cta: "lexi_offer_yes" }); return; }
     if (value === "offer-later") { setMessages((m) => [...m, { role: "assistant", content: t.offer.laterReply }]); return; }
     if (value === "nl-yes" || value === "nl-no") {
       const newsletter = value === "nl-yes";
@@ -415,10 +416,12 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   function startInquiry() {
     // Angebot über das kleine Formular im Chat (Name, E-Mail, optional Telefon/Unternehmen, Newsletter freiwillig)
     offerAsked.current = true;
-    setMessages((m) => [...clearButtons(m), { role: "assistant", content: t.offer.intro, form: "offer" }]);
+    setMessages((m) => clearButtons(m));
+    setOfferOpen(true);
     track("cta_click", { cta: "lexi_offer_form" });
   }
-  async function submitOffer(d: { name: string; email: string; phone: string; company: string; newsletter: boolean }) {
+  const factsNow = () => chatFacts([...messages.filter((m) => m.role === "user").map((m) => m.content), ...messages.map((m) => m.label ?? "")]);
+  async function submitOffer(d: { name: string; email: string; phone: string; company: string; notes: string; newsletter: boolean }) {
     const userTexts = messages.filter((m) => m.role === "user").map((m) => m.content);
     const f = chatFacts([...userTexts, ...messages.map((m) => m.label ?? "")]);
     const factLines = [
@@ -432,6 +435,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     const message = [
       "Angebotsanfrage über Lexi (Website-Chat).",
       factLines.length ? `\nErkannte Angaben (automatisch aus dem Chat, bitte prüfen):\n- ${factLines.join("\n- ")}` : "",
+      d.notes ? `\nErgänzungen des Besuchers:\n${d.notes}` : "",
       `\nSeite: ${window.location.pathname}`,
       `\nGesprächsverlauf:\n${transcript}`,
     ].join("\n");
@@ -442,7 +446,9 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     if (!res.ok) throw new Error("inquiry_failed");
     if (d.newsletter) fetch("/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: d.email, source: "lexi-chat" }) }).catch(() => {});
     track("form_submit", { form: "lexi-offer", newsletter: d.newsletter ? "yes" : "no" });
-    setMessages((m) => [...m.map((x) => (x.form ? { ...x, form: undefined, content: `${d.name} · ${d.email}` } : x)), { role: "assistant", content: d.newsletter ? `${t.closing}\n\n${t.offer.nlDone}` : t.closing }]);
+    setOfferOpen(false);
+    setOpen(true);
+    setMessages((m) => [...m, { role: "assistant", content: d.newsletter ? `${t.closing}\n\n${t.offer.nlDone}` : t.closing }]);
   }
   function startStepInquiry() {
     answersRef.current = { topic: lastQuestion.current, company: "", name: "", email: "", details: "" };
@@ -568,7 +574,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
           <div className="mt-3 flex gap-2">
             <button onClick={() => openChat("teaser")} className="flex-1 rounded-lg bg-[#1d3b6b] py-2 text-[13px] font-semibold text-white hover:bg-[#16305c]">{t.teaserCta}</button>
             {promo ? (
-              <button onClick={() => { openChat("teaser_voucher"); startVoucher(); }} className="flex-1 rounded-lg border border-[#e8b44a] bg-[#fff8e8] py-2 text-[13px] font-semibold text-[#7a5200] hover:bg-[#ffefc9]">{t.ctaVoucher}</button>
+              <button onClick={() => { setTeaser(false); track("cta_click", { cta: "lexi_teaser_voucher" }); window.dispatchEvent(new CustomEvent("ix:open-voucher")); }} className="flex-1 rounded-lg border border-[#e8b44a] bg-[#fff8e8] py-2 text-[13px] font-semibold text-[#7a5200] hover:bg-[#ffefc9]">{t.ctaVoucher}</button>
             ) : (
               <button onClick={() => { openChat("teaser_inquiry"); startInquiry(); }} className="flex-1 rounded-lg border border-[#b9c7da] py-2 text-[13px] font-semibold text-[#1d3b6b] hover:border-[#1d3b6b]">{t.ctaInquiry}</button>
             )}
@@ -616,7 +622,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                         {m.ctas.map((c) => c === "inquiry" ? (
                           <button key={c} onClick={() => { track("cta_click", { cta: "lexi_cta_inquiry" }); startInquiry(); }} className="rounded-lg bg-[#2db1fb] px-3 py-1.5 text-[13px] font-semibold text-[#06233a] transition-colors hover:bg-[#1a93e0]">{t.ctaInquiry}</button>
                         ) : c === "voucher" ? (
-                          <button key={c} onClick={() => { track("cta_click", { cta: "lexi_cta_voucher" }); startVoucher(); }}
+                          <button key={c} onClick={() => { track("cta_click", { cta: "lexi_cta_voucher" }); window.dispatchEvent(new CustomEvent("ix:open-voucher")); }}
                             className="rounded-lg border border-[#e8b44a] bg-[#fff8e8] px-3 py-1.5 text-[13px] font-semibold text-[#7a5200] transition-colors hover:bg-[#ffefc9]">{t.ctaVoucher}</button>
                         ) : (
                           <a key={c} href={lh(lang, c === "placement" ? "/einstufung" : "/konfigurator")} onClick={() => track("cta_click", { cta: `lexi_cta_${c}` })}
@@ -628,7 +634,6 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                       <a href={m.more.path} onClick={() => track("cta_click", { cta: "lexi_more", target: m.more!.path })} className="self-start text-[13px] font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.moreLabel}: {m.more.title} →</a>
                     )}
                     {m.promoNote && <p className="m-0 rounded-lg border border-[#f1d48a] bg-[#fff8e8] px-2.5 py-1.5 text-[13px] leading-snug text-[#5c4300]">{m.promoNote}</p>}
-                    {m.form === "offer" && <OfferForm t={t.offer} privacyHref={lh(lang, "/rechtliches/datenschutz")} privacyLabel={t.privacyLink} newsletterConsent={t.voucherChat.newsletterConsent} errorText={t.error} onSubmit={submitOffer} />}
                     {m.privacyLink && <a href={lh(lang, "/rechtliches/datenschutz")} target="_blank" rel="noopener" className="font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.privacyLink} ↗</a>}
                     {m.actions && !loading && (
                       <div className="flex flex-wrap gap-1.5 pt-0.5">
@@ -692,6 +697,11 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
         </section>
       )}
 
+      {offerOpen && (
+        <OfferDialog t={t.offer} facts={factsNow()} privacyHref={lh(lang, "/rechtliches/datenschutz")} privacyLabel={t.privacyLink}
+          newsletterConsent={t.voucherChat.newsletterConsent} errorText={t.error} onClose={() => setOfferOpen(false)} onSubmit={submitOffer} />
+      )}
+
       <div className="group relative">
         {offline && !open && (
           <p role="tooltip" className="pointer-events-none absolute bottom-full right-0 m-0 mb-2.5 hidden w-[180px] rounded-[12px_12px_4px_12px] bg-white px-3 py-[9px] text-xs leading-[1.4] text-[#262b31] shadow-[0_4px_14px_rgba(15,23,34,0.12)] group-hover:block group-focus-within:block">{t.offlineHint}</p>
@@ -717,35 +727,67 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   );
 }
 
-/** Kleines Angebotsformular im Chat. Pflicht: Name + E-Mail; Telefon/Unternehmen optional; Newsletter freiwillig (eigener Double-Opt-In). */
-function OfferForm({ t, privacyHref, privacyLabel, newsletterConsent, errorText, onSubmit }: {
-  t: Dictionary["lexi"]["offer"]; privacyHref: string; privacyLabel: string; newsletterConsent: string; errorText: string;
-  onSubmit: (d: { name: string; email: string; phone: string; company: string; newsletter: boolean }) => Promise<void>;
+/**
+ * Angebotsformular als eigenes kleines Fenster (Computer: Mitte, Handy: von unten) – bewusst NICHT im Chat,
+ * weil dort „keine persönlichen Daten“ gilt. Zeigt, was Lexi aus dem Gespräch mitnimmt.
+ * Pflicht: Name + E-Mail; Telefon/Unternehmen/Ergänzungen optional; Newsletter freiwillig (eigener Double-Opt-In).
+ */
+function OfferDialog({ t, facts, privacyHref, privacyLabel, newsletterConsent, errorText, onClose, onSubmit }: {
+  t: Dictionary["lexi"]["offer"]; facts: Record<string, string>; privacyHref: string; privacyLabel: string; newsletterConsent: string; errorText: string;
+  onClose: () => void; onSubmit: (d: { name: string; email: string; phone: string; company: string; notes: string; newsletter: boolean }) => Promise<void>;
 }) {
-  const [d, setD] = useState({ name: "", email: "", phone: "", company: "", newsletter: false });
+  const [d, setD] = useState({ name: "", email: "", phone: "", company: "", notes: "", newsletter: false });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const field = "w-full rounded-lg border border-[#cfd6de] bg-white px-2.5 py-2 text-base text-[#262b31] outline-none! focus:border-[#1d3b6b] sm:text-sm";
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  const chips = [facts.course, facts.participants && `${facts.participants} Pers.`, facts.format, facts.location, facts.when].filter(Boolean) as string[];
+  const field = "w-full rounded-lg border border-[#cfd6de] bg-white px-3 py-2 text-base text-[#262b31] outline-none! focus:border-[#1d3b6b] sm:text-sm";
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!d.name.trim() || !isValidEmail(d.email)) { setErr(t.required); return; }
     setBusy(true); setErr("");
-    try { await onSubmit({ ...d, name: d.name.trim(), email: d.email.trim(), phone: d.phone.trim(), company: d.company.trim() }); }
+    try { await onSubmit({ ...d, name: d.name.trim(), email: d.email.trim(), phone: d.phone.trim(), company: d.company.trim(), notes: d.notes.trim().slice(0, 1500) }); }
     catch { setErr(errorText); setBusy(false); }
   };
   return (
-    <form onSubmit={submit} className="flex flex-col gap-2">
-      <input className={field} placeholder={`${t.name} *`} aria-label={t.name} autoComplete="name" value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} maxLength={120} />
-      <input className={field} placeholder={`${t.email} *`} aria-label={t.email} type="email" autoComplete="email" value={d.email} onChange={(e) => setD({ ...d, email: e.target.value })} maxLength={200} />
-      <input className={field} placeholder={t.phone} aria-label={t.phone} type="tel" autoComplete="tel" value={d.phone} onChange={(e) => setD({ ...d, phone: e.target.value })} maxLength={40} />
-      <input className={field} placeholder={t.company} aria-label={t.company} autoComplete="organization" value={d.company} onChange={(e) => setD({ ...d, company: e.target.value })} maxLength={200} />
-      <label className="flex items-start gap-2 text-[12px] leading-snug text-[#58616c]">
-        <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0" checked={d.newsletter} onChange={(e) => setD({ ...d, newsletter: e.target.checked })} />
-        <span><b className="font-semibold text-[#262b31]">{t.newsletterLabel}</b><br />{newsletterConsent}</span>
-      </label>
-      <p className="m-0 text-[11px] leading-snug text-[#58616c]">{t.privacy} <a href={privacyHref} target="_blank" rel="noopener" className="text-[#0a72bd]">{privacyLabel}</a></p>
-      {err && <p className="m-0 text-[12px] text-[#b23b3b]">{err}</p>}
-      <button type="submit" disabled={busy} className="rounded-lg bg-[#2db1fb] py-2 text-[13px] font-semibold text-[#06233a] hover:bg-[#1a93e0] disabled:opacity-60">{busy ? t.sending : t.submit}</button>
-    </form>
+    <div className="fixed inset-0 z-[70] flex items-end justify-center bg-[rgba(15,23,34,0.45)] sm:items-center" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <section role="dialog" aria-modal="true" aria-label={t.title} className="max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-5 text-[#262b31] shadow-[0_16px_48px_rgba(15,23,34,0.25)] animate-fade-up sm:max-w-[440px] sm:rounded-2xl">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="m-0 text-lg font-semibold text-[#1d3b6b]">{t.title}</h2>
+            <p className="m-0 mt-1 text-[12.5px] leading-snug text-[#58616c]">{t.subtitle}</p>
+          </div>
+          <button type="button" onClick={onClose} aria-label={t.close} title={t.close} className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#58616c] hover:bg-[#f3f5f8]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+        </div>
+        {chips.length > 0 && (
+          <div className="mt-3 rounded-xl bg-[#f3f7fb] px-3 py-2.5">
+            <p className="m-0 text-[11.5px] font-semibold uppercase tracking-wide text-[#58616c]">{t.summary}</p>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">{chips.map((c) => <span key={c} className="rounded-full bg-white px-2.5 py-1 text-[12.5px] font-medium text-[#1d3b6b] ring-1 ring-[#d8e2ee]">{c}</span>)}</div>
+          </div>
+        )}
+        <form onSubmit={submit} className="mt-3 flex flex-col gap-2">
+          <input className={field} placeholder={`${t.name} *`} aria-label={t.name} autoComplete="name" value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} maxLength={120} autoFocus />
+          <input className={field} placeholder={`${t.email} *`} aria-label={t.email} type="email" autoComplete="email" value={d.email} onChange={(e) => setD({ ...d, email: e.target.value })} maxLength={200} />
+          <div className="grid gap-2 sm:grid-cols-2">
+            <input className={field} placeholder={t.phone} aria-label={t.phone} type="tel" autoComplete="tel" value={d.phone} onChange={(e) => setD({ ...d, phone: e.target.value })} maxLength={40} />
+            <input className={field} placeholder={t.company} aria-label={t.company} autoComplete="organization" value={d.company} onChange={(e) => setD({ ...d, company: e.target.value })} maxLength={200} />
+          </div>
+          <textarea className={field} rows={2} placeholder={t.notesPh} aria-label={t.notes} value={d.notes} onChange={(e) => setD({ ...d, notes: e.target.value })} maxLength={1500} />
+          <label className="flex items-start gap-2 text-[12px] leading-snug text-[#58616c]">
+            <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0" checked={d.newsletter} onChange={(e) => setD({ ...d, newsletter: e.target.checked })} />
+            <span><b className="font-semibold text-[#262b31]">{t.newsletterLabel}</b> – {newsletterConsent}</span>
+          </label>
+          <p className="m-0 text-[11.5px] leading-snug text-[#58616c]">{t.privacy} <a href={privacyHref} target="_blank" rel="noopener" className="text-[#0a72bd]">{privacyLabel}</a></p>
+          {err && <p className="m-0 text-[12.5px] text-[#b23b3b]">{err}</p>}
+          <button type="submit" disabled={busy} className="mt-1 rounded-lg bg-[#2db1fb] py-2.5 text-[14px] font-semibold text-[#06233a] hover:bg-[#1a93e0] disabled:opacity-60">{busy ? t.sending : t.submit}</button>
+        </form>
+      </section>
+    </div>
   );
 }
