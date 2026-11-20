@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { lh, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/dictionaries";
 import { track } from "@/lib/track";
@@ -17,10 +18,16 @@ import { track } from "@/lib/track";
 const LEXI_AVATAR = "/lexi-avatar";
 // Kleines Begrüßungsfenster: einmal pro Besuch, Computer nach 8 s, Handy nach 12 s; schließt nach 45 s
 // von selbst oder sofort, wenn das Gutschein-Pop-up erscheint (nie beides gleichzeitig).
-const TEASER_DELAY_MS = 8000;
-const TEASER_DELAY_MOBILE_MS = 12000;
+// Seitenabhängig: nach 6 s eine passende Frage mit Antwortmöglichkeiten (Besucher ins Gespräch holen).
+// Je Seitengruppe einmal pro Besuch, höchstens 3 pro Besuch; nach zweimal „X“ Ruhe für diesen Besuch.
+const TEASER_DELAY_MS = 6000;
 const TEASER_VISIBLE_MS = 45000;
-const TEASER_KEY = "lexi-teaser-seen";
+const OPENERS_KEY = "lexi-openers";
+const OPENERS_MAX = 3;
+const NO_OPENER = /^\/(kontakt|karriere|rechtliches|demo|interlexico-one|gutschein)(\/|$)/;
+type OpenerState = { shown: string[]; closed: number };
+const readOpeners = (): OpenerState => { try { return { shown: [], closed: 0, ...JSON.parse(sessionStorage.getItem(OPENERS_KEY) || "{}") }; } catch { return { shown: [], closed: 0 }; } };
+const writeOpeners = (v: OpenerState) => { try { sessionStorage.setItem(OPENERS_KEY, JSON.stringify(v)); } catch { /* ignore */ } };
 
 interface Message {
   role: "user" | "assistant";
@@ -117,7 +124,9 @@ function shortenAnswer(text: string): string {
       if (m && m[1].split(/\s+/).length <= 5) return `- ${m[1]} – ${cut(m[2].split(/(?<=[.!?])\s/)[0], 9)}`;
       return "- " + cut(item.split(/(?<=[.!?])\s/)[0], 12);
     });
-    return [fixCaps(head.trim()), ...items].filter(Boolean).join("\n");
+    // Rückfrage am Ende (führt das Gespräch weiter) nicht wegkürzen
+    const tailQ = lines.slice(listIdx).filter((l) => !/^-\s+/.test(l) && /\?$/.test(l)).pop();
+    return [fixCaps(head.trim()), ...items, ...(tailQ ? [tailQ] : [])].filter(Boolean).join("\n");
   }
   const all = lines.join(" ");
   const s = sentences(all);
@@ -130,6 +139,9 @@ function shortenAnswer(text: string): string {
     if (out.length && words + n > 70) break;
     out.push(x); words += n;
   }
+  // Rückfrage am Ende behalten, auch wenn sie hinter dem 4. Satz kommt
+  const lastQ = s[s.length - 1];
+  if (/\?$/.test(lastQ) && !out.includes(lastQ)) { if (out.length >= 4) out.pop(); out.push(lastQ); }
   return fixCaps(out.join(" "));
 }
 
@@ -169,6 +181,8 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   const t = dict.lexi;
   const [open, setOpen] = useState(false);
   const [teaser, setTeaser] = useState(false);
+  const pathname = usePathname() || "/";
+  const [opener, setOpener] = useState<{ key: string; text: string; options: { label: string; question: string }[] } | null>(null);
   const [status, setStatus] = useState<Status>("unknown");
   const [promo, setPromo] = useState(false); // läuft gerade die Gutschein-Aktion?
   const [openedAt, setOpenedAt] = useState("");
@@ -200,23 +214,31 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     return () => { alive = false; };
   }, []);
 
-  // Begrüßungsfenster einmal pro Besuch (nicht, wenn gerade das Gutschein-Pop-up offen ist)
+  // Begrüßungsfenster je Seite (nicht, wenn gerade das Gutschein-Pop-up offen ist)
   const voucherOpen = useRef(false);
   useEffect(() => {
     const onVoucher = () => { voucherOpen.current = true; setTeaser(false); };
     window.addEventListener("ix:voucher-shown", onVoucher);
-    let seen = false;
-    try { seen = sessionStorage.getItem(TEASER_KEY) === "1"; } catch { /* ignore */ }
-    if (seen) return () => window.removeEventListener("ix:voucher-shown", onVoucher);
-    const mobile = !window.matchMedia("(min-width: 640px)").matches;
-    const id = window.setTimeout(() => {
-      if (voucherOpen.current) return;
-      setTeaser(true);
-      try { sessionStorage.setItem(TEASER_KEY, "1"); } catch { /* ignore */ }
-      track("cta_click", { cta: "lexi_teaser_shown", device: mobile ? "mobile" : "desktop" });
-    }, mobile ? TEASER_DELAY_MOBILE_MS : TEASER_DELAY_MS);
-    return () => { window.clearTimeout(id); window.removeEventListener("ix:voucher-shown", onVoucher); };
+    return () => window.removeEventListener("ix:voucher-shown", onVoucher);
   }, []);
+  useEffect(() => {
+    setTeaser(false);
+    const path = pathname.replace(/^\/(de|en|es)(?=\/|$)/, "") || "/";
+    if (NO_OPENER.test(path)) return;
+    const rule = t.pageOpeners.find((r) => new RegExp(r.match).test(path));
+    const key = rule?.match ?? "default";
+    const st = readOpeners();
+    if (st.closed >= 2 || st.shown.length >= OPENERS_MAX || st.shown.includes(key)) return;
+    const id = window.setTimeout(() => {
+      if (voucherOpen.current || open) return;
+      setOpener(rule ? { key, text: rule.text, options: rule.options } : null);
+      setTeaser(true);
+      const now = readOpeners();
+      writeOpeners({ ...now, shown: [...now.shown, key] });
+      track("cta_click", { cta: "lexi_teaser_shown", page: key });
+    }, TEASER_DELAY_MS);
+    return () => window.clearTimeout(id);
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!teaser) return;
@@ -381,10 +403,10 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     }
   }
 
-  async function sendMessage(preset?: string) {
+  async function sendMessage(preset?: string, display?: string) {
     const value = (preset ?? input).trim();
     if (!value || loading || step === "done") return;
-    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "user", content: value }]);
+    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "user", content: display ?? value }]);
     if (preset === undefined) setInput("");
 
     if (step === "chat") {
@@ -458,13 +480,25 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
             </div>
             <div className="min-w-0 flex-1">
               <p className="m-0 text-[13px] font-semibold text-[#1d3b6b]">Lexi</p>
-              <p className="m-0 text-sm leading-snug text-[#262b31]">{t.teaser}</p>
+              <p className="m-0 text-sm leading-snug text-[#262b31]">{opener?.text ?? t.teaser}</p>
             </div>
-            <button onClick={() => { setTeaser(false); track("cta_click", { cta: "lexi_teaser_close" }); }} aria-label={t.teaserClose} title={t.teaserClose}
+            <button onClick={() => { setTeaser(false); const st = readOpeners(); writeOpeners({ ...st, closed: st.closed + 1 }); track("cta_click", { cta: "lexi_teaser_close" }); }} aria-label={t.teaserClose} title={t.teaserClose}
               className="-mr-1 -mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#58616c] hover:bg-[#f3f5f8]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
           </div>
+          {opener ? (
+            <div className="mt-2.5 flex flex-col gap-1.5">
+              {opener.options.map((o) => (
+                <button key={o.label} onClick={() => {
+                  track("cta_click", { cta: "lexi_opener_option", page: opener.key });
+                  openChat("teaser_option");
+                  if (o.question === "@inquiry") startInquiry(); else void sendMessage(o.question, o.label);
+                }} className="rounded-lg border border-[#b9c7da] bg-white px-3 py-1.5 text-left text-[13px] font-medium text-[#1d3b6b] hover:border-[#1d3b6b] hover:bg-[#f5f8fc]">{o.label}</button>
+              ))}
+              <button onClick={() => openChat("teaser")} className="self-start pt-0.5 text-[12.5px] font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.teaserCta} →</button>
+            </div>
+          ) : (
           <div className="mt-3 flex gap-2">
             <button onClick={() => openChat("teaser")} className="flex-1 rounded-lg bg-[#1d3b6b] py-2 text-[13px] font-semibold text-white hover:bg-[#16305c]">{t.teaserCta}</button>
             {promo ? (
@@ -473,6 +507,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
               <button onClick={() => { openChat("teaser_inquiry"); startInquiry(); }} className="flex-1 rounded-lg border border-[#b9c7da] py-2 text-[13px] font-semibold text-[#1d3b6b] hover:border-[#1d3b6b]">{t.ctaInquiry}</button>
             )}
           </div>
+          )}
         </section>
       )}
 

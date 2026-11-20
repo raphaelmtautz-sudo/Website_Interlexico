@@ -205,11 +205,7 @@ body {
 html[data-reading="on"] .grain::before {
   opacity: 0;
 }
-html[data-reading="on"] [data-distraction="chat"] {
-  opacity: 0;
-  transform: translateY(12px);
-  pointer-events: none;
-}
+/* Lexi bleibt beim Scrollen sichtbar (früher hier ausgeblendet – Besucher fanden den Chat dann nicht). */
 
 /* --- Accessibility by Design --- */
 :focus-visible {
