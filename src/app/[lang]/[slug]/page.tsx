@@ -49,7 +49,7 @@ export default async function CmsPage({
   return (
     <Section className="pt-24 lg:pt-32">
       <h1 className="kinetic font-display text-5xl mb-8 text-balance sm:text-6xl">{page.title}</h1>
-      <div className="max-w-3xl space-y-6">{renderLexical(page.content)}</div>
+      <div className="max-w-3xl space-y-6">{renderLexical(page.content, { lang })}</div>
     </Section>
   );
 }

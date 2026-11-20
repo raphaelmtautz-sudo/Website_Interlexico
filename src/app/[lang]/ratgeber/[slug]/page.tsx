@@ -95,7 +95,7 @@ export default async function GuidePage({ params }: { params: Promise<{ lang: st
           {/* Artikel aus dem CMS: Rich Text in derselben Typografie wie die eingebauten Ratgeber. */}
           {guide.content ? (
             <div className="mt-12 space-y-5 [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:text-3xl [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-2xl [&_ul]:list-none [&_ul]:space-y-3 [&_ol]:space-y-3 [&_li]:border-l [&_li]:border-gold [&_li]:pl-4 [&_li]:text-sm [&_li]:text-paper">
-              {renderLexical(guide.content)}
+              {renderLexical(guide.content, { lang })}
             </div>
           ) : null}
 

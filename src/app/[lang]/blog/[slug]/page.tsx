@@ -52,7 +52,7 @@ export default async function BlogPostPage({
             priority
           />
         )}
-        <div className="space-y-6">{renderLexical(post.content)}</div>
+        <div className="space-y-6">{renderLexical(post.content, { lang })}</div>
       </div>
     </Section>
   );
