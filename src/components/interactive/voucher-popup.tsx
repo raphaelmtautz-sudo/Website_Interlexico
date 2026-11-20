@@ -51,6 +51,7 @@ export function VoucherPopup({ lang, t: dict }: { lang: Locale; t: Dictionary["v
   const [variant, setVariant] = useState<Variant | null>(null);
   const [campaign, setCampaign] = useState<{ requestEndsAt: number; texts: Record<VoucherTextKey, string> } | null>(null);
   const formTouched = useRef(false);
+  const [forced, setForced] = useState(false); // ausdrücklich geöffnet (z. B. Button „Gutschein sichern“ in Lexi)
 
   const excluded = EXCLUDED.some((p) => pathname.startsWith(lh(lang, p)));
 
@@ -112,12 +113,33 @@ export function VoucherPopup({ lang, t: dict }: { lang: Locale; t: Dictionary["v
     return () => cleanups.forEach((c) => c());
   }, [campaign, excluded, variant, show]);
 
-  // Auf ausgeschlossenen Seiten (auch nach clientseitigem Seitenwechsel dorthin) nie anzeigen
-  if (!variant || excluded || !campaign) return null;
+  // Ausdrücklich angefordert (Lexi-Button): ohne Wartezeit/Sperre öffnen, Aktion bei Bedarf nachladen.
+  useEffect(() => {
+    const onOpen = async () => {
+      let c = campaign;
+      if (!c) {
+        const d = await fetch(`/api/voucher/campaign?lang=${lang}`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+        if (!d?.active) return;
+        c = { requestEndsAt: Date.parse(d.requestEndsAt), texts: d.texts };
+        setCampaign(c);
+      }
+      if (Date.now() > c.requestEndsAt) return;
+      const v: Variant = window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches ? "modal" : "sheet";
+      setForced(true);
+      setVariant(v);
+      track("voucher_shown", { variant: v, source: "lexi" });
+    };
+    window.addEventListener("ix:open-voucher", onOpen);
+    return () => window.removeEventListener("ix:open-voucher", onOpen);
+  }, [campaign, lang]);
+
+  // Auf ausgeschlossenen Seiten (auch nach clientseitigem Seitenwechsel dorthin) nie von selbst anzeigen
+  if (!variant || (excluded && !forced) || !campaign) return null;
   return createPortal(
     <VoucherDialog lang={lang} t={{ ...dict, ...campaign.texts }} variant={variant} onClose={(reason) => {
       if (reason === "dismiss") track("voucher_dismissed", { variant });
       setVariant(null);
+      setForced(false);
     }} />,
     document.body,
   );

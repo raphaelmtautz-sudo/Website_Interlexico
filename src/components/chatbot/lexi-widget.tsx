@@ -27,6 +27,8 @@ interface Message {
   pending?: boolean;
   ctas?: Cta[];
   ai?: boolean; // KI-Antwort → im Chat auf Kurzform gekürzt
+  actions?: { label: string; value: string }[]; // Antwort-Buttons im Ablauf (z. B. Datenschutz bestätigen)
+  privacyLink?: boolean;
 }
 
 // Bewerbungen gehören nicht in den Anfrage-Flow, sondern ins Bewerbungsformular (/karriere).
@@ -48,15 +50,19 @@ const speechLang: Record<Locale, string> = { de: "de-DE", en: "en-US", es: "es-E
 
 // Buttons unter Lexis Antworten statt langer Texte: immer „Angebot anfragen“, dazu passend zum Thema
 // Einstufungstest oder Konfigurator (höchstens zwei).
-type Cta = "inquiry" | "placement" | "configurator";
-function pickCtas(text: string): Cta[] {
+type Cta = "inquiry" | "placement" | "configurator" | "voucher";
+// Laufende Gutschein-Aktion nur bei Verkaufsthemen anbieten (nicht aufdringlich)
+const SALES_RE = /(preis|kosten|kostet|price|cost|precio|cuesta|rabatt|discount|descuento|angebot|offer|oferta|buch|book|reserv|start|beginn|gutschein|voucher|cup[oó]n|kostenfrei|gratis|free|aktion|promo|probier|try|testen|unterrichtseinheit)/;
+function pickCtas(text: string, promo = false): Cta[] {
   const t = text.toLowerCase();
-  if (/(einstuf|niveau|level|nivel|prueba|test\b|a1|b1|b2|c1)/.test(t)) return ["inquiry", "placement"];
-  if (/(kurs|course|curso|training|formaci|format|gruppe|group|grupo|einzel|1:1|team|vor ort|on-site|presencial|online|angebot|offer)/.test(t)) return ["inquiry", "configurator"];
-  return ["inquiry"];
+  const out: Cta[] = ["inquiry"];
+  if (promo && SALES_RE.test(t)) out.push("voucher");
+  if (/(einstuf|niveau|level|nivel|prueba|test\b|a1|b1|b2|c1)/.test(t)) out.push("placement");
+  else if (/(kurs|course|curso|training|formaci|format|gruppe|group|grupo|einzel|1:1|team|vor ort|on-site|presencial|online|angebot|offer)/.test(t)) out.push("configurator");
+  return out.slice(0, 3);
 }
 
-type Step = "chat" | "company" | "name" | "email" | "details" | "done";
+type Step = "chat" | "vName" | "vEmail" | "vPrivacy" | "vNewsletter" | "company" | "name" | "email" | "details" | "done";
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
 function Avatar({ size = 36, className = "" }: { size?: number; className?: string }) {
@@ -158,18 +164,24 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   const [open, setOpen] = useState(false);
   const [teaser, setTeaser] = useState(false);
   const [status, setStatus] = useState<Status>("unknown");
+  const [promo, setPromo] = useState(false); // läuft gerade die Gutschein-Aktion?
   const [openedAt, setOpenedAt] = useState("");
   const [messages, setMessages] = useState<Message[]>([{ role: "assistant", content: t.greeting }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<Step>("chat");
   const answersRef = useRef({ topic: "", company: "", name: "", email: "", details: "" });
+  const voucherRef = useRef({ name: "", email: "" });
   const lastQuestion = useRef("");
   const [voiceSupported, setVoiceSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/voucher/campaign?lang=${lang}`).then((r) => (r.ok ? r.json() : null)).then((d) => setPromo(!!d?.active)).catch(() => {});
+  }, [lang]);
 
   // Statuspunkt: grün = Lexi erreichbar, rot = nicht erreichbar
   useEffect(() => {
@@ -268,7 +280,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
           else if (e.type === "busy") { patchLast((m) => ({ ...m, content: e.text ?? t.unavailable, pending: false, offerInquiry: true, ai: false })); finished = true; }
           else if (e.type === "done") {
             const noAnswer = e.reason === "no_match" || e.reason === "model_fallback" || e.reason === "price" || e.reason === "empty" || e.reason === "error";
-            const ctas = pickCtas(`${question} ${noAnswer ? "" : (e.text ?? "")}`).filter((c) => !noAnswer || c !== "inquiry");
+            const ctas = pickCtas(`${question} ${noAnswer ? "" : (e.text ?? "")}`, promo).filter((c) => !noAnswer || c !== "inquiry");
             patchLast((m) => ({ ...m, content: e.text ?? m.content, pending: false, offerInquiry: noAnswer, ai: !noAnswer, ctas: ctas.length ? ctas : undefined }));
             setStatus(e.reason === "error" ? "offline" : "online");
             track("form_submit", { form: "lexi", variant: noAnswer ? "fallback" : "answer" });
@@ -285,9 +297,47 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     }
   }
 
+  // Gutschein-Aktion direkt im Chat abschließen: Name → E-Mail → Datenschutz (Button) → Newsletter (freiwillig) → /api/voucher
+  const vc = t.voucherChat;
+  const clearButtons = (ms: Message[]) => ms.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined }));
+  function startVoucher() {
+    voucherRef.current = { name: "", email: "" };
+    setMessages((m) => [...clearButtons(m), { role: "assistant", content: vc.intro }]);
+    setStep("vName");
+    track("cta_click", { cta: "lexi_voucher_start" });
+    inputRef.current?.focus();
+  }
+  const privacyMsg = (text: string): Message => ({ role: "assistant", content: text, privacyLink: true, actions: [{ label: vc.privacyBtn, value: "privacy" }] });
+  const newsletterMsg = (): Message => ({ role: "assistant", content: `${vc.newsletterQ}\n\n${vc.newsletterConsent}`, actions: [{ label: vc.yes, value: "nl-yes" }, { label: vc.no, value: "nl-no" }] });
+  async function onAction(value: string, label: string) {
+    setMessages((m) => [...clearButtons(m), { role: "user", content: label }]);
+    if (value === "privacy") { setMessages((m) => [...m, newsletterMsg()]); setStep("vNewsletter"); return; }
+    if (value === "nl-yes" || value === "nl-no") {
+      const newsletter = value === "nl-yes";
+      setLoading(true);
+      setMessages((m) => [...m, { role: "assistant", content: vc.sending, pending: false }]);
+      try {
+        const res = await fetch("/api/voucher", {
+          method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ name: voucherRef.current.name, email: voucherRef.current.email, privacyAck: true, newsletter, newsletterConsentText: newsletter ? vc.newsletterConsent : undefined, locale: lang, website: "" }),
+        });
+        if (res.status === 410) throw new Error("ended");
+        if (!res.ok) throw new Error("send");
+        try { localStorage.setItem("il-voucher", JSON.stringify({ submitted: true })); } catch { /* ignore */ }
+        track("voucher_submitted", { variant: "lexi", newsletter: newsletter ? "yes" : "no" });
+        setMessages((m) => [...m, { role: "assistant", content: vc.done }]);
+      } catch (e) {
+        setMessages((m) => [...m, { role: "assistant", content: (e as Error).message === "ended" ? vc.ended : vc.error }]);
+      } finally {
+        setLoading(false);
+        setStep("chat");
+      }
+    }
+  }
+
   function startInquiry() {
     answersRef.current = { topic: lastQuestion.current, company: "", name: "", email: "", details: "" };
-    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined })), { role: "assistant", content: t.askCompany }]);
+    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "assistant", content: t.askCompany }]);
     setStep("company");
     track("cta_click", { cta: "lexi_inquiry" });
     inputRef.current?.focus();
@@ -313,7 +363,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   async function sendMessage(preset?: string) {
     const value = (preset ?? input).trim();
     if (!value || loading || step === "done") return;
-    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined })), { role: "user", content: value }]);
+    setMessages((m) => [...m.map((x) => ({ ...x, offerInquiry: false, ctas: undefined, actions: undefined })), { role: "user", content: value }]);
     if (preset === undefined) setInput("");
 
     if (step === "chat") {
@@ -324,6 +374,22 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
       await askLexi(value);
       return;
     }
+
+    if (step === "vName") {
+      voucherRef.current.name = value.slice(0, 120);
+      setMessages((m) => [...m, { role: "assistant", content: vc.email }]);
+      setStep("vEmail");
+      return;
+    }
+    if (step === "vEmail") {
+      if (!isValidEmail(value)) { setMessages((m) => [...m, { role: "assistant", content: t.invalidEmail }]); return; }
+      voucherRef.current.email = value.trim().slice(0, 200);
+      setMessages((m) => [...m, privacyMsg(vc.privacy)]);
+      setStep("vPrivacy");
+      return;
+    }
+    if (step === "vPrivacy") { setMessages((m) => [...m, privacyMsg(vc.privacyNeeded)]); return; }
+    if (step === "vNewsletter") { setMessages((m) => [...m, newsletterMsg()]); return; }
 
     if (step === "email" && !isValidEmail(value)) {
       setMessages((m) => [...m, { role: "assistant", content: t.invalidEmail }]);
@@ -407,9 +473,21 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                       <div className="flex flex-wrap gap-1.5 pt-0.5">
                         {m.ctas.map((c) => c === "inquiry" ? (
                           <button key={c} onClick={() => { track("cta_click", { cta: "lexi_cta_inquiry" }); startInquiry(); }} className="rounded-lg bg-[#2db1fb] px-3 py-1.5 text-[13px] font-semibold text-[#06233a] transition-colors hover:bg-[#1a93e0]">{t.ctaInquiry}</button>
+                        ) : c === "voucher" ? (
+                          <button key={c} onClick={() => { track("cta_click", { cta: "lexi_cta_voucher" }); startVoucher(); }}
+                            className="rounded-lg border border-[#e8b44a] bg-[#fff8e8] px-3 py-1.5 text-[13px] font-semibold text-[#7a5200] transition-colors hover:bg-[#ffefc9]">{t.ctaVoucher}</button>
                         ) : (
                           <a key={c} href={lh(lang, c === "placement" ? "/einstufung" : "/konfigurator")} onClick={() => track("cta_click", { cta: `lexi_cta_${c}` })}
                             className="rounded-lg border border-[#b9c7da] px-3 py-1.5 text-[13px] font-medium text-[#1d3b6b] transition-colors hover:border-[#1d3b6b]">{c === "placement" ? t.ctaPlacement : t.ctaConfigurator}</a>
+                        ))}
+                      </div>
+                    )}
+                    {m.privacyLink && <a href={lh(lang, "/rechtliches/datenschutz")} target="_blank" rel="noopener" className="font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.privacyLink} ↗</a>}
+                    {m.actions && !loading && (
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
+                        {m.actions.map((a, k) => (
+                          <button key={a.value} onClick={() => onAction(a.value, a.label)}
+                            className={k === 0 ? "rounded-lg bg-[#2db1fb] px-3 py-1.5 text-[13px] font-semibold text-[#06233a] transition-colors hover:bg-[#1a93e0]" : "rounded-lg border border-[#b9c7da] px-3 py-1.5 text-[13px] font-medium text-[#1d3b6b] hover:border-[#1d3b6b]"}>{a.label}</button>
                         ))}
                       </div>
                     )}
