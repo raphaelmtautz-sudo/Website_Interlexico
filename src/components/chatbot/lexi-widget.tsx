@@ -85,7 +85,7 @@ function cleanAnswer(raw: string) {
 }
 /**
  * Kürzt Lexis Antwort hart auf Chat-Länge (das kleine Modell hält Längenvorgaben nicht zuverlässig ein):
- * höchstens 2 Sätze Text; bei Aufzählungen 1 Einleitungssatz + höchstens 3 Punkte (je ≤ 8 Wörter, ohne Klammern).
+ * höchstens 4 Sätze (~70 Wörter); bei Aufzählungen 1 Einleitungssatz + höchstens 4 Punkte (Name – kurze Erklärung, ohne Klammern).
  * Unvollständige Satzreste am Ende fallen weg. Für Details gibt es die Buttons darunter.
  */
 function shortenAnswer(text: string): string {
@@ -97,20 +97,28 @@ function shortenAnswer(text: string): string {
     const intro = lines.slice(0, listIdx).join(" ");
     const introS = sentences(intro);
     const head = introS.length ? introS[introS.length - 1] : intro;
-    const items = lines.slice(listIdx).filter((l) => /^-\s+/.test(l)).slice(0, 3).map((l) => {
-      let item = l.replace(/^-\s+/, "").replace(/\s*\([^)]*\)?/g, "").trim();
-      const label = /^([^:]{2,60}):\s/.exec(item)?.[1];
-      if (label && label.split(/\s+/).length <= 5) item = label; // „Einzeltraining: Individuelle …“ → „Einzeltraining“
-      else item = item.split(/(?<=[.!?])\s/)[0];                  // sonst nur der erste Satz
-      const words = item.replace(/[.;,:]+$/, "").split(/\s+/);
-      return "- " + words.slice(0, 10).join(" ") + (words.length > 10 ? " …" : "");
+    const cut = (t: string, n: number) => { const w = t.replace(/[.;,:]+$/, "").split(/\s+/).filter(Boolean); return w.length > n ? w.slice(0, n).join(" ").replace(/[,;:]$/, "") + " …" : w.join(" "); };
+    const items = lines.slice(listIdx).filter((l) => /^-\s+/.test(l)).slice(0, 4).map((l) => {
+      const item = l.replace(/^-\s+/, "").replace(/\s*\([^)]*\)?/g, "").trim();
+      const m = /^([^:]{2,60}):\s+(.*)$/.exec(item);
+      // „Einzeltraining: Individuelle Betreuung für …“ → „Einzeltraining – Individuelle Betreuung für …“ (kurz)
+      if (m && m[1].split(/\s+/).length <= 5) return `- ${m[1]} – ${cut(m[2].split(/(?<=[.!?])\s/)[0], 9)}`;
+      return "- " + cut(item.split(/(?<=[.!?])\s/)[0], 12);
     });
     return [fixCaps(head.trim()), ...items].filter(Boolean).join("\n");
   }
   const all = lines.join(" ");
   const s = sentences(all);
   if (!s.length) return fixCaps(all);
-  return fixCaps(s.slice(0, 2).join(" "));
+  // höchstens 4 Sätze und etwa 70 Wörter
+  const out: string[] = [];
+  let words = 0;
+  for (const x of s.slice(0, 4)) {
+    const n = x.split(/\s+/).length;
+    if (out.length && words + n > 70) break;
+    out.push(x); words += n;
+  }
+  return fixCaps(out.join(" "));
 }
 
 function AnswerText({ text, ai }: { text: string; ai?: boolean }) {
