@@ -21,6 +21,7 @@ function detectLocale(request: NextRequest): string {
 // Alte, mehrteilige Adressen der früheren Website (Search Console 20.11.2026) – dauerhaft umleiten.
 // Einteilige Altadressen pflegt das CMS unter „Weiterleitungen“.
 const LEGACY_PREFIX: [RegExp, string][] = [
+  [/^\/(?:(?:de|en|es)\/)?en-home\/request-a-callback/, "/en/kontakt"], // Rückruf-Anfrage
   [/^\/(?:(?:de|en|es)\/)?en-home\/.+/, "/en/demo"], // z. B. /en-home/trail-lesson-1 (Probestunde)
 ];
 
