@@ -253,7 +253,8 @@ function VoucherDialog({
 
   const fields = (
     <form data-voucher onSubmit={submit} noValidate className="flex flex-col gap-3">
-      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px]"
+      {/* Spam-Schutzfeld: bewusst unauffälliger Name – „website“ wurde von Browsern/Passwort-Managern teils automatisch ausgefüllt */}
+      <input type="text" name="ix_hp_v1" tabIndex={-1} autoComplete="off" data-1p-ignore data-lpignore="true" aria-hidden="true" className="absolute -left-[9999px]"
         value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} />
       <Field label={t.nameLabel}>
         <input ref={firstFieldRef} type="text" autoComplete="name" required className={inputClasses}
