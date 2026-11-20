@@ -78,7 +78,7 @@ function cleanAnswer(raw: string) {
     .replace(/^\s*[*_#\s]*(antwort|answer|respuesta|lexi)\s*[*_]*\s*:\s*[*_]*\s*/i, "")
     .replace(/\s+[-•*]\s+(?=\*\*)/g, "\n- ")
     .split("\n")
-    .map((l) => l.replace(/^\s*#{1,6}\s+/, "").replace(/^\s*[•*]\s+/, "- ").replace(/\*\*/g, "").replace(/__/g, "").trimEnd())
+    .map((l) => l.replace(/^\s*#{1,6}\s+/, "").replace(/^\s*[•*]\s+/, "- ").replace(/^\s*\d+[.)]\s+/, "- ").replace(/\*\*/g, "").replace(/__/g, "").trimEnd())
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
