@@ -69,6 +69,21 @@ export const page: LocalPage = {
       question: "How quickly will we hear back?",
       answer: "We usually get back to you within two working days with a concrete proposal.",
     },
+    {
+      question: "How is the participants' language level assessed?",
+      answer:
+        "With the free online placement test for a first orientation and a short conversation at the start of the training for speaking and listening. This results in groups at the right level.",
+    },
+    {
+      question: "Can individual sessions be cancelled or rescheduled?",
+      answer:
+        "Yes. Up to 24 hours before they start, sessions can be cancelled or rescheduled free of charge, conveniently in the customer portal. Sessions cancelled later are charged in full.",
+    },
+    {
+      question: "Do you have experience with companies in our industry?",
+      answer:
+        "Our focus areas are the public sector, sales, engineering and technical services, banking and financial services, IT and software, and management and leadership – each with industry vocabulary and case examples.",
+    },
   ],
   ctaTitle: "Plan language training for your team in Munich",
   ctaText: "Tell us briefly who will take part and what your team needs to be able to do – we usually reply within two working days.",

@@ -69,6 +69,21 @@ export const page: LocalPage = {
       question: "¿Cuándo recibiremos respuesta?",
       answer: "Normalmente le respondemos en un plazo de dos días laborables con una propuesta concreta.",
     },
+    {
+      question: "¿Cómo se determina el nivel de los participantes?",
+      answer:
+        "Con la prueba de nivel online gratuita como primera orientación y una breve conversación al inicio de la formación para la expresión oral y la comprensión auditiva. Así se forman grupos del nivel adecuado.",
+    },
+    {
+      question: "¿Se pueden cancelar o aplazar sesiones concretas?",
+      answer:
+        "Sí. Hasta 24 horas antes del inicio, las sesiones se pueden cancelar o aplazar sin coste, cómodamente en el portal del cliente. Las sesiones canceladas más tarde se cobran completas.",
+    },
+    {
+      question: "¿Tienen experiencia con empresas de nuestro sector?",
+      answer:
+        "Nuestros sectores principales son la administración pública, ventas, ingeniería y servicios técnicos, banca y servicios financieros, TI y software, y dirección y liderazgo, siempre con vocabulario y casos prácticos del sector.",
+    },
   ],
   ctaTitle: "Planifique la formación de idiomas de su equipo en Múnich",
   ctaText: "Cuéntenos brevemente quién participa y qué debe saber hacer su equipo; normalmente respondemos en dos días laborables.",

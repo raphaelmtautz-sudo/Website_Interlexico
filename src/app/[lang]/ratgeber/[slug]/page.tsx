@@ -9,6 +9,7 @@ import { Section, Eyebrow } from "@/components/ui/section";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/interactive/reveal";
 import { PageCta } from "@/components/content/page-cta";
+import { TrainingLinks } from "@/components/content/training-links";
 import { ArticleJsonLd, BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { getGuideLabels } from "@/content/ratgeber";
 import { getAllGuides, getAnyGuide, getDraftGuide, guideLocales } from "@/lib/guides";
@@ -144,6 +145,8 @@ export default async function GuidePage({ params }: { params: Promise<{ lang: st
           </Section>
         </Reveal>
       )}
+
+      <TrainingLinks lang={lang} focus={/deutsch|german|aleman/.test(slug) ? "deutsch-als-fremdsprache" : "business-english"} />
 
       <Reveal as="section" className="border-t border-line">
         <Section>

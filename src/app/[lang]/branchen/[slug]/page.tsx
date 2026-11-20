@@ -8,6 +8,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/interactive/reveal";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
 import { PageCta } from "@/components/content/page-cta";
+import { TrainingLinks } from "@/components/content/training-links";
 import { BreadcrumbJsonLd, FaqJsonLd, ServiceJsonLd } from "@/components/seo/json-ld";
 import { getIndustryLabels, getIndustryPage, getIndustryPages } from "@/content/branchen";
 import { getDictionary } from "@/dictionaries";
@@ -99,6 +100,8 @@ export default async function BranchePage({ params }: { params: Promise<{ lang: 
           </ul>
         </Section>
       </Reveal>
+
+      <TrainingLinks lang={lang} />
 
       <PageCta title={t.cta} text={t.ctaText} href={contact} label={dict.common.angebotAnfordern} />
 

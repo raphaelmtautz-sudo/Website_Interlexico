@@ -46,8 +46,23 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
         answer:
           "In drei Schritten: Sie schildern Team, Ziele und Zeitrahmen in einer kurzen Anfrage, wir klären den Bedarf und stufen die Teilnehmenden ein, danach startet das maßgeschneiderte Training.",
       },
+      {
+        question: "Eignet sich Business English auch für Vertriebsteams?",
+        answer:
+          "Ja. Im Vertrieb trainieren wir die Situationen, in denen es auf Englisch ankommt: Kundengespräche, Präsentationen, Angebote und Verhandlungen bis zum Abschluss – mit Vokabular und Fallbeispielen aus Ihrem Markt. Details auf der Seite Branche Vertrieb.",
+      },
+      {
+        question: "Ist Business English auch für Ingenieure und technische Teams geeignet?",
+        answer:
+          "Ja. Für Engineering und technische Dienstleistungen liegt der Schwerpunkt auf Projektmeetings, Abstimmungen mit internationalen Partnern, technischer Dokumentation und dem Erklären komplexer Sachverhalte – mit dem Fachvokabular Ihres Bereichs.",
+      },
     ],
     "deutsch-als-fremdsprache": [
+      {
+        question: "Welches Deutschniveau brauchen neue Mitarbeitende?",
+        answer:
+          "Das hängt von den Situationen im Job ab. Faustregeln nach GER: interne Routinekommunikation ab A2, Kundenkontakt mit Standardanliegen und Teamsitzungen ab B1, Projektarbeit und Präsentationen ab B2, Verhandlungen und Führung ab C1. Für manche Berufe gelten feste Vorgaben (in der Pflege häufig B2). Der kostenlose Einstufungstest gibt eine erste Orientierung.",
+      },
       {
         question: "Was kostet ein Deutschkurs für Mitarbeitende?",
         answer:
@@ -122,8 +137,23 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
         answer:
           "In three steps: you describe your team, goals and timeline in a short enquiry, we clarify your needs and assess participants, then your tailored training begins.",
       },
+      {
+        question: "Is Business English also suitable for sales teams?",
+        answer:
+          "Yes. For sales we train the situations where English matters: customer conversations, presentations, proposals and negotiations through to closing – with vocabulary and case examples from your market. See the Sales industry page for details.",
+      },
+      {
+        question: "Is Business English suitable for engineers and technical teams?",
+        answer:
+          "Yes. For engineering and technical services the focus is on project meetings, alignment with international partners, technical documentation and explaining complex topics – using the terminology of your field.",
+      },
     ],
     "deutsch-als-fremdsprache": [
+      {
+        question: "What German level do new employees need?",
+        answer:
+          "It depends on the situations in the job. CEFR rules of thumb: routine internal communication from A2, standard customer contact and team meetings from B1, project work and presentations from B2, negotiations and leadership from C1. Some professions have fixed requirements (nursing often B2). The free placement test gives a first orientation.",
+      },
       {
         question: "How much does a German course for employees cost?",
         answer:
@@ -198,8 +228,23 @@ const byLocale: Record<Locale, Record<string, FaqItem[]>> = {
         answer:
           "En tres pasos: describe su equipo, objetivos y plazos en una breve solicitud, aclaramos las necesidades y evaluamos a los participantes, y después empieza la formación a medida.",
       },
+      {
+        question: "¿El inglés de negocios también es adecuado para equipos de ventas?",
+        answer:
+          "Sí. En ventas entrenamos las situaciones en las que el inglés es decisivo: conversaciones con clientes, presentaciones, ofertas y negociaciones hasta el cierre, con vocabulario y casos prácticos de su mercado. Más detalles en la página del sector Ventas.",
+      },
+      {
+        question: "¿Es adecuado para ingenieros y equipos técnicos?",
+        answer:
+          "Sí. En ingeniería y servicios técnicos el enfoque está en reuniones de proyecto, coordinación con socios internacionales, documentación técnica y la explicación de temas complejos, con la terminología de su área.",
+      },
     ],
     "deutsch-als-fremdsprache": [
+      {
+        question: "¿Qué nivel de alemán necesitan los nuevos empleados?",
+        answer:
+          "Depende de las situaciones del puesto. Reglas orientativas según el MCER: comunicación interna rutinaria desde A2, atención al cliente estándar y reuniones de equipo desde B1, trabajo en proyectos y presentaciones desde B2, negociaciones y liderazgo desde C1. Algunas profesiones tienen requisitos fijos (en enfermería, a menudo B2). La prueba de nivel gratuita ofrece una primera orientación.",
+      },
       {
         question: "¿Cuánto cuesta un curso de alemán para empleados?",
         answer:

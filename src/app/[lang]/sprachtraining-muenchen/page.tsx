@@ -8,6 +8,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/interactive/reveal";
 import { StickyMobileCta } from "@/components/interactive/sticky-mobile-cta";
 import { PageCta } from "@/components/content/page-cta";
+import { TrainingLinks } from "@/components/content/training-links";
 import { BreadcrumbJsonLd, FaqJsonLd, ServiceJsonLd } from "@/components/seo/json-ld";
 import { getLocalPage, LOCAL_PATH } from "@/content/local";
 import { getDictionary } from "@/dictionaries";
@@ -109,6 +110,8 @@ export default async function MuenchenPage({ params }: { params: Promise<{ lang:
           </div>
         </Section>
       </Reveal>
+
+      <TrainingLinks lang={lang} />
 
       <PageCta title={page.ctaTitle} text={page.ctaText} href={contact} label={dict.common.angebotAnfordern} />
 

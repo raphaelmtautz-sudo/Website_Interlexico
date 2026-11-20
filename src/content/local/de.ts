@@ -69,6 +69,21 @@ export const page: LocalPage = {
       question: "Wie schnell erhalten wir eine Rückmeldung?",
       answer: "Wir melden uns in der Regel innerhalb von zwei Werktagen mit einem konkreten Vorschlag.",
     },
+    {
+      question: "Wie wird das Sprachniveau der Teilnehmenden festgestellt?",
+      answer:
+        "Mit dem kostenlosen Online-Einstufungstest zur ersten Orientierung und einem kurzen Gespräch zu Trainingsbeginn für Sprechen und Hörverstehen. So entstehen Gruppen mit passendem Niveau.",
+    },
+    {
+      question: "Können einzelne Termine abgesagt oder verschoben werden?",
+      answer:
+        "Ja. Bis 24 Stunden vor Beginn können Termine kostenfrei abgesagt oder verschoben werden, bequem im Kundenportal. Später abgesagte Termine werden voll berechnet.",
+    },
+    {
+      question: "Haben Sie Erfahrung mit Unternehmen aus unserer Branche?",
+      answer:
+        "Schwerpunkte sind öffentlicher Dienst, Vertrieb, Engineering und technische Dienstleistungen, Banken und Finanzdienstleistungen, IT und Software sowie Management und Führung – jeweils mit Fachvokabular und Fallbeispielen aus der Branche.",
+    },
   ],
   ctaTitle: "Sprachtraining für Ihr Team in München planen",
   ctaText: "Erzählen Sie uns kurz, wer teilnimmt und was Ihr Team können soll – wir melden uns in der Regel innerhalb von zwei Werktagen.",
