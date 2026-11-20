@@ -30,6 +30,7 @@ interface Message {
   actions?: { label: string; value: string }[]; // Antwort-Buttons im Ablauf (z. B. Datenschutz bestätigen)
   privacyLink?: boolean;
   promoNote?: string; // Aktionshinweis (einmal pro Gespräch, nur bei Verkaufsthemen)
+  more?: { path: string; title: string }; // „Mehr dazu“: passende Seite auf interlexico.com
 }
 
 // Bewerbungen gehören nicht in den Anfrage-Flow, sondern ins Bewerbungsformular (/karriere).
@@ -261,7 +262,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     setLoading(true);
     setMessages((m) => [...m, { role: "assistant", content: "", pending: true, ai: true }]);
     try {
-      const res = await fetch("/api/lexi/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, language: lang }) });
+      const res = await fetch("/api/lexi/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, language: lang, page: window.location.pathname }) });
       if (res.status === 429) throw new Error("rate");
       if (!res.ok || !res.body) throw new Error("unavailable");
       const reader = res.body.getReader();
@@ -277,7 +278,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
           const line = buf.slice(0, nl).trim();
           buf = buf.slice(nl + 1);
           if (!line) continue;
-          const e = JSON.parse(line) as { type: string; text?: string; reason?: string; mode?: string; promoNote?: string };
+          const e = JSON.parse(line) as { type: string; text?: string; reason?: string; mode?: string; promoNote?: string; more?: { path: string; title: string } };
           if (e.type === "token" && e.text) patchLast((m) => ({ ...m, content: m.content + e.text }));
           else if (e.type === "busy") { patchLast((m) => ({ ...m, content: e.text ?? t.unavailable, pending: false, offerInquiry: true, ai: false })); finished = true; }
           else if (e.type === "done") {
@@ -286,7 +287,9 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
             // Aktion einmal pro Gespräch erwähnen – nur bei Verkaufsthemen (Kosten, Start, Buchung …), nicht aufdringlich
             const note = e.promoNote && !promoShown.current && SALES_RE.test(question.toLowerCase()) ? e.promoNote : undefined;
             if (note) promoShown.current = true;
-            patchLast((m) => ({ ...m, content: e.text ?? m.content, pending: false, offerInquiry: noAnswer, ai: !noAnswer, ctas: ctas.length ? ctas : undefined, promoNote: note }));
+            patchLast((m) => ({ ...m, content: e.text ?? m.content, pending: false, offerInquiry: noAnswer, ai: !noAnswer, ctas: ctas.length ? ctas : undefined, promoNote: note,
+              // „Mehr dazu“ nur auf eigene Seiten und nicht auf die Seite, auf der der Besucher schon ist
+              more: e.more && /^\/[a-z]{2}(\/|$)/.test(e.more.path) && e.more.path !== window.location.pathname.replace(/\/+$/, "") ? e.more : undefined }));
             setStatus(e.reason === "error" ? "offline" : "online");
             track("form_submit", { form: "lexi", variant: noAnswer ? "fallback" : "answer" });
             finished = true;
@@ -486,6 +489,9 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                             className="rounded-lg border border-[#b9c7da] px-3 py-1.5 text-[13px] font-medium text-[#1d3b6b] transition-colors hover:border-[#1d3b6b]">{c === "placement" ? t.ctaPlacement : t.ctaConfigurator}</a>
                         ))}
                       </div>
+                    )}
+                    {m.more && step === "chat" && (
+                      <a href={m.more.path} onClick={() => track("cta_click", { cta: "lexi_more", target: m.more!.path })} className="self-start text-[13px] font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.moreLabel}: {m.more.title} →</a>
                     )}
                     {m.promoNote && <p className="m-0 rounded-lg border border-[#f1d48a] bg-[#fff8e8] px-2.5 py-1.5 text-[13px] leading-snug text-[#5c4300]">{m.promoNote}</p>}
                     {m.privacyLink && <a href={lh(lang, "/rechtliches/datenschutz")} target="_blank" rel="noopener" className="font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.privacyLink} ↗</a>}

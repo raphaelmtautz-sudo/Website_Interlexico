@@ -105,6 +105,7 @@ export const de = {
     ctaPlacement: "Einstufungstest starten",
     ctaConfigurator: "Training zusammenstellen",
     ctaVoucher: "Gutschein sichern",
+    moreLabel: "Mehr dazu",
     voucherChat: {
       intro: "Sehr gern! Für den Gutschein brauche ich nur Ihren Namen und Ihre E-Mail-Adresse. Wie ist Ihr Name?",
       email: "Danke! An welche E-Mail-Adresse soll der Bestätigungslink gehen?",

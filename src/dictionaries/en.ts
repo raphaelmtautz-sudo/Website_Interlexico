@@ -107,6 +107,7 @@ export const en: Dictionary = {
     ctaPlacement: "Take the placement test",
     ctaConfigurator: "Build your training",
     ctaVoucher: "Get your voucher",
+    moreLabel: "Learn more",
     voucherChat: {
       intro: "Happy to help! For the voucher I just need your name and email address. What is your name?",
       email: "Thank you! Which email address should receive the confirmation link?",

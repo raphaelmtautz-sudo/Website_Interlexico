@@ -107,6 +107,7 @@ export const es: Dictionary = {
     ctaPlacement: "Hacer la prueba de nivel",
     ctaConfigurator: "Configurar formación",
     ctaVoucher: "Obtener el cupón",
+    moreLabel: "Más información",
     voucherChat: {
       intro: "¡Con mucho gusto! Para el cupón solo necesito su nombre y su correo electrónico. ¿Cómo se llama?",
       email: "¡Gracias! ¿A qué dirección de correo enviamos el enlace de confirmación?",

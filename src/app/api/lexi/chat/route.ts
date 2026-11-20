@@ -21,12 +21,14 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const question = typeof body.question === "string" ? body.question.trim().slice(0, 500) : "";
   const language = LANGS.has(body.language) ? body.language : "de";
+  // aktuelle Seite (nur Pfad wie /de/kurse) – Lexi nutzt sie als Kontext und für „Mehr dazu“
+  const page = typeof body.page === "string" && /^\/[a-z]{2}(\/[\w\-./]*)?$/i.test(body.page) ? body.page.slice(0, 200) : undefined;
   if (question.length < 2) return Response.json({ ok: false, error: "empty" }, { status: 422 });
   try {
     const r = await fetch(LEXI_API_URL, {
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${LEXI_API_TOKEN}`, "x-ix-client-ip": ip },
-      body: JSON.stringify({ question, language }),
+      body: JSON.stringify({ question, language, page }),
       signal: AbortSignal.timeout(120_000),
     });
     if (!r.ok || !r.body) return Response.json({ ok: false, error: "unavailable" }, { status: 502 });
