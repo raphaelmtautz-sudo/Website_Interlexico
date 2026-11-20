@@ -95,6 +95,6 @@ export const deutschAlsFremdsprache: CourseType = {
   seo: {
     title: "Alemán para empresas: cursos para su plantilla | Interlexico",
     description:
-      "Cursos de alemán orientados al trabajo para la plantilla internacional, de A1 a C2 – individual, en grupo o en clase, en el área de Múnich u online.",
+      "Cursos de alemán orientados al trabajo para la plantilla internacional, de A1 a C2 – individual, en grupo o en clase, presencial en toda la región DACH u online.",
   },
 };

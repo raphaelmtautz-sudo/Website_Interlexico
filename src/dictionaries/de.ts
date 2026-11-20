@@ -3,7 +3,7 @@ export const de = {
     titleDefault: "Sprachakademie für Unternehmen: Business English & Deutsch | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
-      "Sprachakademie für Unternehmen: Business English und Deutsch für Mitarbeitende – vor Ort im Großraum München oder online, eingestuft und mit messbarem Fortschritt.",
+      "Sprachakademie für Unternehmen: Business English und Deutsch für Mitarbeitende – vor Ort in ganz DACH oder online, eingestuft und mit messbarem Fortschritt.",
   },
   skipLink: "Zum Inhalt springen",
   nav: {
@@ -197,7 +197,7 @@ export const de = {
     heroTitleKinetic: "Englisch & Deutsch",
     heroTitleAfter: " für Unternehmen, trainiert an Ihrem Arbeitsalltag",
     heroSubtitle:
-      "Wir trainieren Ihr Team für Meetings, Verhandlungen und Kundengespräche – vor Ort im Großraum München oder online in ganz DACH. Jede Person wird eingestuft, die Inhalte kommen aus Ihrer Branche, und HR sieht den Fortschritt im Kundenportal.",
+      "Wir trainieren Ihr Team für Meetings, Verhandlungen und Kundengespräche – vor Ort oder online in ganz Deutschland, Österreich und der Schweiz. Jede Person wird eingestuft, die Inhalte kommen aus Ihrer Branche, und HR sieht den Fortschritt im Kundenportal.",
     ctaConfigure: "Training konfigurieren",
     lanes: {
       start: "Start",
@@ -297,10 +297,10 @@ export const de = {
   kurse: {
     eyebrow: "Trainingsangebot",
     title: "Sprachkurse für Unternehmen",
-    intro: "Interlexico bietet zwei Sprachtrainings für Unternehmen an: Business English für Teams mit internationalem Kontakt und Deutsch für internationale Mitarbeitende. Beide gibt es als Einzeltraining, als Gruppentraining mit höchstens sieben Personen und als Klassentraining für ganze Abteilungen – vor Ort im Großraum München, online in ganz DACH oder hybrid. Jede Person wird vorab eingestuft; Preise erhalten Sie als individuelles Angebot.",
+    intro: "Interlexico bietet zwei Sprachtrainings für Unternehmen an: Business English für Teams mit internationalem Kontakt und Deutsch für internationale Mitarbeitende. Beide gibt es als Einzeltraining, als Gruppentraining mit höchstens sieben Personen und als Klassentraining für ganze Abteilungen – vor Ort in ganz Deutschland, Österreich und der Schweiz (nach Verfügbarkeit), online oder hybrid. Jede Person wird vorab eingestuft; Preise erhalten Sie als individuelles Angebot.",
     metaTitle: "Sprachkurse für Unternehmen: Business English & Deutsch",
     metaDescription:
-      "Sprachkurse für Unternehmen im Überblick: Business English und Deutsch für internationale Mitarbeitende – Einzel, Gruppe oder Klasse, vor Ort im Raum München oder online.",
+      "Sprachkurse für Unternehmen im Überblick: Business English und Deutsch für internationale Mitarbeitende – Einzel, Gruppe oder Klasse, vor Ort in ganz DACH oder online.",
     verfuegbar: "Verfügbar",
     baldVerfuegbar: "Bald verfügbar",
     detailsAnsehen: "Details ansehen",

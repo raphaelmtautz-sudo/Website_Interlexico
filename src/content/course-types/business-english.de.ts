@@ -96,6 +96,6 @@ export const businessEnglish: CourseType = {
   seo: {
     title: "Business English für Unternehmen: Training vor Ort & online | Interlexico",
     description:
-      "Business English Training für Unternehmen: Meetings, Verhandlungen, Präsentationen. Einzel, Gruppe oder Klasse – vor Ort im Raum München oder online in DACH.",
+      "Business English Training für Unternehmen: Meetings, Verhandlungen, Präsentationen. Einzel, Gruppe oder Klasse – vor Ort oder online in ganz DACH.",
   },
 };

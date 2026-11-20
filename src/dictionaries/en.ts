@@ -5,7 +5,7 @@ export const en: Dictionary = {
     titleDefault: "Language Academy for Companies: Business English & German | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
-      "Language academy for companies: Business English and German for your staff – on-site in the Munich area or online, individually assessed with measurable progress.",
+      "Language academy for companies: Business English and German for your staff – on-site across the DACH region or online, individually assessed with measurable progress.",
   },
   skipLink: "Skip to content",
   nav: {
@@ -199,7 +199,7 @@ export const en: Dictionary = {
     heroTitleKinetic: "English & German",
     heroTitleAfter: " for companies, trained for your everyday work",
     heroSubtitle:
-      "We train your team for meetings, negotiations and client conversations – on-site in the Munich area or online across the DACH region. Everyone is assessed individually, the content comes from your industry, and HR follows progress in the client portal.",
+      "We train your team for meetings, negotiations and client conversations – on-site or online across Germany, Austria and Switzerland. Everyone is assessed individually, the content comes from your industry, and HR follows progress in the client portal.",
     ctaConfigure: "Configure your training",
     lanes: {
       start: "Start",
@@ -299,10 +299,10 @@ export const en: Dictionary = {
   kurse: {
     eyebrow: "Programs",
     title: "Language courses for companies",
-    intro: "Interlexico offers two language training programmes for companies: Business English for teams with international contacts and German for international staff. Both are available as one-to-one training, group training with no more than seven people and class training for whole departments – on-site in the Munich area, online across DACH or hybrid. Everyone is assessed beforehand; pricing comes as an individual proposal.",
+    intro: "Interlexico offers two language training programmes for companies: Business English for teams with international contacts and German for international staff. Both are available as one-to-one training, group training with no more than seven people and class training for whole departments – on-site anywhere in Germany, Austria and Switzerland (subject to availability), online or hybrid. Everyone is assessed beforehand; pricing comes as an individual proposal.",
     metaTitle: "Language Courses for Companies: Business English & German",
     metaDescription:
-      "Language courses for companies at a glance: Business English and German for international staff – one-to-one, group or class, on-site in the Munich area or online.",
+      "Language courses for companies at a glance: Business English and German for international staff – one-to-one, group or class, on-site across the DACH region or online.",
     verfuegbar: "Available",
     baldVerfuegbar: "Coming soon",
     detailsAnsehen: "View details",

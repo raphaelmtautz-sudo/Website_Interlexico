@@ -14,7 +14,7 @@ export const page: LocalPage = {
   onsiteText:
     "Präsenztraining findet in Ihren Räumen statt – Ihr Team spart sich die Anfahrt, und wir trainieren an den Situationen, die bei Ihnen tatsächlich vorkommen. Wer verteilt arbeitet, kombiniert Präsenztermine in München mit Online-Einheiten.",
   places: ["München", "Landkreis München", "Fürstenfeldbruck", "Dachau", "Starnberg", "Freising", "Erding", "Ebersberg"],
-  placesNote: "Weitere Orte in Oberbayern nach Absprache. Online trainieren wir in ganz Deutschland, Österreich und der Schweiz.",
+  placesNote: "Nach Verfügbarkeit kommen wir auch zu Ihnen an jeden anderen Ort in Deutschland, Österreich und der Schweiz. Online trainieren wir überall.",
   offerTitle: "Was wir in München anbieten",
   offers: [
     {
@@ -53,7 +53,7 @@ export const page: LocalPage = {
     {
       question: "Welche Orte decken Sie vor Ort ab?",
       answer:
-        "München und die umliegenden Landkreise, etwa Fürstenfeldbruck, Dachau, Starnberg, Freising, Erding und Ebersberg. Weitere Orte in Oberbayern nach Absprache; online trainieren wir in ganz Deutschland, Österreich und der Schweiz.",
+        "München und die umliegenden Landkreise, etwa Fürstenfeldbruck, Dachau, Starnberg, Freising, Erding und Ebersberg. Nach Verfügbarkeit kommen wir auch an jeden anderen Ort in Deutschland, Österreich und der Schweiz; online trainieren wir überall.",
     },
     {
       question: "Bieten Sie Deutschkurse für internationale Mitarbeitende in München an?",

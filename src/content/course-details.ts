@@ -44,9 +44,9 @@ export type DetailLabels = {
 };
 
 const PLACE = {
-  de: "Vor Ort im Großraum München und Oberbayern, online in ganz DACH oder hybrid",
-  en: "On-site in the Munich area and Upper Bavaria, online across DACH, or hybrid",
-  es: "Presencial en el área de Múnich y Alta Baviera, online en toda la región DACH o híbrido",
+  de: "Vor Ort in ganz Deutschland, Österreich und der Schweiz (nach Verfügbarkeit), online oder hybrid",
+  en: "On-site anywhere in Germany, Austria and Switzerland (subject to availability), online or hybrid",
+  es: "Presencial en toda Alemania, Austria y Suiza (según disponibilidad), online o híbrido",
 };
 
 const labels: Record<Locale, DetailLabels> = {
@@ -74,7 +74,7 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
   de: {
     "business-english": {
       answer:
-        "Business English bei Interlexico ist ein trainergeführtes Englischtraining für Unternehmen: Ihre Mitarbeitenden üben genau die Situationen, die ihr Job verlangt – Meetings, Verhandlungen, Präsentationen, E-Mails und Kundengespräche. Jede Person wird vorab eingestuft. Trainiert wird im Einzel-, Gruppen- oder Klassenformat, vor Ort im Großraum München oder online in ganz DACH.",
+        "Business English bei Interlexico ist ein trainergeführtes Englischtraining für Unternehmen: Ihre Mitarbeitenden üben genau die Situationen, die ihr Job verlangt – Meetings, Verhandlungen, Präsentationen, E-Mails und Kundengespräche. Jede Person wird vorab eingestuft. Trainiert wird im Einzel-, Gruppen- oder Klassenformat, vor Ort oder online in ganz Deutschland, Österreich und der Schweiz.",
       facts: [
         { label: "Für wen", value: "Fach- und Führungskräfte und Teams mit internationalem Kontakt" },
         { label: "Niveau", value: "Alle Niveaus von A1 bis C2 (GER), mit Einstufung vor dem Start" },
@@ -98,7 +98,7 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
     },
     "deutsch-als-fremdsprache": {
       answer:
-        "Deutsch als Fremdsprache bei Interlexico ist ein berufsbezogener Deutschkurs für internationale Mitarbeitende: Sie lernen das Deutsch, das sie im Team, am Telefon, in E-Mails und im Kundenkontakt brauchen. Jede Person wird eingestuft. Trainiert wird von A1 bis C2 im Einzel-, Gruppen- oder Klassenformat, vor Ort im Großraum München oder online.",
+        "Deutsch als Fremdsprache bei Interlexico ist ein berufsbezogener Deutschkurs für internationale Mitarbeitende: Sie lernen das Deutsch, das sie im Team, am Telefon, in E-Mails und im Kundenkontakt brauchen. Jede Person wird eingestuft. Trainiert wird von A1 bis C2 im Einzel-, Gruppen- oder Klassenformat, vor Ort in ganz DACH oder online.",
       facts: [
         { label: "Für wen", value: "Internationale Fach- und Führungskräfte, neue Mitarbeitende im Onboarding" },
         { label: "Niveau", value: "A1 bis C2 (GER), mit Einstufung vor dem Start" },
@@ -124,7 +124,7 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
   en: {
     "business-english": {
       answer:
-        "Business English at Interlexico is trainer-led English training for companies: your staff practise exactly the situations their job demands – meetings, negotiations, presentations, emails and client conversations. Everyone is assessed beforehand. Training takes place one-to-one, in groups or in classes, on-site in the Munich area or online across the DACH region.",
+        "Business English at Interlexico is trainer-led English training for companies: your staff practise exactly the situations their job demands – meetings, negotiations, presentations, emails and client conversations. Everyone is assessed beforehand. Training takes place one-to-one, in groups or in classes, on-site or online across Germany, Austria and Switzerland.",
       facts: [
         { label: "Who it's for", value: "Professionals, managers and teams with international contacts" },
         { label: "Level", value: "All levels from A1 to C2 (CEFR), assessed before the start" },
@@ -148,7 +148,7 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
     },
     "deutsch-als-fremdsprache": {
       answer:
-        "German as a Foreign Language at Interlexico is a job-focused German course for international staff: participants learn the German they need in the team, on the phone, in emails and with clients. Everyone is assessed. Training runs from A1 to C2, one-to-one, in groups or in classes, on-site in the Munich area or online.",
+        "German as a Foreign Language at Interlexico is a job-focused German course for international staff: participants learn the German they need in the team, on the phone, in emails and with clients. Everyone is assessed. Training runs from A1 to C2, one-to-one, in groups or in classes, on-site across the DACH region or online.",
       facts: [
         { label: "Who it's for", value: "International professionals and managers, new staff during onboarding" },
         { label: "Level", value: "A1 to C2 (CEFR), assessed before the start" },
@@ -174,7 +174,7 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
   es: {
     "business-english": {
       answer:
-        "El Business English de Interlexico es una formación de inglés para empresas impartida por formadores: su plantilla practica exactamente las situaciones que exige su puesto – reuniones, negociaciones, presentaciones, correos y conversaciones con clientes. Cada persona es evaluada antes de empezar. La formación es individual, en grupo o en clase, presencial en el área de Múnich u online en toda la región DACH.",
+        "El Business English de Interlexico es una formación de inglés para empresas impartida por formadores: su plantilla practica exactamente las situaciones que exige su puesto – reuniones, negociaciones, presentaciones, correos y conversaciones con clientes. Cada persona es evaluada antes de empezar. La formación es individual, en grupo o en clase, presencial en toda la región DACH u online en toda la región DACH.",
       facts: [
         { label: "Para quién", value: "Profesionales, directivos y equipos con contacto internacional" },
         { label: "Nivel", value: "Todos los niveles de A1 a C2 (MCER), con evaluación previa" },
@@ -198,7 +198,7 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
     },
     "deutsch-als-fremdsprache": {
       answer:
-        "El alemán como lengua extranjera de Interlexico es un curso de alemán orientado al trabajo para la plantilla internacional: los participantes aprenden el alemán que necesitan en el equipo, al teléfono, en correos y con clientes. Cada persona es evaluada. La formación va de A1 a C2, individual, en grupo o en clase, presencial en el área de Múnich u online.",
+        "El alemán como lengua extranjera de Interlexico es un curso de alemán orientado al trabajo para la plantilla internacional: los participantes aprenden el alemán que necesitan en el equipo, al teléfono, en correos y con clientes. Cada persona es evaluada. La formación va de A1 a C2, individual, en grupo o en clase, presencial en toda la región DACH u online.",
       facts: [
         { label: "Para quién", value: "Profesionales y directivos internacionales, nuevas incorporaciones" },
         { label: "Nivel", value: "A1 a C2 (MCER), con evaluación previa" },
@@ -224,9 +224,9 @@ const courses: Record<Locale, Record<string, CourseDetail>> = {
 };
 
 const PLACE_ANSWER = {
-  de: "Beides ist möglich: vor Ort in Ihrem Unternehmen im Großraum München und Oberbayern, online in ganz Deutschland, Österreich und der Schweiz oder im Wechsel.",
-  en: "Both are possible: on-site at your company in the Munich area and Upper Bavaria, online across Germany, Austria and Switzerland, or alternating.",
-  es: "Ambas opciones: presencial en su empresa en el área de Múnich y Alta Baviera, online en toda Alemania, Austria y Suiza, o alternando.",
+  de: "Beides ist möglich: vor Ort in Ihrem Unternehmen überall in Deutschland, Österreich und der Schweiz (nach Verfügbarkeit), online oder im Wechsel.",
+  en: "Both are possible: on-site at your company anywhere in Germany, Austria and Switzerland (subject to availability), online, or alternating.",
+  es: "Ambas opciones: presencial en su empresa en cualquier lugar de Alemania, Austria y Suiza (según disponibilidad), online o alternando.",
 };
 
 const formats: Record<Locale, Record<CourseFormatKind, FormatDetail>> = {
@@ -375,7 +375,7 @@ const formats: Record<Locale, Record<CourseFormatKind, FormatDetail>> = {
   es: {
     einzel: {
       seoTitle: "{course}: formación individual (1:1) para empresas | Interlexico",
-      seoDescription: "{course} en formación individual: formador fijo, horarios flexibles y preparación para ocasiones concretas – cerca de Múnich u online.",
+      seoDescription: "{course} en formación individual: formador fijo, horarios flexibles y preparación para ocasiones concretas – presencial en toda la región DACH u online.",
       title: "{course} en formación individual",
       answer: "En la formación individual, una persona trabaja 1:1 con un formador fijo. Contenidos, ritmo y horarios se adaptan por completo a ella – ideal con agendas apretadas o ante una ocasión concreta.",
       bestFor: [
@@ -398,7 +398,7 @@ const formats: Record<Locale, Record<CourseFormatKind, FormatDetail>> = {
     },
     gruppe: {
       seoTitle: "{course}: formación en grupo para equipos (máx. 7) | Interlexico",
-      seoDescription: "{course} en grupo: grupos pequeños de máximo 7 personas de nivel similar, casos de su día a día – cerca de Múnich u online.",
+      seoDescription: "{course} en grupo: grupos pequeños de máximo 7 personas de nivel similar, casos de su día a día – presencial en toda la región DACH u online.",
       title: "{course} en formación en grupo",
       answer: "En la formación en grupo aprenden juntos como máximo siete compañeros de nivel similar. El grupo reducido garantiza mucho tiempo de habla por persona, y los casos proceden del trabajo diario compartido.",
       bestFor: [

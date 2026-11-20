@@ -95,6 +95,6 @@ export const deutschAlsFremdsprache: CourseType = {
   seo: {
     title: "German Courses for Companies and International Staff | Interlexico",
     description:
-      "Job-focused German courses for international staff from A1 to C2 – one-to-one, group or class training, on-site in the Munich area or online.",
+      "Job-focused German courses for international staff from A1 to C2 – one-to-one, group or class training, on-site across the DACH region or online.",
   },
 };

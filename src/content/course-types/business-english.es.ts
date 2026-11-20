@@ -96,6 +96,6 @@ export const businessEnglish: CourseType = {
   seo: {
     title: "Business English para empresas: presencial y online | Interlexico",
     description:
-      "Formación de inglés de negocios para empresas: reuniones, negociaciones, presentaciones. Individual, en grupo o en clase – en el área de Múnich u online.",
+      "Formación de inglés de negocios para empresas: reuniones, negociaciones, presentaciones. Individual, en grupo o en clase – presencial en toda la región DACH u online.",
   },
 };

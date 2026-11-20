@@ -14,7 +14,7 @@ export const page: LocalPage = {
   onsiteText:
     "La formación presencial se realiza en sus instalaciones: su equipo se ahorra el desplazamiento y trabajamos con las situaciones que realmente se dan en su empresa. Los equipos distribuidos combinan sesiones presenciales en Múnich con unidades online.",
   places: ["Múnich", "Distrito de Múnich", "Fürstenfeldbruck", "Dachau", "Starnberg", "Freising", "Erding", "Ebersberg"],
-  placesNote: "Otras localidades de Alta Baviera previa consulta. Online formamos en toda Alemania, Austria y Suiza.",
+  placesNote: "Según disponibilidad, también vamos a cualquier otro lugar de Alemania, Austria y Suiza. Online formamos en cualquier lugar.",
   offerTitle: "Qué ofrecemos en Múnich",
   offers: [
     {
@@ -53,7 +53,7 @@ export const page: LocalPage = {
     {
       question: "¿Qué localidades cubren de forma presencial?",
       answer:
-        "Múnich y los distritos de alrededor, como Fürstenfeldbruck, Dachau, Starnberg, Freising, Erding y Ebersberg. Otras localidades de Alta Baviera previa consulta; online formamos en toda Alemania, Austria y Suiza.",
+        "Múnich y los distritos de alrededor, como Fürstenfeldbruck, Dachau, Starnberg, Freising, Erding y Ebersberg. Según disponibilidad, también vamos a cualquier otro lugar de Alemania, Austria y Suiza; online formamos en cualquier lugar.",
     },
     {
       question: "¿Ofrecen cursos de alemán para la plantilla internacional en Múnich?",

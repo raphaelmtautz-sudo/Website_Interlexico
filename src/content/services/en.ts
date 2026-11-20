@@ -1,6 +1,6 @@
 import type { ServicePage, ServiceSlug } from "./index";
 
-const PLACE = "On-site in the Munich area and Upper Bavaria, online across DACH, or hybrid";
+const PLACE = "On-site anywhere in Germany, Austria and Switzerland (subject to availability), online or hybrid";
 
 export const services: Record<ServiceSlug, ServicePage> = {
   "executive-language-coaching": {
@@ -11,7 +11,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
     eyebrow: "Executive Language Coaching",
     title: "English coaching for executives – one-to-one and occasion-focused",
     answer:
-      "Executive Language Coaching at Interlexico is one-to-one coaching for managers and executives. It fits your calendar and your concrete occasions: we prepare you specifically for presentations, negotiations, board meetings or conferences – confidentially, with a dedicated coach, on-site in the Munich area or online.",
+      "Executive Language Coaching at Interlexico is one-to-one coaching for managers and executives. It fits your calendar and your concrete occasions: we prepare you specifically for presentations, negotiations, board meetings or conferences – confidentially, with a dedicated coach, on-site across the DACH region or online.",
     facts: [
       { label: "Who it's for", value: "Managers, managing directors and board members" },
       { label: "Format", value: "One-to-one coaching with a dedicated coach" },
@@ -48,7 +48,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
       { question: "How does executive coaching differ from regular one-to-one training?", answer: "The coaching focuses on concrete occasions and how leaders come across. We work with your real presentations, documents and conversations instead of a general syllabus." },
       { question: "Can I get coaching shortly before an appointment?", answer: "Yes, the coaching can prepare you specifically for an upcoming occasion. Contact us as early as possible so we can plan sessions accordingly." },
       { question: "Is the content kept confidential?", answer: "Yes. Coaching takes place one-to-one, and any documents you share for preparation are treated confidentially." },
-      { question: "Is the coaching online or on-site?", answer: "Both are possible: on-site in the Munich area and Upper Bavaria, online across Germany, Austria and Switzerland, or alternating." },
+      { question: "Is the coaching online or on-site?", answer: "Both are possible: on-site anywhere in Germany, Austria and Switzerland (subject to availability), online, or alternating." },
     ],
     ctaTitle: "Your next important meeting in English?",
     ctaText: "Tell us briefly what it is about and by when – we usually reply within two working days.",
@@ -67,7 +67,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
     eyebrow: "Intercultural Communication",
     title: "Intercultural training for companies",
     answer:
-      "Intercultural communication at Interlexico is for companies whose teams work internationally. We run workshops for teams, support the onboarding of international professionals into the working culture in Germany and prepare people specifically for working with certain countries and regions – on-site in the Munich area or online.",
+      "Intercultural communication at Interlexico is for companies whose teams work internationally. We run workshops for teams, support the onboarding of international professionals into the working culture in Germany and prepare people specifically for working with certain countries and regions – on-site across the DACH region or online.",
     facts: [
       { label: "Who it's for", value: "International teams, managers and new international staff" },
       { label: "Formats", value: "Team workshops, onboarding support, country-specific preparation" },
@@ -103,7 +103,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
       { question: "Which countries do you prepare for?", answer: "Country-specific preparation is based on the countries and regions your team works with. Let us know in your enquiry which ones are relevant." },
       { question: "Does the training help with onboarding international staff?", answer: "Yes. We support new international professionals as they settle into the working culture in Germany – optionally combined with a German course." },
       { question: "Can it be combined with language training?", answer: "Yes, intercultural topics can be combined with Business English or German as a Foreign Language." },
-      { question: "Is the training online or on-site?", answer: "Both are possible: on-site in the Munich area and Upper Bavaria, online across Germany, Austria and Switzerland, or hybrid." },
+      { question: "Is the training online or on-site?", answer: "Both are possible: on-site anywhere in Germany, Austria and Switzerland (subject to availability), online, or hybrid." },
     ],
     ctaTitle: "Strengthen international collaboration in your team",
     ctaText: "Briefly describe who works with whom – we usually reply within two working days with a proposal.",

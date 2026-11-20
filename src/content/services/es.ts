@@ -1,6 +1,6 @@
 import type { ServicePage, ServiceSlug } from "./index";
 
-const PLACE = "Presencial en el área de Múnich y Alta Baviera, online en toda la región DACH o híbrido";
+const PLACE = "Presencial en toda Alemania, Austria y Suiza (según disponibilidad), online o híbrido";
 
 export const services: Record<ServiceSlug, ServicePage> = {
   "executive-language-coaching": {
@@ -11,7 +11,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
     eyebrow: "Executive Language Coaching",
     title: "Coaching de inglés para directivos – individual y orientado a ocasiones",
     answer:
-      "El Executive Language Coaching de Interlexico es un coaching individual para directivos y gerencia. Se adapta a su agenda y a sus ocasiones concretas: le preparamos específicamente para presentaciones, negociaciones, reuniones de consejo o congresos – de forma confidencial, con un coach fijo, presencial en el área de Múnich u online.",
+      "El Executive Language Coaching de Interlexico es un coaching individual para directivos y gerencia. Se adapta a su agenda y a sus ocasiones concretas: le preparamos específicamente para presentaciones, negociaciones, reuniones de consejo o congresos – de forma confidencial, con un coach fijo, presencial en toda la región DACH u online.",
     facts: [
       { label: "Para quién", value: "Directivos, gerencia y consejo de administración" },
       { label: "Formato", value: "Coaching 1:1 con un coach fijo" },
@@ -48,7 +48,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
       { question: "¿En qué se diferencia del entrenamiento individual normal?", answer: "El coaching se centra en ocasiones concretas y en la presencia de los directivos. Trabajamos con sus presentaciones, documentos y conversaciones reales en lugar de un plan general." },
       { question: "¿Puedo recibir coaching poco antes de una cita?", answer: "Sí, el coaching puede prepararle específicamente para una ocasión próxima. Contáctenos lo antes posible para planificar las sesiones." },
       { question: "¿Los contenidos son confidenciales?", answer: "Sí. El coaching es 1:1 y los documentos que comparta para la preparación se tratan de forma confidencial." },
-      { question: "¿El coaching es online o presencial?", answer: "Ambas opciones: presencial en el área de Múnich y Alta Baviera, online en toda Alemania, Austria y Suiza, o alternando." },
+      { question: "¿El coaching es online o presencial?", answer: "Ambas opciones: presencial en cualquier lugar de Alemania, Austria y Suiza (según disponibilidad), online o alternando." },
     ],
     ctaTitle: "¿Su próxima cita importante en inglés?",
     ctaText: "Cuéntenos brevemente de qué se trata y para cuándo; normalmente respondemos en dos días laborables.",
@@ -67,7 +67,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
     eyebrow: "Comunicación intercultural",
     title: "Formación intercultural para empresas",
     answer:
-      "La comunicación intercultural de Interlexico está pensada para empresas cuyos equipos trabajan a nivel internacional. Ofrecemos talleres para equipos, acompañamos la incorporación de profesionales internacionales a la cultura laboral en Alemania y preparamos específicamente para colaborar con determinados países y regiones – presencial en el área de Múnich u online.",
+      "La comunicación intercultural de Interlexico está pensada para empresas cuyos equipos trabajan a nivel internacional. Ofrecemos talleres para equipos, acompañamos la incorporación de profesionales internacionales a la cultura laboral en Alemania y preparamos específicamente para colaborar con determinados países y regiones – presencial en toda la región DACH u online.",
     facts: [
       { label: "Para quién", value: "Equipos internacionales, directivos y nuevas incorporaciones internacionales" },
       { label: "Formatos", value: "Talleres para equipos, acompañamiento en la incorporación, preparación por país" },
@@ -103,7 +103,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
       { question: "¿Para qué países preparan?", answer: "La preparación por país se basa en los países y regiones con los que trabaja su equipo. Indíquenos en su solicitud cuáles son." },
       { question: "¿Ayuda la formación en la incorporación de personal internacional?", answer: "Sí. Acompañamos a los nuevos profesionales internacionales en su llegada a la cultura laboral en Alemania, si lo desea combinado con un curso de alemán." },
       { question: "¿Se puede combinar con formación de idiomas?", answer: "Sí, los temas interculturales se pueden combinar con Business English o alemán como lengua extranjera." },
-      { question: "¿La formación es online o presencial?", answer: "Ambas opciones: presencial en el área de Múnich y Alta Baviera, online en toda Alemania, Austria y Suiza, o híbrida." },
+      { question: "¿La formación es online o presencial?", answer: "Ambas opciones: presencial en cualquier lugar de Alemania, Austria y Suiza (según disponibilidad), online o híbrida." },
     ],
     ctaTitle: "Refuerce la colaboración internacional de su equipo",
     ctaText: "Describa brevemente quién colabora con quién; normalmente respondemos en dos días laborables con una propuesta.",

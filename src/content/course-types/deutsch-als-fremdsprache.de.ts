@@ -95,6 +95,6 @@ export const deutschAlsFremdsprache: CourseType = {
   seo: {
     title: "Deutsch für Unternehmen: Deutschkurse für Mitarbeitende | Interlexico",
     description:
-      "Deutschkurse für internationale Mitarbeitende: berufsbezogen von A1 bis C2, als Einzel-, Gruppen- oder Klassentraining – vor Ort im Raum München oder online.",
+      "Deutschkurse für internationale Mitarbeitende: berufsbezogen von A1 bis C2, als Einzel-, Gruppen- oder Klassentraining – vor Ort in ganz DACH oder online.",
   },
 };

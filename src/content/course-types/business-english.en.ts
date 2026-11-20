@@ -96,6 +96,6 @@ export const businessEnglish: CourseType = {
   seo: {
     title: "Business English Training for Companies: On-site & Online | Interlexico",
     description:
-      "Business English training for companies: meetings, negotiations, presentations. One-to-one, group or class – on-site in the Munich area or online across DACH.",
+      "Business English training for companies: meetings, negotiations, presentations. One-to-one, group or class – on-site or online across the DACH region.",
   },
 };

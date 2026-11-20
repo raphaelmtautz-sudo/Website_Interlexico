@@ -5,7 +5,7 @@ export const es: Dictionary = {
     titleDefault: "Academia de idiomas para empresas: inglés y alemán | Interlexico",
     titleTemplate: "%s | Interlexico",
     description:
-      "Academia de idiomas para empresas: inglés de negocios y alemán para su plantilla – presencial en el área de Múnich u online, con evaluación y progreso medible.",
+      "Academia de idiomas para empresas: inglés de negocios y alemán para su plantilla – presencial en toda la región DACH u online, con evaluación y progreso medible.",
   },
   skipLink: "Saltar al contenido",
   nav: {
@@ -194,12 +194,12 @@ export const es: Dictionary = {
     careerRedirectLink: "Ir al formulario de candidatura →",
   },
   home: {
-    eyebrow: "Academia de idiomas para empresas · Múnich y online",
+    eyebrow: "Academia de idiomas para empresas · Presencial en DACH y online",
     heroTitleBefore: "",
     heroTitleKinetic: "Inglés y alemán",
     heroTitleAfter: " de negocios para empresas, entrenados para su día a día profesional",
     heroSubtitle:
-      "Preparamos a su equipo para reuniones, negociaciones y conversaciones con clientes – de forma presencial en el área de Múnich u online en toda la región DACH. Cada persona es evaluada, los contenidos proceden de su sector y RR. HH. sigue el progreso en el portal de clientes.",
+      "Preparamos a su equipo para reuniones, negociaciones y conversaciones con clientes – de forma presencial u online en toda Alemania, Austria y Suiza. Cada persona es evaluada, los contenidos proceden de su sector y RR. HH. sigue el progreso en el portal de clientes.",
     ctaConfigure: "Configurar su formación",
     lanes: {
       start: "Inicio",
@@ -299,10 +299,10 @@ export const es: Dictionary = {
   kurse: {
     eyebrow: "Programas",
     title: "Cursos de idiomas para empresas",
-    intro: "Interlexico ofrece dos formaciones de idiomas para empresas: Business English para equipos con contacto internacional y alemán para la plantilla internacional. Ambas existen como formación individual, en grupo de máximo siete personas y en clase para departamentos completos – presencial en el área de Múnich, online en toda la región DACH o híbrida. Cada persona es evaluada antes; el precio se indica en una oferta individual.",
+    intro: "Interlexico ofrece dos formaciones de idiomas para empresas: Business English para equipos con contacto internacional y alemán para la plantilla internacional. Ambas existen como formación individual, en grupo de máximo siete personas y en clase para departamentos completos – presencial en toda Alemania, Austria y Suiza (según disponibilidad), online o híbrida. Cada persona es evaluada antes; el precio se indica en una oferta individual.",
     metaTitle: "Cursos de idiomas para empresas: Business English y alemán",
     metaDescription:
-      "Cursos de idiomas para empresas: Business English y alemán para la plantilla internacional – individual, en grupo o en clase, en el área de Múnich u online.",
+      "Cursos de idiomas para empresas: Business English y alemán para la plantilla internacional – individual, en grupo o en clase, presencial en toda la región DACH u online.",
     verfuegbar: "Disponible",
     baldVerfuegbar: "Próximamente",
     detailsAnsehen: "Ver detalles",

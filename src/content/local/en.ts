@@ -14,7 +14,7 @@ export const page: LocalPage = {
   onsiteText:
     "Classroom training takes place at your premises – your team saves the commute, and we train on the situations that actually happen at your company. Distributed teams combine on-site sessions in Munich with online units.",
   places: ["Munich", "Munich district", "Fürstenfeldbruck", "Dachau", "Starnberg", "Freising", "Erding", "Ebersberg"],
-  placesNote: "Other locations in Upper Bavaria by arrangement. Online, we train across Germany, Austria and Switzerland.",
+  placesNote: "Subject to availability, we also come to you anywhere else in Germany, Austria and Switzerland. Online, we train everywhere.",
   offerTitle: "What we offer in Munich",
   offers: [
     {
@@ -53,7 +53,7 @@ export const page: LocalPage = {
     {
       question: "Which locations do you cover on-site?",
       answer:
-        "Munich and the surrounding districts, such as Fürstenfeldbruck, Dachau, Starnberg, Freising, Erding and Ebersberg. Other locations in Upper Bavaria by arrangement; online, we train across Germany, Austria and Switzerland.",
+        "Munich and the surrounding districts, such as Fürstenfeldbruck, Dachau, Starnberg, Freising, Erding and Ebersberg. Subject to availability, we also come anywhere else in Germany, Austria and Switzerland; online, we train everywhere.",
     },
     {
       question: "Do you offer German courses for international staff in Munich?",

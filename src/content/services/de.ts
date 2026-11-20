@@ -1,6 +1,6 @@
 import type { ServicePage, ServiceSlug } from "./index";
 
-const PLACE = "Vor Ort im Großraum München und Oberbayern, online in ganz DACH oder hybrid";
+const PLACE = "Vor Ort in ganz Deutschland, Österreich und der Schweiz (nach Verfügbarkeit), online oder hybrid";
 
 export const services: Record<ServiceSlug, ServicePage> = {
   "executive-language-coaching": {
@@ -11,7 +11,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
     eyebrow: "Executive Language Coaching",
     title: "Englisch-Coaching für Führungskräfte – 1:1 und anlassbezogen",
     answer:
-      "Executive Language Coaching bei Interlexico ist ein Einzelcoaching für Führungskräfte und Geschäftsführung. Es richtet sich nach Ihrem Kalender und Ihren konkreten Anlässen: Wir bereiten Sie gezielt auf Präsentationen, Verhandlungen, Board-Meetings oder Konferenzen vor – vertraulich, mit einem festen Coach, vor Ort im Großraum München oder online.",
+      "Executive Language Coaching bei Interlexico ist ein Einzelcoaching für Führungskräfte und Geschäftsführung. Es richtet sich nach Ihrem Kalender und Ihren konkreten Anlässen: Wir bereiten Sie gezielt auf Präsentationen, Verhandlungen, Board-Meetings oder Konferenzen vor – vertraulich, mit einem festen Coach, vor Ort in ganz DACH oder online.",
     facts: [
       { label: "Für wen", value: "Führungskräfte, Geschäftsführung und Vorstand" },
       { label: "Format", value: "1:1-Coaching mit festem Coach" },
@@ -48,7 +48,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
       { question: "Was unterscheidet Executive Coaching vom normalen Einzeltraining?", answer: "Das Coaching ist auf konkrete Anlässe und den Auftritt von Führungskräften ausgerichtet. Wir arbeiten mit Ihren echten Präsentationen, Unterlagen und Gesprächssituationen statt mit einem allgemeinen Lehrplan." },
       { question: "Kann ich kurzfristig vor einem Termin coachen lassen?", answer: "Ja, das Coaching kann gezielt auf einen bevorstehenden Anlass vorbereiten. Sprechen Sie uns möglichst früh an, damit wir die Termine passend planen können." },
       { question: "Bleiben Inhalte vertraulich?", answer: "Ja. Das Coaching findet 1:1 statt, und Unterlagen, die Sie zur Vorbereitung teilen, werden vertraulich behandelt." },
-      { question: "Findet das Coaching online oder vor Ort statt?", answer: "Beides ist möglich: vor Ort im Großraum München und Oberbayern, online in ganz Deutschland, Österreich und der Schweiz oder im Wechsel." },
+      { question: "Findet das Coaching online oder vor Ort statt?", answer: "Beides ist möglich: vor Ort überall in Deutschland, Österreich und der Schweiz (nach Verfügbarkeit), online oder im Wechsel." },
     ],
     ctaTitle: "Ihr nächster wichtiger Termin auf Englisch?",
     ctaText: "Schreiben Sie uns kurz, worum es geht und bis wann – wir melden uns in der Regel innerhalb von zwei Werktagen.",
@@ -67,7 +67,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
     eyebrow: "Interkulturelle Kommunikation",
     title: "Interkulturelles Training für Unternehmen",
     answer:
-      "Interkulturelle Kommunikation bei Interlexico richtet sich an Unternehmen, deren Teams international zusammenarbeiten. Wir bieten Workshops für Teams, begleiten das Onboarding internationaler Fachkräfte in die Arbeitskultur in Deutschland und bereiten gezielt auf die Zusammenarbeit mit bestimmten Ländern und Regionen vor – vor Ort im Großraum München oder online.",
+      "Interkulturelle Kommunikation bei Interlexico richtet sich an Unternehmen, deren Teams international zusammenarbeiten. Wir bieten Workshops für Teams, begleiten das Onboarding internationaler Fachkräfte in die Arbeitskultur in Deutschland und bereiten gezielt auf die Zusammenarbeit mit bestimmten Ländern und Regionen vor – vor Ort in ganz DACH oder online.",
     facts: [
       { label: "Für wen", value: "Internationale Teams, Führungskräfte und neue internationale Mitarbeitende" },
       { label: "Formate", value: "Workshops für Teams, Onboarding-Begleitung, länderspezifische Vorbereitung" },
@@ -103,7 +103,7 @@ export const services: Record<ServiceSlug, ServicePage> = {
       { question: "Für welche Länder bereiten Sie vor?", answer: "Die länderspezifische Vorbereitung richtet sich nach den Ländern und Regionen, mit denen Ihr Team zusammenarbeitet. Nennen Sie uns in der Anfrage, um welche es geht." },
       { question: "Hilft das Training beim Onboarding internationaler Mitarbeitender?", answer: "Ja. Wir begleiten neue internationale Fachkräfte beim Ankommen in der Arbeitskultur in Deutschland – auf Wunsch kombiniert mit einem Deutschkurs." },
       { question: "Lässt sich das mit Sprachtraining kombinieren?", answer: "Ja, interkulturelle Themen lassen sich mit Business English oder Deutsch als Fremdsprache verbinden." },
-      { question: "Findet das Training online oder vor Ort statt?", answer: "Beides ist möglich: vor Ort im Großraum München und Oberbayern, online in ganz Deutschland, Österreich und der Schweiz oder hybrid." },
+      { question: "Findet das Training online oder vor Ort statt?", answer: "Beides ist möglich: vor Ort überall in Deutschland, Österreich und der Schweiz (nach Verfügbarkeit), online oder hybrid." },
     ],
     ctaTitle: "Internationale Zusammenarbeit in Ihrem Team stärken",
     ctaText: "Beschreiben Sie kurz, wer mit wem zusammenarbeitet – wir melden uns in der Regel innerhalb von zwei Werktagen mit einem Vorschlag.",
