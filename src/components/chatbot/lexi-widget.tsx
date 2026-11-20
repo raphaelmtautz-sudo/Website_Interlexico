@@ -29,6 +29,7 @@ interface Message {
   ai?: boolean; // KI-Antwort → im Chat auf Kurzform gekürzt
   actions?: { label: string; value: string }[]; // Antwort-Buttons im Ablauf (z. B. Datenschutz bestätigen)
   privacyLink?: boolean;
+  promoNote?: string; // Aktionshinweis (einmal pro Gespräch, nur bei Verkaufsthemen)
 }
 
 // Bewerbungen gehören nicht in den Anfrage-Flow, sondern ins Bewerbungsformular (/karriere).
@@ -172,6 +173,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   const [step, setStep] = useState<Step>("chat");
   const answersRef = useRef({ topic: "", company: "", name: "", email: "", details: "" });
   const voucherRef = useRef({ name: "", email: "" });
+  const promoShown = useRef(false);
   const lastQuestion = useRef("");
   const [voiceSupported, setVoiceSupported] = useState(false);
   const [listening, setListening] = useState(false);
@@ -275,13 +277,16 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
           const line = buf.slice(0, nl).trim();
           buf = buf.slice(nl + 1);
           if (!line) continue;
-          const e = JSON.parse(line) as { type: string; text?: string; reason?: string; mode?: string };
+          const e = JSON.parse(line) as { type: string; text?: string; reason?: string; mode?: string; promoNote?: string };
           if (e.type === "token" && e.text) patchLast((m) => ({ ...m, content: m.content + e.text }));
           else if (e.type === "busy") { patchLast((m) => ({ ...m, content: e.text ?? t.unavailable, pending: false, offerInquiry: true, ai: false })); finished = true; }
           else if (e.type === "done") {
             const noAnswer = e.reason === "no_match" || e.reason === "model_fallback" || e.reason === "price" || e.reason === "empty" || e.reason === "error";
             const ctas = pickCtas(`${question} ${noAnswer ? "" : (e.text ?? "")}`, promo).filter((c) => !noAnswer || c !== "inquiry");
-            patchLast((m) => ({ ...m, content: e.text ?? m.content, pending: false, offerInquiry: noAnswer, ai: !noAnswer, ctas: ctas.length ? ctas : undefined }));
+            // Aktion einmal pro Gespräch erwähnen – nur bei Verkaufsthemen (Kosten, Start, Buchung …), nicht aufdringlich
+            const note = e.promoNote && !promoShown.current && SALES_RE.test(question.toLowerCase()) ? e.promoNote : undefined;
+            if (note) promoShown.current = true;
+            patchLast((m) => ({ ...m, content: e.text ?? m.content, pending: false, offerInquiry: noAnswer, ai: !noAnswer, ctas: ctas.length ? ctas : undefined, promoNote: note }));
             setStatus(e.reason === "error" ? "offline" : "online");
             track("form_submit", { form: "lexi", variant: noAnswer ? "fallback" : "answer" });
             finished = true;
@@ -482,6 +487,7 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
                         ))}
                       </div>
                     )}
+                    {m.promoNote && <p className="m-0 rounded-lg border border-[#f1d48a] bg-[#fff8e8] px-2.5 py-1.5 text-[13px] leading-snug text-[#5c4300]">{m.promoNote}</p>}
                     {m.privacyLink && <a href={lh(lang, "/rechtliches/datenschutz")} target="_blank" rel="noopener" className="font-medium text-[#0a72bd] hover:text-[#1d3b6b]">{t.privacyLink} ↗</a>}
                     {m.actions && !loading && (
                       <div className="flex flex-wrap gap-1.5 pt-0.5">
