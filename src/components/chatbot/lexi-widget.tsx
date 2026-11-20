@@ -15,7 +15,11 @@ import { track } from "@/lib/track";
  *    (Unternehmen → Name → E-Mail → Details → /api/inquiry, wie bisher).
  */
 const LEXI_AVATAR = "/lexi-avatar";
-const TEASER_DELAY_MS = 5000;
+// Kleines Begrüßungsfenster: einmal pro Besuch, Computer nach 8 s, Handy nach 12 s; schließt nach 45 s
+// von selbst oder sofort, wenn das Gutschein-Pop-up erscheint (nie beides gleichzeitig).
+const TEASER_DELAY_MS = 8000;
+const TEASER_DELAY_MOBILE_MS = 12000;
+const TEASER_VISIBLE_MS = 45000;
 const TEASER_KEY = "lexi-teaser-seen";
 
 interface Message {
@@ -196,25 +200,34 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
     return () => { alive = false; };
   }, []);
 
-  // Kleiner Hinweis am Icon nach 5 Sekunden, einmal pro Sitzung
+  // Begrüßungsfenster einmal pro Besuch (nicht, wenn gerade das Gutschein-Pop-up offen ist)
+  const voucherOpen = useRef(false);
   useEffect(() => {
+    const onVoucher = () => { voucherOpen.current = true; setTeaser(false); };
+    window.addEventListener("ix:voucher-shown", onVoucher);
     let seen = false;
     try { seen = sessionStorage.getItem(TEASER_KEY) === "1"; } catch { /* ignore */ }
-    if (seen) return;
+    if (seen) return () => window.removeEventListener("ix:voucher-shown", onVoucher);
+    const mobile = !window.matchMedia("(min-width: 640px)").matches;
     const id = window.setTimeout(() => {
+      if (voucherOpen.current) return;
       setTeaser(true);
       try { sessionStorage.setItem(TEASER_KEY, "1"); } catch { /* ignore */ }
-      track("cta_click", { cta: "lexi_teaser_shown" });
-    }, TEASER_DELAY_MS);
-    return () => window.clearTimeout(id);
+      track("cta_click", { cta: "lexi_teaser_shown", device: mobile ? "mobile" : "desktop" });
+    }, mobile ? TEASER_DELAY_MOBILE_MS : TEASER_DELAY_MS);
+    return () => { window.clearTimeout(id); window.removeEventListener("ix:voucher-shown", onVoucher); };
   }, []);
 
-  // Die kleine Begrüßung verschwindet nach 20 Sekunden von selbst
   useEffect(() => {
     if (!teaser) return;
-    const id = window.setTimeout(() => setTeaser(false), 20_000);
+    const id = window.setTimeout(() => setTeaser(false), TEASER_VISIBLE_MS);
     return () => window.clearTimeout(id);
   }, [teaser]);
+
+  // Solange Lexi-Fenster oder Chat offen sind, wartet das Gutschein-Pop-up (niemand wird beim Schreiben unterbrochen)
+  useEffect(() => {
+    (window as unknown as { __ixLexiBusy?: boolean }).__ixLexiBusy = open || teaser;
+  }, [open, teaser]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -437,10 +450,30 @@ export function LexiWidget({ lang, dict }: { lang: Locale; dict: Pick<Dictionary
   return (
     <div data-distraction="chat" data-lexi="" className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6 flex flex-col items-end font-sans text-[#262b31]">
       {teaser && !open && !offline && (
-        <button onClick={() => openChat("teaser")}
-          className="mb-2.5 max-w-[180px] rounded-[12px_12px_4px_12px] bg-white px-3 py-[9px] text-left text-xs leading-[1.4] text-[#262b31] shadow-[0_4px_14px_rgba(15,23,34,0.12)] animate-fade-up">
-          {t.teaser}
-        </button>
+        <section aria-label="Lexi" className="mb-3 w-[min(300px,calc(100vw-2rem))] rounded-2xl bg-white p-3.5 shadow-[0_10px_32px_rgba(15,23,34,0.18),0_2px_6px_rgba(15,23,34,0.08)] animate-fade-up">
+          <div className="flex items-start gap-2.5">
+            <div className="relative h-9 w-9 shrink-0">
+              <Avatar size={36} />
+              {dot && <span aria-hidden="true" className={`absolute -bottom-px -right-px h-3 w-3 rounded-full border-2 border-white ${dot}`} />}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="m-0 text-[13px] font-semibold text-[#1d3b6b]">Lexi</p>
+              <p className="m-0 text-sm leading-snug text-[#262b31]">{t.teaser}</p>
+            </div>
+            <button onClick={() => { setTeaser(false); track("cta_click", { cta: "lexi_teaser_close" }); }} aria-label={t.teaserClose} title={t.teaserClose}
+              className="-mr-1 -mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#58616c] hover:bg-[#f3f5f8]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button onClick={() => openChat("teaser")} className="flex-1 rounded-lg bg-[#1d3b6b] py-2 text-[13px] font-semibold text-white hover:bg-[#16305c]">{t.teaserCta}</button>
+            {promo ? (
+              <button onClick={() => { openChat("teaser_voucher"); startVoucher(); }} className="flex-1 rounded-lg border border-[#e8b44a] bg-[#fff8e8] py-2 text-[13px] font-semibold text-[#7a5200] hover:bg-[#ffefc9]">{t.ctaVoucher}</button>
+            ) : (
+              <button onClick={() => { openChat("teaser_inquiry"); startInquiry(); }} className="flex-1 rounded-lg border border-[#b9c7da] py-2 text-[13px] font-semibold text-[#1d3b6b] hover:border-[#1d3b6b]">{t.ctaInquiry}</button>
+            )}
+          </div>
+        </section>
       )}
 
       {open && (

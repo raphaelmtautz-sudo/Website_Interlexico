@@ -131,7 +131,7 @@ export const es: Dictionary = {
     trigger: "¿Preguntas? — Lexi",
     subtitle: "Asistente de IA de Interlexico",
     greeting: "¡Hola, soy Lexi! Pregúnteme lo que quiera sobre nuestras formaciones de idiomas: formatos, proceso, prueba de nivel o formación presencial.",
-    teaser: "¡Hola, soy Lexi! ¿Tiene alguna pregunta?",
+    teaser: "¡Hola, soy Lexi! ¿Inglés de negocios o alemán para su equipo? En dos minutos encontramos juntos la formación adecuada.",
     teaserCta: "Hacer una pregunta",
     teaserClose: "Más tarde",
     aiNote: "Lexi es una IA · Por favor, no introduzca datos personales ·",

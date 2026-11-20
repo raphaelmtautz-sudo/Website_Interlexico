@@ -58,11 +58,13 @@ export function VoucherPopup({ lang, t: dict }: { lang: Locale; t: Dictionary["v
   const show = useCallback((v: Variant) => {
     if (document.documentElement.getAttribute("data-focus") === "on") return;
     if (formTouched.current) return;
+    if ((window as unknown as { __ixLexiBusy?: boolean }).__ixLexiBusy) return; // Lexi offen → nicht dazwischenfunken
     const s = readState();
     if (s.submitted || (s.until && s.until > Date.now())) return;
     // Schon beim Anzeigen sperren: wer die Seite einfach verlässt, sieht es 14 Tage nicht wieder.
     writeState({ until: Date.now() + SNOOZE_MS });
     setVariant(v);
+    window.dispatchEvent(new CustomEvent("ix:voucher-shown")); // Lexi blendet dann ihr Begrüßungsfenster aus
     track("voucher_shown", { variant: v });
   }, []);
 

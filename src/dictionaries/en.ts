@@ -131,7 +131,7 @@ export const en: Dictionary = {
     trigger: "Questions? — Lexi",
     subtitle: "Interlexico's AI assistant",
     greeting: "Hi, I'm Lexi! Ask me anything about our language training – formats, process, placement or on-site training.",
-    teaser: "Hi, I'm Lexi! Do you have any questions?",
+    teaser: "Hi, I'm Lexi! Business English or German for your team? I'll help you find the right training in two minutes.",
     teaserCta: "Ask a question",
     teaserClose: "Later",
     aiNote: "Lexi is an AI · Please don't enter personal data ·",

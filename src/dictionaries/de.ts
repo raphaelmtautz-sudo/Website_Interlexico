@@ -129,7 +129,7 @@ export const de = {
     trigger: "Fragen? — Lexi",
     subtitle: "KI-Assistentin von Interlexico",
     greeting: "Hallo, ich bin Lexi! Fragen Sie mich gern alles zu unseren Sprachtrainings – Formate, Ablauf, Einstufung oder Training vor Ort.",
-    teaser: "Hallo, ich bin Lexi! Haben Sie Fragen?",
+    teaser: "Hallo, ich bin Lexi! Business English oder Deutsch für Ihr Team? Ich finde mit Ihnen in zwei Minuten das passende Training.",
     teaserCta: "Frage stellen",
     teaserClose: "Später",
     aiNote: "Lexi ist eine KI · Bitte keine persönlichen Daten eingeben ·",
