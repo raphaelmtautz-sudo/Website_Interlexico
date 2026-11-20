@@ -21,8 +21,15 @@ function detectLocale(request: NextRequest): string {
 // Alte, mehrteilige Adressen der früheren Website (Search Console 20.11.2026) – dauerhaft umleiten.
 // Einteilige Altadressen pflegt das CMS unter „Weiterleitungen“.
 const LEGACY_PREFIX: [RegExp, string][] = [
+  // Liste aus Search Console → Seitenindexierung → „Nicht gefunden (404)“, Stand 20.11.2026
   [/^\/(?:(?:de|en|es)\/)?en-home\/request-a-callback/, "/en/kontakt"], // Rückruf-Anfrage
+  [/^\/(?:(?:de|en|es)\/)?en-home\/imprint/, "/en/rechtliches/impressum"],
+  [/^\/(?:(?:de|en|es)\/)?en-home\/about-us/, "/en/ueber-uns"],
   [/^\/(?:(?:de|en|es)\/)?en-home\/.+/, "/en/demo"], // z. B. /en-home/trail-lesson-1 (Probestunde)
+  [/^\/(?:(?:de|en|es)\/)?en-home\/?$/, "/en"],
+  [/^\/(?:(?:de|en|es)\/)?es-inicio\/resumen-de-cursos/, "/es/kurse"],
+  [/^\/(?:(?:de|en|es)\/)?es-inicio\/.+/, "/es/demo"], // z. B. leccion-de-senderismo (Probestunde)
+  [/^\/(?:(?:de|en|es)\/)?es-inicio\/?$/, "/es"],
 ];
 
 export function proxy(request: NextRequest) {
